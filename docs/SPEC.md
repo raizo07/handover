@@ -1,6 +1,6 @@
-# CHARTER — Technical Specification
+# HANDOVER — Technical Specification
 
-**Status:** draft v0.1 — design only, no code yet.
+**Status:** draft v0.2 — `vault` implemented and tested; registry not started.
 **Track:** `nfts` (primary), `business` (secondary).
 **Repo:** this directory. License MIT.
 
@@ -548,3 +548,78 @@ funds, no signatures requested from the human at any point in the build.
 2. **Testnet deployer account** — must be created by the human; never invented.
 3. **Push policy** — commits stay local; no `git push`, no public repo, until explicit yes.
 4. **Second submission** — SEALED is held in reserve (Q-015: max 2, disclosed in both READMEs).
+
+---
+
+## 15. Implementation deltas (v0.2) — what the code changed about this design
+
+Written after building `contracts/vault`. Each item is a place where writing the code
+proved the spec wrong or imprecise; the spec text above is left intact so the change is
+visible rather than silent.
+
+### D-1. The contract cannot tell the holder from the operator
+
+The spec assumed the contract could branch on caller identity (`predecessor == holder`).
+It cannot. **A function-call access key belongs to the vault account**, so a transaction
+signed by the operator's key has `signer_id == vault` — exactly like one signed by the
+holder's key. Both arrive as "self".
+
+Consequence, now the core of the security story: separation is enforced **by the
+protocol**, not by `if` statements. The operator's key is `FunctionCall` scoped to
+`record_sale,operator_spend`; the holder's key is `FullAccess`. `require_self_signed()`
+checks only "signed by some key of this account", and the key's scope does the rest.
+A bug in the contract cannot promote the operator, because the promotion would have to
+happen in nearcore.
+
+### D-2. `halt()` is stronger than a flag — and the flag is belt-and-braces
+
+`halt()` deletes the operator's key (`DeleteKey`), so the agent's next transaction is
+rejected by the protocol with `Access key does not exist` before any contract code runs.
+The `halted` boolean exists only so the UI can render state and so `operator_spend`
+fails with a readable `E23` in the window before the deletion finalises.
+
+### D-3. Public amounts are `U128`, not `u128`
+
+`serde_json` cannot represent `u128` as a number (a 1 NEAR cap is 1e24, far past
+`u64::MAX`), so every public amount is `near_sdk::json_types::U128` and travels as a
+decimal string. Internal state stays `u128`. First attempt passed decimal *strings*
+against plain `u128` fields and failed inside the VM with
+`Failed to deserialize input from JSON. Error: invalid number` — caught by the sandbox
+test, not by a human reading the code.
+
+### D-4. Errors are `E##`-prefixed panics, not a `#[handle_result]` enum
+
+§3.3/§4.3 described a typed error enum. In practice every failure here must **revert**
+the call, so `require!(cond, "E21: …")` is both simpler and atomically correct; the UI
+parses the prefix out of the receipt. The codes in §3.3/§4.3 stand; the mechanism does
+not.
+
+### D-5. Keys are added by the registry's batch, not by `new()`
+
+If `new()` added the operator key itself, a failed promise would leave a vault whose
+state exists but which has no usable key. Instead the registry's `CreateAccount` batch
+carries `DeployContract` + `AddKey(owner)` + `AddKey(operator, scoped)` +
+`FunctionCall(new)`, so the account is never in a half-keyed state. `new()` only sets
+state.
+
+### D-6. The claim cooldown starts at the first claim
+
+A fresh vault has `last_claim_at = 0`, so a naive `now >= last + cooldown` blocks the
+business's first-ever payout for an hour. Fixed: the cooldown applies only when
+`last_claim_at > 0`. Caught by `claim_cooldown_is_enforced` failing — the test was right
+and the code was wrong.
+
+### D-7. Transfers to uncreated accounts fail
+
+`operator_spend` to a named account that does not exist fails at the transfer
+(`AccountDoesNotExist`). That is correct fail-closed behaviour, but it silently made one
+sandbox test meaningless until the vendor account was created in `setup()`. Recorded
+because the UI must show that error distinctly from `E22`.
+
+### Test status at v0.2
+
+```
+vault: 15 unit tests … ok
+vault:  4 sandbox tests … ok   (deploy+init, sale+outsider claim refused,
+                                per-call cap in VM, halt blocks operator)
+```

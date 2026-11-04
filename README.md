@@ -1,11 +1,14 @@
-# CHARTER
+# HANDOVER
 
 **A business is a NEAR account. An NFT is the share.**
 
-> Status: **pre-alpha.** Contracts are specified, not yet written. The steps below are
-> the intended path and are marked `[not yet]` until the code that makes them real
-> exists. Nothing in this README claims a feature that does not run. See
-> [docs/SPEC.md](docs/SPEC.md) for the build contract.
+*Working name — `HANDOVER`. The rulebook a business runs under is called its **charter**;
+the repo directory keeps the old name.*
+
+> Status: **contract v1 in progress.** The vault contract is written and tested
+> (15 unit + 4 sandbox tests). The registry contract, deployment and frontend do not
+> exist yet. Steps below are marked `[not yet]` until the code behind them runs.
+> See [docs/SPEC.md](docs/SPEC.md) for the build contract.
 
 ## The problem
 
@@ -79,8 +82,8 @@ docs/DECISIONS.md    choices made and the trigger that would reverse each one
 ## Status
 
 - [x] Specification, test matrix, demo script
-- [ ] `vault` contract + unit tests
-- [ ] `charter` contract + rotation state machine
+- [x] `vault` contract — 15 unit tests + 4 sandbox tests, all green
+- [ ] `charter` registry contract + rotation state machine
 - [ ] Testnet deployment + seed script
 - [ ] Frontend (marketplace, business page, buy flow, charter panel)
 - [ ] `make demo` fixtures
