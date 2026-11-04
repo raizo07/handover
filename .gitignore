@@ -1,0 +1,30 @@
+# --- secrets: never commit ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.near-credentials
+near-credentials/
+*.testnet.json
+*.mainnet.json
+
+# --- rust ---
+target/
+**/target/
+Cargo.lock.bak
+
+# --- node ---
+node_modules/
+dist/
+.vite/
+*.tsbuildinfo
+
+# --- tooling / os ---
+.DS_Store
+.cargo-home/
+*.log
+coverage/
+.playwright/
+.home/
+contracts/.home/
