@@ -219,7 +219,7 @@ impl Vault {
 
     /// Kill switch: delete the operator's access key. The agent stops existing to the
     /// chain, not just in application logic.
-    pub fn halt(&mut self) {
+    pub fn halt(&mut self) -> Promise {
         self.require_self_signed();
         require!(!self.halted, "E23: already halted");
         self.halted = true;
@@ -229,11 +229,11 @@ impl Vault {
             json!({ "token_id": self.token_id, "operator_key": self.operator_key.to_string() }),
         );
 
-        Promise::new(env::current_account_id()).delete_key(self.operator_key.clone());
+        Promise::new(env::current_account_id()).delete_key(self.operator_key.clone())
     }
 
     /// Re-arm the operator with a new function-call key.
-    pub fn resume(&mut self, operator_key: PublicKey) {
+    pub fn resume(&mut self, operator_key: PublicKey) -> Promise {
         self.require_self_signed();
         require!(self.halted, "E33: operator is not halted");
         self.halted = false;
@@ -244,12 +244,13 @@ impl Vault {
             json!({ "token_id": self.token_id, "operator_key": operator_key.to_string() }),
         );
 
-        Promise::new(env::current_account_id()).add_access_key(
+        Promise::new(env::current_account_id()).add_access_key_allowance(
             operator_key,
-            NearToken::from_yoctonear(OPERATOR_ALLOWANCE),
+            near_sdk::Allowance::limited(NearToken::from_yoctonear(OPERATOR_ALLOWANCE))
+                .unwrap_or(near_sdk::Allowance::Unlimited),
             env::current_account_id(),
             OPERATOR_METHODS.to_string(),
-        );
+        )
     }
 
     // ------------------------------------------------------------------ holder
@@ -584,7 +585,7 @@ mod tests {
         v.operator_spend(vendor(), U128::from(1), "ok".into())
             .detach();
         let err = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            v.operator_spend(bob(), U128::from(1), "nope".into())
+            let _ = v.operator_spend(bob(), U128::from(1), "nope".into());
         }));
         assert!(err.is_err(), "E22: recipient not allowed");
     }
@@ -593,17 +594,17 @@ mod tests {
     fn halt_blocks_spending_and_resume_restores_it() {
         let mut v = vault();
         as_vault_self(1_000);
-        v.halt();
+        let _ = v.halt();
         assert!(v.get_stats().halted);
         assert!(!v.get_keys().operator_key_live);
 
         let err = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            v.operator_spend(vendor(), U128::from(1), "x".into())
+            let _ = v.operator_spend(vendor(), U128::from(1), "x".into());
         }));
         assert!(err.is_err(), "E23: operator is halted");
 
         as_vault_self(1_001);
-        v.resume(op_key());
+        let _ = v.resume(op_key());
         assert!(!v.get_stats().halted);
         v.operator_spend(vendor(), U128::from(1), "back".into())
             .detach();
@@ -652,7 +653,7 @@ mod tests {
             .parse()
             .unwrap();
         as_registry(1_050);
-        v.set_holder(bob(), new_owner_key.clone(), 2);
+        let _ = v.set_holder(bob(), new_owner_key.clone(), 2);
 
         let stats = v.get_stats();
         assert_eq!(stats.holder, bob());
@@ -672,7 +673,7 @@ mod tests {
         let k: PublicKey = "ed25519:H8sCci9badyRkXb3JoRpBj5p8C6Tw41ELDZoiihKEtp"
             .parse()
             .unwrap();
-        v.set_holder(bob(), k, 2);
+        let _ = v.set_holder(bob(), k, 2);
     }
 
     #[test]
@@ -683,7 +684,7 @@ mod tests {
         let k: PublicKey = "ed25519:H8sCci9badyRkXb3JoRpBj5p8C6Tw41ELDZoiihKEtp"
             .parse()
             .unwrap();
-        v.set_holder(bob(), k, 1);
+        let _ = v.set_holder(bob(), k, 1);
     }
 
     #[test]
@@ -691,7 +692,7 @@ mod tests {
     fn outsider_cannot_claim() {
         let mut v = vault();
         as_outsider(1_100);
-        v.claim();
+        let _ = v.claim();
     }
 
     #[test]

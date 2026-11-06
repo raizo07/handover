@@ -5,8 +5,8 @@
 *Working name — `HANDOVER`. The rulebook a business runs under is called its **charter**;
 the repo directory keeps the old name.*
 
-> Status: **contract v1 in progress.** The vault contract is written and tested
-> (15 unit + 4 sandbox tests). The registry contract, deployment and frontend do not
+> Status: **contracts written, nothing deployed.** `vault` (15 unit + 4 sandbox tests)
+> and `registry` (13 unit tests) are green. Deployment, seeding and the frontend do not
 > exist yet. Steps below are marked `[not yet]` until the code behind them runs.
 > See [docs/SPEC.md](docs/SPEC.md) for the build contract.
 
@@ -72,7 +72,7 @@ All steps target testnet. No real funds.
 ## Layout
 
 ```
-contracts/charter/   NEP-171 registry + rotation state machine
+contracts/registry/   NEP-171 registry + rotation state machine
 contracts/vault/     per-business account: treasury, keys, charter, accounting
 web/                 React + Vite app; /judge runs on committed fixtures
 docs/SPEC.md         state shapes, methods, events, errors, protocol, test matrix
@@ -83,7 +83,7 @@ docs/DECISIONS.md    choices made and the trigger that would reverse each one
 
 - [x] Specification, test matrix, demo script
 - [x] `vault` contract — 15 unit tests + 4 sandbox tests, all green
-- [ ] `charter` registry contract + rotation state machine
+- [x] `registry` contract — NEP-171, mint batch, two-beat rotation — 13 unit tests, green
 - [ ] Testnet deployment + seed script
 - [ ] Frontend (marketplace, business page, buy flow, charter panel)
 - [ ] `make demo` fixtures

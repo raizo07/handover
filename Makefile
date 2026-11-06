@@ -2,7 +2,7 @@
 # Portable: no absolute paths, no secrets. Everything runs against testnet or a local
 # sandbox. `make deploy` and `make demo` are added when the code behind them exists.
 
-CONTRACTS := contracts/vault contracts/charter
+CONTRACTS := contracts/vault contracts/registry
 
 .PHONY: test build fmt clean
 

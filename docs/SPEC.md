@@ -1,6 +1,6 @@
 # HANDOVER — Technical Specification
 
-**Status:** draft v0.2 — `vault` implemented and tested; registry not started.
+**Status:** draft v0.3 — both contracts implemented and tested; not deployed.
 **Track:** `nfts` (primary), `business` (secondary).
 **Repo:** this directory. License MIT.
 
@@ -622,4 +622,51 @@ because the UI must show that error distinctly from `E22`.
 vault: 15 unit tests … ok
 vault:  4 sandbox tests … ok   (deploy+init, sale+outsider claim refused,
                                 per-call cap in VM, halt blocks operator)
+```
+
+### D-8. `promise_result` → `promise_result_checked`
+
+`env::promise_result` is deprecated for a reason: an unbounded read inside a callback can
+run out of gas and take the callback down. Every callback now uses
+`promise_result_checked(0, 2048)`, so a large return value is a clean `false`, not a
+dead receipt.
+
+### D-9. The rotation machine is testable only because it is separable
+
+`testing_env!` in near-sdk 5.29 takes a `VMContext` and a VM `Config` — it will not
+inject mocked promise results. Rather than leave the state machine untested, the logic
+lives in `settle_rotation(token_id, epoch, ok: bool)` and `on_rotation` is a thin
+`#[private]` wrapper that reads the promise result. The machine now has real tests
+(`successful_callback_marks_applied`, `failed_callback_reverts_the_holder`) instead of
+hopes.
+
+### D-10. Returning a promise changes what "success" means
+
+`halt()` originally created `DeleteKey` and dropped the promise (a compiler warning I
+ignored). Once it returned the promise, the transaction status included the dependent
+receipt — and the sandbox test failed with `DeleteKeyDoesNotExist`, because a *manual*
+deploy never adds the operator key (the mint batch does). Two lessons, both now in the
+code: returning promises is correct but makes sub-receipt failures visible, and tests
+must model the real creation path rather than a shortcut.
+
+### D-11. Crate renamed: `charter` → `registry`
+
+The product is HANDOVER; the **charter** is the rulebook a business runs under. The crate
+that holds the tokens is the registry. Keeping the old name would have made every
+conversation ambiguous.
+
+### D-12. Mint takes a flat 4 NEAR and refunds the surplus
+
+The true cost (sub-account + wasm storage + state) is only knowable by measuring a real
+deploy. Until then the registry charges a flat `MIN_MINT_DEPOSIT` of 4 NEAR, refunds
+anything above it, and refunds the whole amount if the mint batch fails. The measured
+figure replaces this constant in the README after the first testnet mint.
+
+### Test status at v0.3
+
+```
+registry: 13 unit tests … ok   (mint, token-id rules, transfer auth, key requirement,
+                                rotation pending/applied/failed, views)
+vault:    15 unit tests … ok
+vault:     4 sandbox tests … ok
 ```

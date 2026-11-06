@@ -1,6 +1,6 @@
 [package]
-name = "charter"
-description = "CHARTER registry: NEP-171 ownership tokens and the transfer/rotation state machine"
+name = "registry"
+description = "HANDOVER registry: NEP-171 ownership tokens and the transfer/rotation state machine"
 version = "0.1.0"
 edition = "2024"
 resolver = "3"
