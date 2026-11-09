@@ -131,7 +131,7 @@ p { margin: 0; }
 
 .footer {
   border-top: 1px solid var(--line);
-  padding: 22px 0 40px;
+  padding: 22px var(--pad) 40px;
   font-family: var(--mono); font-size: 11px; color: var(--ink-faint);
   display: flex; gap: 18px; flex-wrap: wrap; justify-content: space-between;
 }
@@ -438,6 +438,8 @@ p { margin: 0; }
 }
 
 @media (max-width: 720px) {
+  .footer { gap: 6px; }
+  .footer span { white-space: normal; }
   .bizcard-metrics { grid-template-columns: 1fr 1fr; }
   .feed-row { grid-template-columns: 52px 1fr; }
   .feed-row .feed-amount { grid-column: 2; justify-self: start; }
