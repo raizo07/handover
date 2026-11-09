@@ -670,3 +670,10 @@ registry: 13 unit tests … ok   (mint, token-id rules, transfer auth, key requi
 vault:    15 unit tests … ok
 vault:     4 sandbox tests … ok
 ```
+
+## 8.1 Implementation status
+
+The frontend described above is built (`web/`). It runs against a demo client that
+re-enforces the same rule checks as the vault, and reads a live registry only when
+`VITE_REGISTRY_CONTRACT` is set. Chain *writes* are deliberately unwired: the UI says so
+rather than simulating a signature it cannot produce.

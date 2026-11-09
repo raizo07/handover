@@ -1,0 +1,26 @@
+{
+  "name": "handover-web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --port 4173",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@near-js/crypto": "2.5.1",
+    "near-kit": "0.20.2",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.3.0",
+    "puppeteer-core": "^24.43.1",
+    "typescript": "5.9.3",
+    "vite": "8.3.5"
+  }
+}
