@@ -11,7 +11,7 @@
 //! explicit state machine (`Pending -> Applied | Failed`) with a permissionless
 //! `resolve_rotation` to retry or revert. See docs/SPEC.md §6.
 
-use near_sdk::json_types::U128;
+use near_sdk::json_types::{Base64VecU8, U128};
 use near_sdk::serde_json::json;
 use near_sdk::store::{IterableMap, LazyOption, LookupMap};
 use near_sdk::{
@@ -124,14 +124,17 @@ impl Registry {
 
     // ------------------------------------------------------------------- admin
 
+    /// Store the vault wasm once; every mint deploys from these bytes. Base64 so the
+    /// deploy script sends one string instead of a 150k-element JSON array.
     #[payable]
-    pub fn store_vault_code(&mut self, code: Vec<u8>) {
+    pub fn store_vault_code(&mut self, code: Base64VecU8) {
         require!(
             env::predecessor_account_id() == self.owner_id,
             "E01: only the owner may store code"
         );
-        require!(!code.is_empty(), "E13: empty code");
-        self.vault_code.set(Some(code));
+        let bytes: Vec<u8> = code.into();
+        require!(!bytes.is_empty(), "E13: empty code");
+        self.vault_code.set(Some(bytes));
     }
 
     pub fn set_minter(&mut self, minter: AccountId) {
@@ -600,7 +603,7 @@ mod tests {
     fn registry() -> Registry {
         testing_env!(context(alice(), 0));
         let mut r = Registry::new(alice(), alice(), meta());
-        r.store_vault_code(vec![0u8; 64]);
+        r.store_vault_code(Base64VecU8::from(vec![0u8; 64]));
         r
     }
 

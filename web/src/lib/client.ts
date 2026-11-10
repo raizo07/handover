@@ -12,7 +12,7 @@
  *  The interface is deliberately the contract's method names.
  */
 
-import { buildFixtures, plannedSpend } from "./fixtures";
+import { DISPLAY, buildFixtures, plannedSpend } from "./fixtures";
 import type { Business, FeedEvent, OwnerKey, Receipt, Rules } from "./types";
 import { E } from "./types";
 import { YOCTO } from "./format";
@@ -379,7 +379,11 @@ function revive(_k: string, v: unknown) {
 export async function createLiveClient(contractId: string): Promise<DataClient | null> {
   try {
     const { Near } = await import("near-kit");
-    const near = new Near({ network: "testnet" });
+    // VITE_RPC_URL lets the app read a local sandbox as well as testnet.
+    const rpcUrl = import.meta.env.VITE_RPC_URL as string | undefined;
+    const near = new Near(
+      rpcUrl ? { network: { rpcUrl, networkId: "custom" } } : { network: "testnet" },
+    );
 
     const view = async <T>(cid: string, method: string, args: object = {}): Promise<T | undefined> =>
       (await near.view(cid, method, args)) as T | undefined;
@@ -395,11 +399,12 @@ export async function createLiveClient(contractId: string): Promise<DataClient |
       const stats = await view<Record<string, string>>(vault, "get_stats");
       const rules = await view<Record<string, unknown>>(vault, "get_rules");
       if (!stats || !rules) continue;
+      const display = DISPLAY[tokenId];
       businesses.push({
         tokenId,
-        name: tokenId,
-        kind: "live",
-        tagline: "",
+        name: display?.name ?? tokenId,
+        kind: display?.kind ?? "live",
+        tagline: display?.tagline ?? "Deployed on testnet.",
         vault,
         holder: String(t.owner_id),
         operator: String(t.operator),

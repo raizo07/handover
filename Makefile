@@ -4,7 +4,7 @@
 
 CONTRACTS := contracts/vault contracts/registry
 
-.PHONY: test build fmt clean web-install web-dev web-build demo
+.PHONY: test build fmt clean web-install web-dev web-build demo deploy deploy-dry deploy-sandbox
 
 ## Run unit + sandbox integration tests for both contracts.
 test:
@@ -41,3 +41,15 @@ web-build:
 ## Build the app and serve it on http://localhost:4173 — the judge path.
 demo: web-install web-build
 	cd web && npm run preview
+
+## Deploy + seed to testnet using .env (needs a funded named account).
+deploy:
+	cd web && node scripts/deploy.mjs
+
+## Show exactly what deploy would do, without touching the network.
+deploy-dry:
+	cd web && node scripts/deploy.mjs --dry-run
+
+## Full rehearsal of deploy + seed against a local NEAR node (downloads it once).
+deploy-sandbox:
+	cd web && node scripts/deploy.mjs --sandbox

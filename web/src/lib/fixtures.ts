@@ -158,6 +158,12 @@ function feedFor(seed: Seed, now: number): FeedEvent[] {
   return events;
 }
 
+/** Display names by token id — used by the demo data and by live mode, so a deployed
+ *  registry shows "Oja Coffee Works" instead of "biz-7". */
+export const DISPLAY: Record<string, { name: string; kind: string; tagline: string }> = Object.fromEntries(
+  SEEDS.map((s) => [s.tokenId, { name: s.name, kind: s.kind, tagline: s.tagline }]),
+);
+
 export function buildFixtures(now = Date.now()): Business[] {
   return SEEDS.map((seed) => {
     const history = historyFor(seed);

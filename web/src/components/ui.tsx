@@ -153,6 +153,13 @@ export function Bars({ data, height = 120 }: { data: bigint[]; height?: number }
 }
 
 export function Spark({ data, width = 84, height = 26 }: { data: bigint[]; width?: number; height?: number }) {
+  if (data.every((d) => d === 0n)) {
+    return (
+      <span className="faint mono" style={{ fontSize: 9.5, letterSpacing: "0.08em" }}>
+        NO SALES YET
+      </span>
+    );
+  }
   const max = Math.max(1, ...data.map((d) => Number(d)));
   const step = width / Math.max(1, data.length - 1);
   const pts = data.map((d, i) => `${i * step},${height - (Number(d) / max) * height}`).join(" ");

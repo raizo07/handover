@@ -33,3 +33,6 @@ contracts/.home/
 web/node_modules/
 web/dist/
 web/shots/
+
+# deploy artifacts (contains generated testnet keys)
+deploy-out/

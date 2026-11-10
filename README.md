@@ -86,6 +86,29 @@ Requires Node 20+ and Rust stable. No wallet, no faucet, no funds.
    Every action opens a drawer with the `EVENT_JSON` the contract emits and the action list.
    No number in the UI is unexplained.
 
+## Deploy (written, rehearsed, not yet run on testnet)
+
+The deploy script is idempotent and has three modes:
+
+```
+make deploy-dry      # print the plan: accounts, wasm hashes, NEAR needed
+make deploy-sandbox  # full rehearsal against a local NEAR node
+make deploy          # real testnet run, reading .env
+```
+
+The sandbox rehearsal is the one I have executed: it deploys the registry (214 KB), stores
+the vault wasm in registry state (162 KB), mints three businesses — each a real sub-account
+with a vault, a full-access owner key and a function-call operator key — then reads all of it
+back. Pointing the app at that node with `VITE_REGISTRY_CONTRACT` renders the same data from
+chain:
+
+![Live mode](docs/screens/live.png)
+
+A testnet run needs a funded named account (about 25 NEAR covers the registry plus three
+mints) and writes `docs/DEPLOYED.md` with the real addresses. It will not run against
+mainnet, and it refuses an implicit 64-character account up front — sub-accounts require a
+named parent.
+
 ## Real vs simulated (exact)
 
 | Thing | State |
@@ -93,9 +116,9 @@ Requires Node 20+ and Rust stable. No wallet, no faucet, no funds.
 | `registry` + `vault` contracts | **Real.** Built with `cargo near build`, 28 tests green. |
 | Key rotation, caps, halt, dividends | **Real** in Rust; **re-enforced** in the demo client so the UI cannot show a state the contract forbids. |
 | Browser app | **Real** React/Vite build, served from `dist/`. |
-| Chain reads in the browser | **Wired but unused.** Set `VITE_REGISTRY_CONTRACT` and the app reads the registry via `near-kit`. Nothing is deployed, so it falls back to demo data. |
+| Chain reads in the browser | **Verified.** Set `VITE_REGISTRY_CONTRACT` (and `VITE_RPC_URL` for a local node) and the app reads the registry through `near-kit`. Rehearsed end-to-end against a local NEAR node: three businesses, real operator accounts, no demo banner. |
 | Chain writes in the browser | **Not wired.** Writes show "needs a connected wallet" instead of pretending. |
-| Deployed contracts | **None.** No address in this repository is live. |
+| Deployed contracts | **None still.** The deploy script is written, rehearsed on a local node, and has not been run against testnet yet — so no address in this repository is live. |
 
 The demo client enforces `E20` (per-call cap), `E21` (epoch cap), `E22` (allowlist), `E23`
 (halted), `E27` (claim cooldown), `E28` (nothing to claim), `E29` (rules timelock) and `E32`
