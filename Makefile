@@ -4,7 +4,7 @@
 
 CONTRACTS := contracts/vault contracts/registry
 
-.PHONY: test build fmt clean web-install web-dev web-build demo deploy deploy-dry deploy-sandbox
+.PHONY: test build fmt clean web-install web-dev web-build demo deploy deploy-dry deploy-sandbox pages
 
 ## Run unit + sandbox integration tests for both contracts.
 test:
@@ -53,3 +53,7 @@ deploy-dry:
 ## Full rehearsal of deploy + seed against a local NEAR node (downloads it once).
 deploy-sandbox:
 	cd web && node scripts/deploy.mjs --sandbox
+
+## Build with the GitHub Pages base path and publish to the gh-pages branch.
+pages:
+	./web/scripts/publish-pages.sh
