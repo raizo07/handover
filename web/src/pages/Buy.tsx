@@ -1,7 +1,8 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { Business, OwnerKey } from "../lib/types";
 import type { DataClient } from "../lib/client";
 import { downloadKey, generateOwnerKey } from "../lib/keys";
+import { useWallet } from "../lib/wallet";
 import { shortKey } from "../lib/format";
 import { Btn, Chip, KV, Panel, ReceiptView } from "../components/ui";
 
@@ -18,8 +19,15 @@ export function BuyPage({
   navigate: (to: string) => void;
   toast: (t: string, tone?: "ok" | "bad" | "plain") => void;
 }) {
+  const wallet = useWallet();
   const [step, setStep] = useState<Step>(1);
-  const [account, setAccount] = useState("collector.testnet");
+  const [account, setAccount] = useState(wallet.account ?? "collector.testnet");
+  const [accountTouched, setAccountTouched] = useState(false);
+
+  // A connected wallet is the natural buyer: use it unless the user typed something else.
+  useEffect(() => {
+    if (wallet.account && !accountTouched) setAccount(wallet.account);
+  }, [wallet.account, accountTouched]);
   const [key, setKey] = useState<OwnerKey | null>(null);
   const [downloaded, setDownloaded] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -109,13 +117,21 @@ export function BuyPage({
                 browser mints an ed25519 keypair for you. It is a bearer instrument: whoever holds
                 the secret key can claim the dividends.
               </p>
+              {wallet.phase === "connected" && wallet.account && !accountTouched && (
+                <p className="small mt-s" style={{ color: "var(--ok)" }}>
+                  using your connected wallet · <span className="mono">{wallet.account}</span>
+                </p>
+              )}
               <div className="field mt">
                 <label className="metric-label" htmlFor="acct">your NEAR account (testnet)</label>
                 <input
                   id="acct"
                   className="input"
                   value={account}
-                  onChange={(e) => setAccount(e.target.value)}
+                  onChange={(e) => {
+                    setAccountTouched(true);
+                    setAccount(e.target.value);
+                  }}
                   placeholder="you.testnet"
                   autoComplete="off"
                   spellCheck={false}

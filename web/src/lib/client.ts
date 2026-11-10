@@ -15,7 +15,6 @@
 import { DISPLAY, buildFixtures, plannedSpend } from "./fixtures";
 import type { Business, FeedEvent, OwnerKey, Receipt, Rules } from "./types";
 import { E } from "./types";
-import { YOCTO } from "./format";
 
 export type Mode = "demo" | "live";
 
@@ -379,87 +378,167 @@ function revive(_k: string, v: unknown) {
 export async function createLiveClient(contractId: string): Promise<DataClient | null> {
   try {
     const { Near } = await import("near-kit");
-    // VITE_RPC_URL lets the app read a local sandbox as well as testnet.
     const rpcUrl = import.meta.env.VITE_RPC_URL as string | undefined;
-    const near = new Near(
-      rpcUrl ? { network: { rpcUrl, networkId: "custom" } } : { network: "testnet" },
-    );
+    const network = rpcUrl ? { rpcUrl, networkId: "custom" } : "testnet";
+
+    const reader = new Near(network === "testnet" ? { network: "testnet" } : { network });
 
     const view = async <T>(cid: string, method: string, args: object = {}): Promise<T | undefined> =>
-      (await near.view(cid, method, args)) as T | undefined;
+      (await reader.view(cid, method, args)) as T | undefined;
 
-    const raw = (await view<unknown[]>(contractId, "nft_tokens", { from_index: "0", limit: 50 })) ?? [];
-    if (!Array.isArray(raw) || raw.length === 0) return null;
+    const listeners = new Set<() => void>();
+    let businesses: Business[] = [];
 
-    // See docs/SPEC.md §8: the live path reads the same shapes the demo simulates.
-    const businesses: Business[] = [];
-    for (const t of raw as Array<Record<string, unknown>>) {
-      const tokenId = String(t.token_id);
-      const vault = String(t.vault);
-      const stats = await view<Record<string, string>>(vault, "get_stats");
-      const rules = await view<Record<string, unknown>>(vault, "get_rules");
-      if (!stats || !rules) continue;
-      const display = DISPLAY[tokenId];
-      businesses.push({
-        tokenId,
-        name: display?.name ?? tokenId,
-        kind: display?.kind ?? "live",
-        tagline: display?.tagline ?? "Deployed on testnet.",
-        vault,
-        holder: String(t.owner_id),
-        operator: String(t.operator),
-        epoch: Number(t.epoch ?? 1),
-        stats: {
-          revenueTotal: BigInt(stats.revenue_total ?? "0"),
-          claimedTotal: BigInt(stats.claimed_total ?? "0"),
-          pendingDividend: BigInt(stats.pending_dividend ?? "0"),
-          spentEpoch: BigInt(stats.spent_epoch ?? "0"),
-          epochStart: Number(stats.epoch_start ?? 0) / 1e6,
-          treasuryEstimate: BigInt(stats.treasury_estimate ?? "0"),
-          lastClaimAt: Number(stats.last_claim_at ?? 0) / 1e6,
-          createdAt: Number(stats.created_at ?? 0) / 1e6,
-          halted: Boolean(stats.halted),
-        },
-        rules: {
-          maxSpendPerEpoch: BigInt(String(rules.max_spend_per_epoch ?? "0")),
-          maxSingleSpend: BigInt(String(rules.max_single_spend ?? "0")),
-          epochSecs: Number(rules.epoch_secs ?? 0),
-          allowRecipients: (rules.allow_recipients as string[]) ?? [],
-          claimCooldownSecs: Number(rules.claim_cooldown_secs ?? 0),
-          rulesDelaySecs: Number(rules.rules_delay_secs ?? 0),
-        },
-        pendingRules: null,
-        rotation: "none",
-        rotationEpoch: null,
-        feed: [],
-        history: Array.from({ length: 30 }, () => 0n),
-      });
+    async function load(): Promise<Business[]> {
+      const raw = (await view<unknown[]>(contractId, "nft_tokens", { from_index: "0", limit: 50 })) ?? [];
+      if (!Array.isArray(raw) || raw.length === 0) return [];
+      const out: Business[] = [];
+      for (const t of raw as Array<Record<string, unknown>>) {
+        const tokenId = String(t.token_id);
+        const vault = String(t.vault);
+        const stats = await view<Record<string, string>>(vault, "get_stats");
+        const rules = await view<Record<string, unknown>>(vault, "get_rules");
+        if (!stats || !rules) continue;
+        const display = DISPLAY[tokenId];
+        out.push({
+          tokenId,
+          name: display?.name ?? tokenId,
+          kind: display?.kind ?? "live",
+          tagline: display?.tagline ?? "Deployed on testnet.",
+          vault,
+          holder: String(t.owner_id),
+          operator: String(t.operator),
+          epoch: Number(t.epoch ?? 1),
+          stats: {
+            revenueTotal: BigInt(stats.revenue_total ?? "0"),
+            claimedTotal: BigInt(stats.claimed_total ?? "0"),
+            pendingDividend: BigInt(stats.pending_dividend ?? "0"),
+            spentEpoch: BigInt(stats.spent_epoch ?? "0"),
+            epochStart: Number(stats.epoch_start ?? 0) / 1e6,
+            treasuryEstimate: BigInt(stats.treasury_estimate ?? "0"),
+            lastClaimAt: Number(stats.last_claim_at ?? 0) / 1e6,
+            createdAt: Number(stats.created_at ?? 0) / 1e6,
+            halted: Boolean(stats.halted),
+          },
+          rules: {
+            maxSpendPerEpoch: BigInt(String(rules.max_spend_per_epoch ?? "0")),
+            maxSingleSpend: BigInt(String(rules.max_single_spend ?? "0")),
+            epochSecs: Number(rules.epoch_secs ?? 0),
+            allowRecipients: (rules.allow_recipients as string[]) ?? [],
+            claimCooldownSecs: Number(rules.claim_cooldown_secs ?? 0),
+            rulesDelaySecs: Number(rules.rules_delay_secs ?? 0),
+          },
+          pendingRules: null,
+          rotation: "none",
+          rotationEpoch: null,
+          feed: [],
+          history: Array.from({ length: 30 }, () => 0n),
+        });
+      }
+      return out;
     }
 
+    businesses = await load();
     if (businesses.length === 0) return null;
 
-    const notWired = (m: string): Receipt =>
-      receipt(false, `${m} needs a connected wallet — this build reads live state only`);
+    const notify = () => listeners.forEach((l) => l());
+    const reload = async () => {
+      businesses = await load();
+      notify();
+    };
+
+    /** Sign with the connected wallet. Registry actions only: a vault is controlled by
+     *  the bearer key the buy flow generates, not by the user's wallet account. */
+    async function walletCall(
+      method: string,
+      args: object,
+      opts: { deposit?: bigint; gas?: `${number} Tgas` } = {},
+    ): Promise<Receipt> {
+      const { Near: N, fromNearConnect } = await import("near-kit");
+      const { connectorInstance } = await import("./wallet");
+      const connector = connectorInstance();
+      let signerId: string | undefined;
+      try {
+        const { accounts } = await connector.getConnectedWallet();
+        signerId = accounts?.[0]?.accountId;
+      } catch {
+        signerId = undefined;
+      }
+      if (!signerId) {
+        return receipt(false, "connect a wallet to sign this", { code: "W01" });
+      }
+      try {
+        const near = new N({
+          network: network === "testnet" ? "testnet" : (network as { rpcUrl: string; networkId: string }),
+          // near-connect and near-kit describe FinalExecutionOutcome with slightly
+          // different literal unions; structurally compatible at runtime, so cast at the
+          // boundary rather than fork the adapter.
+          wallet: fromNearConnect(connector as unknown as Parameters<typeof fromNearConnect>[0]),
+        });
+        const out = await near.call(contractId, method, args, {
+          // 1 yoctoNEAR is the NEP-171 transfer convention: it proves key ownership.
+          attachedDeposit: opts.deposit ?? 1n,
+          gas: opts.gas ?? "100 Tgas",
+          signerId,
+        });
+        await reload();
+        const hash = (out as { transaction?: { hash?: string } })?.transaction?.hash;
+        return receipt(true, `${method} submitted`, {
+          txHash: hash,
+          logs: [
+            `signer: ${signerId}`,
+            `call: ${method} on ${contractId}`,
+            hash ? `tx: ${hash}` : "submitted",
+          ],
+        });
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        const cancelled = /reject|denied|cancel/i.test(msg);
+        return receipt(false, cancelled ? "cancelled in the wallet" : msg.slice(0, 180), {
+          code: cancelled ? "W02" : "W03",
+          logs: [`signer: ${signerId}`, `error: ${msg.slice(0, 300)}`],
+        });
+      }
+    }
+
+    const businessKeyOnly = (m: string): Receipt =>
+      receipt(false, `${m} is signed by the business key, not your wallet`, {
+        code: "W04",
+        logs: [
+          "A vault is controlled by a bearer key generated at purchase.",
+          "Wallet accounts can buy, sell and repair rotations; vault operations use that key.",
+        ],
+      });
 
     return {
       mode: "live",
-      subscribe: () => () => {},
+      subscribe(fn) {
+        listeners.add(fn);
+        return () => listeners.delete(fn);
+      },
       list: () => businesses,
       get: (id) => businesses.find((b) => b.tokenId === id),
-      claim: async () => notWired("claim()"),
-      halt: async () => notWired("halt()"),
-      resume: async () => notWired("resume()"),
-      proposeRules: async () => notWired("propose_rules()"),
-      applyRules: async () => notWired("apply_rules()"),
-      cancelRules: async () => notWired("cancel_rules()"),
-      operatorSpend: async () => notWired("operator_spend()"),
-      replayOperator: async () => notWired("operator replay"),
-      transfer: async () => notWired("nft_transfer()"),
-      resolveRotation: async () => notWired("resolve_rotation()"),
+
+      claim: async () => businessKeyOnly("claim()"),
+      halt: async () => businessKeyOnly("halt()"),
+      resume: async () => businessKeyOnly("resume()"),
+      proposeRules: async () => businessKeyOnly("propose_rules()"),
+      applyRules: async () => businessKeyOnly("apply_rules()"),
+      cancelRules: async () => businessKeyOnly("cancel_rules()"),
+      operatorSpend: async () => businessKeyOnly("operator_spend()"),
+      replayOperator: async () => businessKeyOnly("operator replay"),
+
+      transfer: async (tokenId, to, publicKey) =>
+        walletCall("nft_transfer", {
+          receiver_id: to,
+          token_id: tokenId,
+          approval_id: null,
+          memo: publicKey,
+        }),
+
+      resolveRotation: async (tokenId) => walletCall("resolve_rotation", { token_id: tokenId }),
     };
   } catch {
     return null;
   }
 }
-
-export const YOCTO_ONE = YOCTO;

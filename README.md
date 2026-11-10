@@ -98,7 +98,25 @@ Requires Node 20+ and Rust stable. No wallet, no faucet, no funds.
    Every action opens a drawer with the `EVENT_JSON` the contract emits and the action list.
    No number in the UI is unexplained.
 
-## Deploy (written, rehearsed, not yet run on testnet)
+## Wallet
+
+The app connects to NEAR testnet through [NEAR Connect](https://github.com/hot-dao/near-connect):
+a wallet picker, a connected-account menu (copy address, explorer, disconnect, network,
+account count), session restore, and honest error states (cancelled in wallet, wallet
+service unreachable, no wallets offered).
+
+![Connect wallet](docs/screens/wallet.png)
+
+**What the wallet can do:** buy and sell a business (`nft_transfer` on the registry, with
+the buyer's new owner key in the memo), repair a stuck rotation (`resolve_rotation`), and
+act as the identity shown across the app.
+
+**What it cannot do — by design:** claim dividends, halt the operator, or edit a charter.
+Those are signed by the *business key*, the bearer key the buy flow generates and makes you
+download, because a vault is an account with its own keys rather than a row in the
+registry. The UI says exactly that instead of pretending the wallet is enough.
+
+## Deploy (run against testnet)
 
 The deploy script is idempotent and has three modes:
 

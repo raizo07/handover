@@ -384,11 +384,18 @@ p { margin: 0; }
 
 /* --------------------------------------------------------------------- modal */
 
-.modal-scrim { position: fixed; inset: 0; background: rgba(4,5,6,0.7); backdrop-filter: blur(3px); z-index: 70; display: grid; place-items: center; padding: 20px; }
+.modal-scrim {
+  position: fixed; inset: 0; background: rgba(4,5,6,0.72); backdrop-filter: blur(3px);
+  z-index: 70; display: flex; align-items: center; justify-content: center;
+  padding: max(16px, env(safe-area-inset-top)) 16px;
+  overflow-y: auto;
+}
 .modal {
   width: min(560px, 100%); background: var(--panel); border: 1px solid var(--line-strong);
   border-radius: 12px; padding: 24px; animation: toastIn 200ms ease both;
-  max-height: 90vh; overflow-y: auto;
+  max-height: calc(100dvh - 32px);
+  display: flex; flex-direction: column; gap: 0;
+  margin: auto;
 }
 
 /* ---------------------------------------------------------------------- forms */
@@ -450,4 +457,77 @@ p { margin: 0; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+}
+
+/* ------------------------------------------------------------------- wallet */
+
+.wallet-wrap { position: relative; }
+
+.wallet-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 5px 10px 5px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: rgba(255,255,255,0.03);
+  cursor: pointer;
+  font-size: 12px;
+  transition: border-color 140ms ease, background 140ms ease;
+}
+.wallet-chip:hover { border-color: var(--ink-faint); background: rgba(255,255,255,0.05); }
+.wallet-chevron { color: var(--ink-faint); font-size: 9px; }
+
+.wallet-menu {
+  position: absolute; right: 0; top: calc(100% + 8px);
+  width: 260px;
+  background: var(--panel);
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 24px 50px -24px rgba(0,0,0,0.95);
+  z-index: 55;
+  animation: toastIn 140ms ease both;
+}
+.wallet-menu-head { padding: 4px 6px 8px; border-bottom: 1px dashed var(--line); margin-bottom: 6px; word-break: break-all; }
+.wallet-menu-item {
+  display: block; width: 100%; text-align: left;
+  padding: 8px 6px; border: 0; background: transparent; cursor: pointer;
+  font-family: var(--mono); font-size: 12px; color: var(--ink-dim);
+  border-radius: 6px;
+}
+.wallet-menu-item:hover { background: rgba(255,255,255,0.04); color: var(--ink); }
+.wallet-menu-item.danger { color: var(--bad); }
+.wallet-menu-sep { height: 1px; background: var(--line); margin: 6px 0; }
+.wallet-menu-row { display: flex; align-items: center; justify-content: space-between; padding: 5px 6px; }
+
+.wallet-modal { width: min(520px, 100%); }
+.wallet-list {
+  display: flex; flex-direction: column; gap: 6px;
+  overflow-y: auto; overscroll-behavior: contain;
+  max-height: min(46vh, 340px);
+  padding-right: 2px;
+}
+.wallet-option {
+  display: flex; align-items: center; gap: 12px;
+  width: 100%; padding: 11px 12px;
+  border: 1px solid var(--line); border-radius: 9px;
+  background: rgba(255,255,255,0.015);
+  cursor: pointer; text-align: left;
+  transition: border-color 140ms ease, background 140ms ease, transform 100ms ease;
+}
+.wallet-option:hover:not(:disabled) { border-color: var(--line-strong); background: rgba(255,255,255,0.045); }
+.wallet-option:active:not(:disabled) { transform: translateY(1px); }
+.wallet-option:disabled { opacity: 0.55; cursor: progress; }
+.wallet-icon {
+  width: 30px; height: 30px; border-radius: 7px; flex: none;
+  display: grid; place-items: center;
+  background: rgba(255,255,255,0.06);
+  font-family: var(--serif); color: var(--accent); font-size: 15px;
+  overflow: hidden;
+}
+.wallet-icon img { width: 26px; height: 26px; object-fit: contain; }
+.wallet-name { display: block; font-family: var(--sans); font-size: 14px; }
+.wallet-desc { display: block; font-size: 11.5px; color: var(--ink-faint); margin-top: 1px; }
+
+@media (max-width: 560px) {
+  .wallet-menu { width: min(280px, calc(100vw - 32px)); }
 }

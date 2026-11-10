@@ -6,7 +6,7 @@
 # GitHub Pages handles single-page apps without a router on the server.
 set -euo pipefail
 
-REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 REPO_SLUG="${REPO_SLUG:-raizo07/handover}"
 REMOTE="https://github.com/${REPO_SLUG}.git"
 REMOTE_URL="$(git -C "$REPO_ROOT" remote get-url origin 2>/dev/null || echo "$REMOTE")"

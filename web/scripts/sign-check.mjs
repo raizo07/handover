@@ -1,0 +1,42 @@
+import puppeteer from "puppeteer-core";
+const BASE = process.env.BASE ?? "http://127.0.0.1:4178";
+const b = await puppeteer.launch({ executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", headless: true, args: ["--no-sandbox"] });
+const p = await b.newPage();
+const errs = [];
+p.on("pageerror", (e) => errs.push(e.message));
+await p.setViewport({ width: 1440, height: 900 });
+await p.goto(`${BASE}/?live=1`, { waitUntil: "networkidle0" });
+await new Promise((r) => setTimeout(r, 3500));
+const click = async (needle) => {
+  const ok = await p.evaluate((n) => {
+    const el = [...document.querySelectorAll("button, a")].find((b) => b.textContent?.toLowerCase().includes(n));
+    if (!el) return false;
+    el.scrollIntoView({ block: "center" });
+    el.click();
+    return true;
+  }, needle);
+  await new Promise((r) => setTimeout(r, 700));
+  return ok;
+};
+const opened = await p.evaluate(() => {
+  const card = [...document.querySelectorAll(".bizcard")][0];
+  if (!card) return false;
+  (card).click();
+  return true;
+});
+await new Promise((r) => setTimeout(r, 900));
+console.log("opened business:", opened);
+await click("sell this business");
+await click("generate key");
+await click("download key file");
+await click("continue");
+await click("continue");
+await click("sign transfer");
+await new Promise((r) => setTimeout(r, 1200));
+const text = await p.evaluate(() => document.body.innerText);
+console.log("reached sign step:", text.includes("SIGN"));
+console.log("asks for a wallet:", /connect a wallet to sign this/i.test(text));
+console.log("old message gone:", !/needs a connected wallet — this build reads live state only/i.test(text));
+await p.screenshot({ path: "shots/19-sign-needs-wallet.png", fullPage: false });
+console.log("page errors:", errs.length, errs.slice(0, 2).join(" | "));
+await b.close();

@@ -6,6 +6,7 @@ import { BusinessPage } from "./pages/Business";
 import { BuyPage } from "./pages/Buy";
 import { KeysPage } from "./pages/Keys";
 import { Btn, Drawer, Panel, ReceiptView, Toasts } from "./components/ui";
+import { ConnectButton } from "./components/wallet";
 
 export default function App() {
   const client = useClient();
@@ -64,6 +65,7 @@ export default function App() {
           <span className="topbar-spacer" />
           <button className="btn ghost sm" onClick={() => navigate("/judge")}>walkthrough</button>
           <button className="btn ghost sm" onClick={() => navigate("/keys")}>keys</button>
+          <ConnectButton onToast={push} />
           <span className="netbadge">
             <span className={`dot ${mode === "live" ? "live" : ""}`} />
             {mode === "live" ? "testnet · live" : "demo"}
