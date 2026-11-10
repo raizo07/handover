@@ -59,7 +59,10 @@ owner and operator is enforced by the protocol rather than by `if` statements in
 
 ## Try it
 
-Requires Node 20+ and Rust stable. No wallet, no faucet, no funds.
+Requires Node 20+ and Rust stable. The demo path needs no wallet, no faucet and no funds.
+
+0. **Follow the walkthrough** — <https://raizo07.github.io/handover/judge>
+   The same eight steps as below, in the app, with the mode you are in explained on the side.
 
 1. **Run the contract tests**
    `make test`
@@ -71,32 +74,46 @@ Requires Node 20+ and Rust stable. No wallet, no faucet, no funds.
    → opens `http://localhost:4173`: three businesses, a `DEMO DATA` banner, no wallet prompt.
 
 3. **See the live testnet registry instead of demo data**
-   `VITE_REGISTRY_CONTRACT=reg.raizo07.testnet npm run build` (in `web/`)
+   `VITE_REGISTRY_CONTRACT=reg.raizo07.testnet npm run build` (in `web/`), or add `?live=1`
+   on the hosted build
    → the badge changes to `TESTNET · LIVE` and the businesses come from chain, not fixtures.
+   Live mode disables the vault buttons and says why: those calls are signed by the business
+   key, not by a wallet.
 
-4. **Watch the charter block the agent**
+4. **Connect a wallet**
+   **connect wallet** in the top bar → the picker lists what NEAR Connect offers (Meteor,
+   Intear, Ledger, …). After connecting, the chip shows your account with copy, explorer and
+   disconnect. It signs registry actions — buying, selling, repairing a rotation — and the
+   buy flow uses your address as the buyer.
+
+5. **Watch the charter block the agent**
    On `/b/biz-7`, drag the *per-call cap* slider to about `0.20` →
    the line under it changes live to "the operator's next 0.31 NEAR payment **is rejected
    (E20)**". Press **replay operator** → the spend is rejected, a receipt drawer opens with
    the reverted call, and the activity feed records a struck-through row.
 
-5. **Halve the cap, then spend inside it**
+6. **Halve the cap, then spend inside it**
    Set the cap to `0.50`, press **replay operator** → the payment settles, the epoch meter
    advances. The same button, two outcomes, decided by one number.
 
-6. **Halt the agent**
+7. **Halt the agent**
    Press **halt operator** → the receipt shows `DeleteKey(...)`. Press **replay operator**
    again → `E23`, because the key no longer exists. Press **resume** to re-arm it.
 
-7. **Buy a business**
+8. **Buy a business**
    Press **sell this business** on any business → generate an owner key (a real ed25519
    keypair in your browser), **download it** (the flow blocks until you do), sign →
    the rotation settles in two beats: `rotation_pending`, then `rotation_applied`, and the
-   page states what the seller now sees: `Access key does not exist`.
+   page states what the seller now sees: `Access key does not exist`. In live mode this
+   transaction is signed by your wallet.
 
-8. **Inspect any receipt**
+9. **Inspect any receipt**
    Every action opens a drawer with the `EVENT_JSON` the contract emits and the action list.
-   No number in the UI is unexplained.
+   Wallet-signed calls also link straight to the transaction on the explorer.
+
+10. **Reset**
+   **reset demo data** on the walkthrough restores the seeded businesses. Downloaded owner
+   keys are kept, because they are separate from the simulation.
 
 ## Wallet
 

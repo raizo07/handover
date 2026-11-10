@@ -4,6 +4,12 @@ import type { Business } from "./types";
 
 /** One client for the whole app; resolved once at boot. */
 let clientPromise: Promise<DataClient> | null = null;
+let liveFallback: string | null = null;
+
+/** Set when live mode was requested but the registry could not be read. */
+export function getLiveFallback(): string | null {
+  return liveFallback;
+}
 
 export function resolveClient(): Promise<DataClient> {
   if (!clientPromise) {
@@ -13,7 +19,13 @@ export function resolveClient(): Promise<DataClient> {
     const wantLive = new URLSearchParams(window.location.search).has("live");
     clientPromise =
       liveId && wantLive
-        ? createLiveClient(liveId).then((c) => c ?? createDemoClient())
+        ? createLiveClient(liveId).then((c) => {
+            if (!c) {
+              liveFallback = "the registry returned no businesses";
+              return createDemoClient();
+            }
+            return c;
+          })
         : Promise.resolve(createDemoClient());
   }
   return clientPromise;

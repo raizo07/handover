@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import type { Business, Receipt, Rules } from "../lib/types";
 import { plannedSpend } from "../lib/fixtures";
 import { countdown, near, shortKey } from "../lib/format";
+
+const LOCKED_HINT = "Signed by the business key, not by a wallet. Use the demo to exercise vault calls.";
 import { Btn, Chip, KV, Meter, Panel } from "./ui";
 
 /* --------------------------------------------------------------- operator */
@@ -10,6 +12,7 @@ export function OperatorPanel({
   b,
   now,
   busy,
+  locked,
   onReplay,
   onHalt,
   onResume,
@@ -18,6 +21,8 @@ export function OperatorPanel({
   b: Business;
   now: number;
   busy: string | null;
+  /** live mode: these calls are signed by the business key, not by a wallet */
+  locked?: boolean;
   onReplay: () => void;
   onHalt: () => void;
   onResume: () => void;
@@ -32,7 +37,13 @@ export function OperatorPanel({
     <Panel
       title="Operator"
       right={
-        b.stats.halted ? <Chip tone="bad">key deleted</Chip> : <Chip tone="ok">scoped key live</Chip>
+        locked ? (
+          <Chip tone="warn">business key required</Chip>
+        ) : b.stats.halted ? (
+          <Chip tone="bad">key deleted</Chip>
+        ) : (
+          <Chip tone="ok">scoped key live</Chip>
+        )
       }
     >
       <div style={{ marginBottom: 10 }}>
@@ -61,27 +72,33 @@ export function OperatorPanel({
       <hr className="rule" />
 
       <div className="row wrap" style={{ gap: 8 }}>
-        <Btn primary sm onClick={onReplay} disabled={busy !== null}>
+        <Btn primary sm onClick={onReplay} disabled={busy !== null || locked} title={locked ? LOCKED_HINT : undefined}>
           {busy === "replay" ? "settling…" : "replay operator"}
         </Btn>
         <Btn
           sm
           onClick={() => onSpend(plan.to, plan.amount + plan.amount / 4n)}
-          disabled={busy !== null}
-          title="Force a spend that breaks the per-call cap"
+          disabled={busy !== null || locked}
+          title={locked ? LOCKED_HINT : "Force a spend that breaks the per-call cap"}
         >
           try an overspend
         </Btn>
         {!b.stats.halted ? (
-          <Btn sm variant="danger" onClick={onHalt} disabled={busy !== null}>
+          <Btn sm variant="danger" onClick={onHalt} disabled={busy !== null || locked} title={locked ? LOCKED_HINT : undefined}>
             halt operator
           </Btn>
         ) : (
-          <Btn sm onClick={onResume} disabled={busy !== null}>
+          <Btn sm onClick={onResume} disabled={busy !== null || locked} title={locked ? LOCKED_HINT : undefined}>
             resume
           </Btn>
         )}
       </div>
+      {locked && (
+        <p className="small mt-s" style={{ color: "var(--accent)" }}>
+          Live mode: vault calls are signed by the business key you downloaded at purchase, not by a
+          connected wallet. Use the demo to exercise them.
+        </p>
+      )}
 
       <p className="small faint mt-s">
         Next attempt pays <span className="mono">{near(plan.amount)} NEAR</span> to{" "}
@@ -144,6 +161,7 @@ export function CharterPanel({
   b,
   now,
   busy,
+  locked,
   onPropose,
   onApply,
   onCancel,
@@ -151,6 +169,7 @@ export function CharterPanel({
   b: Business;
   now: number;
   busy: string | null;
+  locked?: boolean;
   onPropose: (rules: Rules) => void;
   onApply: () => void;
   onCancel: () => void;
@@ -209,15 +228,21 @@ export function CharterPanel({
       </p>
 
       <div className="row wrap mt-s" style={{ gap: 8 }}>
-        <Btn sm primary onClick={() => onPropose(nextRules)} disabled={!dirty || busy !== null}>
+        <Btn
+          sm
+          primary
+          onClick={() => onPropose(nextRules)}
+          disabled={!dirty || busy !== null || locked}
+          title={locked ? LOCKED_HINT : undefined}
+        >
           propose change
         </Btn>
         {pending && (
           <>
-            <Btn sm onClick={onApply} disabled={left > 0 || busy !== null}>
+            <Btn sm onClick={onApply} disabled={left > 0 || busy !== null || locked} title={locked ? LOCKED_HINT : undefined}>
               apply {left > 0 ? `(${countdown(Math.max(0, left))})` : ""}
             </Btn>
-            <Btn sm variant="ghost" onClick={onCancel} disabled={busy !== null}>
+            <Btn sm variant="ghost" onClick={onCancel} disabled={busy !== null || locked}>
               cancel
             </Btn>
           </>

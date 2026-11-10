@@ -13,13 +13,16 @@
  */
 
 import { DISPLAY, buildFixtures, plannedSpend } from "./fixtures";
-import type { Business, FeedEvent, OwnerKey, Receipt, Rules } from "./types";
+import type { Business, Capabilities, FeedEvent, OwnerKey, Receipt, Rules } from "./types";
 import { E } from "./types";
 
 export type Mode = "demo" | "live";
 
 export interface DataClient {
   mode: Mode;
+  capabilities: Capabilities;
+  /** re-read state; live mode implements this, the demo is synchronous */
+  refresh?: () => Promise<void>;
   subscribe(fn: () => void): () => void;
   list(): Business[];
   get(tokenId: string): Business | undefined;
@@ -135,6 +138,7 @@ export function createDemoClient(): DataClient {
 
   const client: DataClient = {
     mode: "demo",
+    capabilities: { live: false, vaultActions: true, registryActions: true, wallet: false },
     subscribe(fn) {
       listeners.add(fn);
       return () => listeners.delete(fn);
@@ -441,6 +445,11 @@ export async function createLiveClient(contractId: string): Promise<DataClient |
     businesses = await load();
     if (businesses.length === 0) return null;
 
+    // Poll so a rotation or a sale appears without a manual reload.
+    window.setInterval(() => {
+      reload().catch(() => {});
+    }, 20_000);
+
     const notify = () => listeners.forEach((l) => l());
     const reload = async () => {
       businesses = await load();
@@ -512,6 +521,8 @@ export async function createLiveClient(contractId: string): Promise<DataClient |
 
     return {
       mode: "live",
+      capabilities: { live: true, vaultActions: false, registryActions: true, wallet: true },
+      refresh: reload,
       subscribe(fn) {
         listeners.add(fn);
         return () => listeners.delete(fn);

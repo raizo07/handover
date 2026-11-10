@@ -121,6 +121,25 @@ export function LiveNumber({
 /* ----------------------------------------------------------------- charts */
 
 export function Bars({ data, height = 120 }: { data: bigint[]; height?: number }) {
+  if (data.every((d) => d === 0n)) {
+    return (
+      <div
+        className="row center"
+        style={{
+          height,
+          border: "1px dashed var(--line)",
+          borderRadius: 8,
+          justifyContent: "center",
+          color: "var(--ink-faint)",
+          fontFamily: "var(--mono)",
+          fontSize: 11,
+          letterSpacing: "0.08em",
+        }}
+      >
+        NO SALES RECORDED YET
+      </div>
+    );
+  }
   const w = 300;
   const max = Math.max(1, ...data.map((d) => Number(d)));
   const bw = w / data.length;

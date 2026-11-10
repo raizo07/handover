@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { Receipt } from "./lib/types";
-import { useBusiness, useBusinesses, useClient, useNow, useRoute, useToasts } from "./lib/hooks";
+import { getLiveFallback, useBusiness, useBusinesses, useClient, useNow, useRoute, useToasts } from "./lib/hooks";
 import { Marketplace } from "./pages/Marketplace";
 import { BusinessPage } from "./pages/Business";
 import { BuyPage } from "./pages/Buy";
 import { KeysPage } from "./pages/Keys";
+import { JudgePage, resetDemo } from "./pages/Judge";
 import { Btn, Drawer, Panel, ReceiptView, Toasts } from "./components/ui";
 import { ConnectButton } from "./components/wallet";
 
@@ -36,7 +37,14 @@ export default function App() {
   } else if (seg[0] === "keys") {
     page = <KeysPage toast={push} />;
   } else if (seg[0] === "judge") {
-    page = <JudgePage onOpen={openBusiness} firstId={businesses[0]?.tokenId} />;
+    page = (
+      <JudgePage
+        mode={mode}
+        firstId={businesses[0]?.tokenId}
+        onOpen={openBusiness}
+        onReset={resetDemo}
+      />
+    );
   } else if (seg[0] === "b" && business && seg[2] === "buy") {
     page = <BuyPage b={business} client={client} navigate={navigate} toast={push} />;
   } else if (seg[0] === "b" && business) {
@@ -63,8 +71,11 @@ export default function App() {
             <span className="brand-sub">business as an account</span>
           </a>
           <span className="topbar-spacer" />
-          <button className="btn ghost sm" onClick={() => navigate("/judge")}>walkthrough</button>
-          <button className="btn ghost sm" onClick={() => navigate("/keys")}>keys</button>
+          <span className="desktop-only row" style={{ gap: 10 }}>
+            <button className="btn ghost sm" onClick={() => navigate("/judge")}>walkthrough</button>
+            <button className="btn ghost sm" onClick={() => navigate("/keys")}>keys</button>
+          </span>
+          <MobileMenu navigate={navigate} mode={mode} />
           <ConnectButton onToast={push} />
           <span className="netbadge">
             <span className={`dot ${mode === "live" ? "live" : ""}`} />
@@ -76,8 +87,9 @@ export default function App() {
       {mode === "demo" && (
         <div className="demo-banner">
           <div className="wrap">
-            demo data — generated from a fixed seed, no chain calls. the same rule checks the
-            contract runs are enforced locally (E20 / E21 / E22 / E23).
+            {getLiveFallback()
+              ? `live registry unavailable (${getLiveFallback()}) — showing demo data`
+              : "demo data — generated from a fixed seed, no chain calls. the same rule checks the contract runs are enforced locally (E20 / E21 / E22 / E23)."}
           </div>
         </div>
       )}
@@ -120,6 +132,16 @@ export default function App() {
               <span className={`chip ${receipt.ok ? "ok" : "bad"}`}>{receipt.ok ? "ok" : receipt.code ?? "error"}</span>
             </div>
             <ReceiptView lines={receipt.logs.length ? receipt.logs : [receipt.message]} />
+            {receipt.txHash && (
+              <a
+                className="btn sm mt"
+                href={`https://testnet.nearblocks.io/txns/${receipt.txHash}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                view transaction on explorer ↗
+              </a>
+            )}
             <div className="kv mt">
               <div className="kv-row">
                 <span className="kv-key">what to look at</span>
@@ -142,50 +164,52 @@ export default function App() {
   );
 }
 
-function JudgePage({ onOpen, firstId }: { onOpen: (id: string) => void; firstId?: string }) {
-  const steps = [
-    ["1", "Open a business", "Treasury, 30-day revenue, operator activity, charter — all populated."],
-    ["2", "Drag the per-call cap down", "The charter panel tells you, before you sign, which verdict the operator's next payment gets."],
-    ["3", "Press “replay operator”", "Either the spend settles, or it is rejected with E20/E21/E22 and the receipt drawer shows the reverted call."],
-    ["4", "Press “sell this business”", "Generate and download an owner key, sign, and watch the rotation settle in two confirmed beats."],
-    ["5", "Press “halt operator”", "The vault deletes the agent's function-call key. Its next transaction cannot be signed at all."],
-    ["6", "Reset the demo", "Everything is local; clearing site data restores the seeded state."],
-  ];
+/** On narrow screens the two nav links collapse into one menu button. */
+function MobileMenu({
+  navigate,
+  mode,
+}: {
+  navigate: (to: string) => void;
+  mode: "demo" | "live";
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDoc = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onDoc);
+    return () => document.removeEventListener("mousedown", onDoc);
+  }, [open]);
+
   return (
-    <>
-      <header className="hero">
-        <div>
-          <div className="eyebrow">judge walkthrough · 6 steps</div>
-          <h1>Try it in two minutes</h1>
-          <p>
-            No wallet, no faucet, no chain. Everything below runs against a local simulation that
-            enforces the contract&apos;s rules. When <span className="mono">VITE_REGISTRY_CONTRACT</span> is
-            set, the same components read the deployed contract instead.
-          </p>
+    <div className="wallet-wrap mobile-only" ref={ref}>
+      <button className="btn ghost sm" aria-haspopup="menu" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
+        menu
+      </button>
+      {open && (
+        <div className="wallet-menu sheet" role="menu">
+          <button className="wallet-menu-item" onClick={() => { navigate("/judge"); setOpen(false); }}>
+            walkthrough
+          </button>
+          <button className="wallet-menu-item" onClick={() => { navigate("/keys"); setOpen(false); }}>
+            keys
+          </button>
+          <button
+            className="wallet-menu-item"
+            onClick={() => {
+              const url = new URL(window.location.href);
+              if (mode === "demo") url.searchParams.set("live", "1");
+              else url.searchParams.delete("live");
+              window.location.href = url.toString();
+            }}
+          >
+            {mode === "demo" ? "read live testnet" : "back to demo data"}
+          </button>
         </div>
-      </header>
-
-      <div className="stack">
-        {steps.map(([n, title, body]) => (
-          <div key={n} className="panel" style={{ display: "grid", gridTemplateColumns: "34px 1fr", gap: 14, alignItems: "start" }}>
-            <span className="eyebrow" style={{ color: "var(--accent)", fontSize: 12 }}>{n}</span>
-            <div>
-              <div style={{ fontFamily: "var(--serif)", fontSize: 18 }}>{title}</div>
-              <div className="small dim mt-s">{body}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {firstId && (
-        <Btn primary className="mt-l" onClick={() => onOpen(firstId)}>
-          start with a business →
-        </Btn>
       )}
-      <p className="small faint mt">
-        The README documents the contract invariants and how to run the Rust test suite
-        (<span className="mono">make test</span>).
-      </p>
-    </>
+    </div>
   );
 }

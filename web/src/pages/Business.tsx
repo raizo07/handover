@@ -71,7 +71,14 @@ export function BusinessPage({
               <Btn
                 primary
                 onClick={() => run("claim", () => client.claim(b.tokenId), "dividend paid")}
-                disabled={busy !== null || claim === 0n}
+                disabled={busy !== null || claim === 0n || !client.capabilities.vaultActions}
+                title={
+                  !client.capabilities.vaultActions
+                    ? "Signed by the business key you downloaded, not by a wallet."
+                    : claim === 0n
+                      ? "Nothing to claim yet"
+                      : undefined
+                }
               >
                 {busy === "claim" ? "claiming…" : "claim"}
               </Btn>
@@ -110,6 +117,7 @@ export function BusinessPage({
             b={b}
             now={now}
             busy={busy}
+            locked={!client.capabilities.vaultActions}
             onReplay={() => run("replay", () => client.replayOperator(b.tokenId))}
             onHalt={() => run("halt", () => client.halt(b.tokenId), "operator key deleted")}
             onResume={() =>
@@ -132,6 +140,7 @@ export function BusinessPage({
             b={b}
             now={now}
             busy={busy}
+            locked={!client.capabilities.vaultActions}
             onPropose={(rules: Rules) => run("propose", () => client.proposeRules(b.tokenId, rules), "change proposed")}
             onApply={() => run("apply", () => client.applyRules(b.tokenId), "charter updated")}
             onCancel={() => run("cancel", () => client.cancelRules(b.tokenId), "change cancelled")}

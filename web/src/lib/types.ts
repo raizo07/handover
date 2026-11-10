@@ -112,3 +112,15 @@ export const CODE_TEXT: Record<string, string> = {
   E31: "exceeds free treasury",
   E32: "invalid rules",
 };
+
+/** What the current data source can actually do. The UI disables what it cannot. */
+export interface Capabilities {
+  /** real chain data (false = local simulation) */
+  live: boolean;
+  /** vault operations: claim / halt / charter — signed by the business key */
+  vaultActions: boolean;
+  /** registry operations: buy / sell / resolve_rotation */
+  registryActions: boolean;
+  /** a wallet is required to sign registry actions */
+  wallet: boolean;
+}

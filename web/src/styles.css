@@ -531,3 +531,27 @@ p { margin: 0; }
 @media (max-width: 560px) {
   .wallet-menu { width: min(280px, calc(100vw - 32px)); }
 }
+
+/* --------------------------------------------------------- compact nav (mobile) */
+
+.mobile-only { display: none; }
+
+@media (max-width: 560px) {
+  .desktop-only { display: none !important; }
+  .mobile-only { display: block; }
+}
+
+@media (max-width: 560px) {
+  /* the badge shrinks to its status dot so the row fits without wrapping */
+  .netbadge { font-size: 0; padding: 6px 8px; gap: 0; letter-spacing: 0; }
+  .topbar-inner { gap: 8px; }
+  .brand-mark { font-size: 17px; }
+}
+
+@media (max-width: 560px) {
+  /* anchor the compact-nav dropdown to the viewport, not to a button near the left edge */
+  .wallet-menu.sheet {
+    position: fixed; left: 12px; right: 12px; top: 58px;
+    width: auto; max-width: none;
+  }
+}
