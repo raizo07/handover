@@ -25,9 +25,9 @@ const REPO = join(HERE, "..", "..");
 const OUT = join(REPO, "deploy-out");
 
 const YOCTO_PER_NEAR = 10n ** 24n;
-const MIN_MINT_DEPOSIT = "4 NEAR";
-const CODE_DEPOSIT = "3 NEAR";
-const REGISTRY_FUNDING = "10 NEAR";
+const MIN_MINT_DEPOSIT = "2 NEAR";
+const CODE_DEPOSIT = "2 NEAR";
+const REGISTRY_FUNDING = "3 NEAR";
 
 // Same three businesses the frontend seeds, so demo and chain agree.
 const BUSINESSES = [
@@ -77,6 +77,10 @@ const DRY = args.includes("--dry-run");
 const SANDBOX = args.includes("--sandbox");
 const VERBOSE = args.includes("--verbose");
 const KEEP = args.includes("--keep");
+const LIMIT = (() => {
+  const i = args.indexOf("--businesses");
+  return i >= 0 ? Number(args[i + 1]) : BUSINESSES.length;
+})();
 
 const c = {
   dim: (s) => `\x1b[2m${s}\x1b[0m`,
@@ -282,8 +286,9 @@ async function storeVaultCode(near, cfg, wasm) {
 }
 
 async function seedBusinesses(near, cfg, keys) {
-  step(3, `seeding ${BUSINESSES.length} businesses`);
-  for (const b of BUSINESSES) {
+  const seed = BUSINESSES.slice(0, LIMIT);
+  step(3, `seeding ${seed.length} of ${BUSINESSES.length} businesses`);
+  for (const b of seed) {
     const existing = await near
       .view(cfg.registryId, "nft_token", { token_id: b.tokenId })
       .catch(() => null);
@@ -441,7 +446,7 @@ async function main() {
     for (const b of BUSINESSES) {
       console.log(`    3  mint_business ${b.tokenId.padEnd(6)} → ${b.tokenId}.${cfg.registryId}`);
     }
-    const total = 10 + 3 + 4 * BUSINESSES.length;
+    const total = 3 + 2 + 2 * BUSINESSES.length;
     console.log(`\n  funded balance needed: ${c.bold(`~${total} NEAR`)} (mint deposit is ${MIN_MINT_DEPOSIT} each)`);
     console.log(`  ${c.dim("Get testnet NEAR from a faucet; the deployer pays for every sub-account.")}\n`);
     return;
@@ -499,7 +504,7 @@ async function main() {
     const rows = await verify(near, cfg);
     writeDeployed(cfg, rows, wasmInfo);
 
-    console.log(`\n${c.green("done")} — ${BUSINESSES.length} businesses on ${cfg.networkId}`);
+    console.log(`\n${c.green("done")} — ${Math.min(LIMIT, BUSINESSES.length)} of ${BUSINESSES.length} businesses on ${cfg.networkId}`);
     console.log(`  ${c.dim("secrets for the seeded owners are in deploy-out/keys.json (git-ignored)")}\n`);
   } finally {
     if (sandbox && KEEP) {

@@ -19,8 +19,10 @@ use near_sdk::{
 };
 
 /// Deposit required to mint. Covers sub-account creation + vault wasm storage + state.
-/// The real cost is measured after deployment and published in the README.
-const MIN_MINT_DEPOSIT: u128 = 4_000_000_000_000_000_000_000_000; // 4 NEAR
+/// Measured on testnet 2026-11-10: the vault wasm is 162 KB, i.e. ~1.62 NEAR of storage
+/// stake at 1 NEAR / 100 KB, plus the account and its state. 2 NEAR is that cost with a
+/// little room left in the vault as working balance.
+const MIN_MINT_DEPOSIT: u128 = 2_000_000_000_000_000_000_000_000; // 2 NEAR
 /// Attached to `set_holder` so the vault can pay for the new access key's storage.
 const ROTATION_DEPOSIT: u128 = 50_000_000_000_000_000_000_000; // 0.05 NEAR
 const OPERATOR_ALLOWANCE: u128 = 500_000_000_000_000_000_000_000; // 0.5 NEAR

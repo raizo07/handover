@@ -5,11 +5,19 @@
 *The rulebook a business runs under is called its **charter**. The repo directory keeps an
 older name; everything user-facing says HANDOVER.*
 
-> **Status — read this first.** The two contracts are written and tested (28 Rust tests,
-> including 4 that deploy real wasm into a real NEAR VM). The frontend is built and runs on
-> a local simulation of those contracts. **Nothing is deployed to testnet yet** — there is
-> no live contract address in this repo, and this README does not claim one. The
-> "real vs simulated" section below is exact.
+> **Status — read this first.** Both contracts are written and tested (28 Rust tests,
+> including 4 that deploy real wasm into a real NEAR VM), and they are **deployed on
+> testnet**:
+>
+> | | |
+> |---|---|
+> | Registry | [`reg.raizo07.testnet`](https://testnet.nearblocks.io/address/reg.raizo07.testnet) |
+> | Businesses | [`biz-7.reg.raizo07.testnet`](https://testnet.nearblocks.io/address/biz-7.reg.raizo07.testnet) · [`biz-3.reg.raizo07.testnet`](https://testnet.nearblocks.io/address/biz-3.reg.raizo07.testnet) |
+> | Deployer | `raizo07.testnet` |
+>
+> The frontend runs against seeded demo data by default and reads this registry when
+> `VITE_REGISTRY_CONTRACT` is set. No mainnet contract exists — the "real vs simulated"
+> section below is exact.
 
 ![Marketplace](docs/screens/marketplace.png)
 
@@ -62,27 +70,31 @@ Requires Node 20+ and Rust stable. No wallet, no faucet, no funds.
    `make demo` (or `cd web && npm ci && npm run dev` for the dev server)
    → opens `http://localhost:4173`: three businesses, a `DEMO DATA` banner, no wallet prompt.
 
-3. **Watch the charter block the agent**
+3. **See the live testnet registry instead of demo data**
+   `VITE_REGISTRY_CONTRACT=reg.raizo07.testnet npm run build` (in `web/`)
+   → the badge changes to `TESTNET · LIVE` and the businesses come from chain, not fixtures.
+
+4. **Watch the charter block the agent**
    On `/b/biz-7`, drag the *per-call cap* slider to about `0.20` →
    the line under it changes live to "the operator's next 0.31 NEAR payment **is rejected
    (E20)**". Press **replay operator** → the spend is rejected, a receipt drawer opens with
    the reverted call, and the activity feed records a struck-through row.
 
-4. **Halve the cap, then spend inside it**
+5. **Halve the cap, then spend inside it**
    Set the cap to `0.50`, press **replay operator** → the payment settles, the epoch meter
    advances. The same button, two outcomes, decided by one number.
 
-5. **Halt the agent**
+6. **Halt the agent**
    Press **halt operator** → the receipt shows `DeleteKey(...)`. Press **replay operator**
    again → `E23`, because the key no longer exists. Press **resume** to re-arm it.
 
-6. **Buy a business**
+7. **Buy a business**
    Press **sell this business** on any business → generate an owner key (a real ed25519
    keypair in your browser), **download it** (the flow blocks until you do), sign →
    the rotation settles in two beats: `rotation_pending`, then `rotation_applied`, and the
    page states what the seller now sees: `Access key does not exist`.
 
-7. **Inspect any receipt**
+8. **Inspect any receipt**
    Every action opens a drawer with the `EVENT_JSON` the contract emits and the action list.
    No number in the UI is unexplained.
 
@@ -96,11 +108,14 @@ make deploy-sandbox  # full rehearsal against a local NEAR node
 make deploy          # real testnet run, reading .env
 ```
 
-The sandbox rehearsal is the one I have executed: it deploys the registry (214 KB), stores
-the vault wasm in registry state (162 KB), mints three businesses — each a real sub-account
-with a vault, a full-access owner key and a function-call operator key — then reads all of it
-back. Pointing the app at that node with `VITE_REGISTRY_CONTRACT` renders the same data from
-chain:
+It has now been run for real on testnet: registry `reg.raizo07.testnet` (214 KB wasm), vault
+wasm stored in registry state (162 KB), and **two** businesses minted. Measured cost per
+business: **≈1.66 NEAR** of storage for the vault contract (166 KB) plus the account itself;
+the third business is unseeded only because the deployer account had 10 NEAR and each mint
+takes 2. Fund it with ~3 more NEAR and `make deploy` mints the third (the script is
+idempotent and skips what already exists).
+
+The same app pointed at that registry with `VITE_REGISTRY_CONTRACT` renders live chain data:
 
 ![Live mode](docs/screens/live.png)
 
@@ -118,7 +133,7 @@ named parent.
 | Browser app | **Real** React/Vite build, served from `dist/`. |
 | Chain reads in the browser | **Verified.** Set `VITE_REGISTRY_CONTRACT` (and `VITE_RPC_URL` for a local node) and the app reads the registry through `near-kit`. Rehearsed end-to-end against a local NEAR node: three businesses, real operator accounts, no demo banner. |
 | Chain writes in the browser | **Not wired.** Writes show "needs a connected wallet" instead of pretending. |
-| Deployed contracts | **None still.** The deploy script is written, rehearsed on a local node, and has not been run against testnet yet — so no address in this repository is live. |
+| Deployed contracts | **Real, on testnet.** Registry `reg.raizo07.testnet` with two businesses minted. Addresses in [docs/DEPLOYED.md](docs/DEPLOYED.md). |
 
 The demo client enforces `E20` (per-call cap), `E21` (epoch cap), `E22` (allowlist), `E23`
 (halted), `E27` (claim cooldown), `E28` (nothing to claim), `E29` (rules timelock) and `E32`
