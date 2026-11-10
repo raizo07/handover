@@ -9,26 +9,42 @@ until the human confirms the exact payload — the API takes one submission per 
 
 | Field | Rule | Where it comes from | State |
 |---|---|---|---|
-| `projectName` | 2–80 chars | HANDOVER (working title) | needs a yes |
-| `leadName` | 2–80 chars | human | **missing** |
-| `email` | valid, ≤160 | human | **missing** |
-| `size` | `1` \| `2 - 4` \| `4 - 6` \| `6 - 8` \| `8+` | human | **missing** |
-| `tracks` | ≥1 track id | proposal: `["nfts","business"]` | needs a yes |
-| `nearAddress` | mainnet, lowercase | `raizo07.near` | **blocked — key not rotated** |
+| `projectName` | 2–80 chars | `HANDOVER` | **confirmed** |
+| `leadName` | 2–80 chars | proposed `Raizo Agada` from the email | **confirm spelling** |
+| `email` | valid, ≤160 | `agadaraizo@gmail.com` | **confirmed** |
+| `size` | `1` \| `2 - 4` \| `4 - 6` \| `6 - 8` \| `8+` | `1` | **confirmed** |
+| `tracks` | ≥1 track id | `["nfts","business"]` | **confirmed** |
+| `nearAddress` | mainnet, lowercase | see §1.1 | **blocked** |
 | `projectUrl` | public repo | https://github.com/raizo07/handover | ready |
 | `demoUrl` | public post | X post by the human | **missing** |
 | `idea` | 20–2000 chars | draft below | needs approval |
 | `consent` | `true` | read to the human verbatim | pending |
 
-### Why `nearAddress` is blocked
+### 1.1 Why `nearAddress` is blocked, and the two ways out
 
-`raizo07.near` is the only mainnet account the team has, and its **only** full-access key
-is the one pasted into chat on 2026-11-10. Anyone with that string can sign for the
-account, which means anyone could sweep a prize paid to it.
+`raizo07.near` exists on mainnet, holds 0 NEAR, and its **only** full-access key is
+`ed25519:8EJvQEEjj6sh2h8Uf5n2ZfZ12fUZwWHsrkzAFYSEuxCk` — the key pasted into chat. Anyone
+holding that string can sign for the account, including a transfer of any prize paid to it.
 
-Fix before submitting: add a new full-access key in a wallet, confirm it works, delete
-`ed25519:8EJvQEEjj6sh2h8Uf5n2ZfZ12fUZwWHsrkzAFYSEuxCk`, then use the account. Or submit a
-different mainnet account.
+The hackathon is explicit that the team creates this account and an agent must never create
+or invent one, so both fixes are human steps:
+
+**Option A — a fresh account (recommended).** Create a new mainnet account in a wallet
+(e.g. `handover-prize.near`), record its name, and submit that. The compromised key never
+touches the payout address. Cost: whatever the wallet charges to register the name.
+
+**Option B — rotate `raizo07.near`.** Keeps the name, but the account needs ~0.1 NEAR of
+mainnet funds for gas and key storage first, then:
+
+```
+near account add-key raizo07.near grant-full-access \
+  use-manually-provided-public-key <NEW_PUBKEY> network-config mainnet sign-with-keychain send
+
+near account delete-key raizo07.near public-key ed25519:8EJvQEEjj6sh2h8Uf5n2ZfZ12fUZwWHsrkzAFYSEuxCk \
+  network-config mainnet sign-with-keychain send
+```
+
+Verify the new key works before deleting the old one, or the account is lost.
 
 ---
 
@@ -62,23 +78,38 @@ different mainnet account.
 
 ---
 
-## 4. Draft X post (human publishes; do not post on their behalf)
+## 4. Demo post (human publishes; never posted on their behalf)
 
-> Selling a small business onchain is impossible today: the buyer gets an NFT, not the
-> business. At NEAR HACKATHON we built HANDOVER — the token owns a real NEAR sub-account
-> with a treasury, an owner key, and an operator key limited by an onchain charter.
->
-> Sell it and the vault rotates its owner key in two beats while the operator keeps
-> trading. The seller's key is deleted, so their next transaction fails inside nearcore
-> before any contract code runs.
->
-> 32 Rust tests, live on testnet. Try it: https://raizo07.github.io/handover/
->
-> What would you want the charter to be able to constrain? @NEARProtocol #NEARHackathon
+Single post, 273 characters with the link weighted as X counts it (limit 280):
 
-Attach: a screen recording of 45 seconds following the buy flow, or the three screenshots
-in `docs/screens/`. The first line must land for someone who has never heard of the
-project.
+> Selling a small business onchain gives the buyer a JPEG, not the business.
+>
+> At NEAR HACKATHON I built HANDOVER: the token owns a real NEAR sub-account. Sell it and
+> the owner key rotates while the operator keeps trading.
+>
+> https://raizo07.github.io/handover/ @NEARProtocol #NEARHackathon
+
+Attach the 45-second screen recording if there is one; otherwise attach
+`docs/screens/settled.png` and `docs/screens/business.png`. The post must contain
+`#NEARHackathon`, `@NEARProtocol`, and the words NEAR HACKATHON — it does.
+
+Longer version, if a thread or a premium account is used:
+
+> A small business sold onchain gives the buyer a JPEG, not the business. No treasury, no
+> operator, no customers.
+>
+> At NEAR HACKATHON I built HANDOVER. Minting a business creates a real NEAR sub-account
+> with its own treasury, a full-access owner key, and an operator key that an agent can
+> use only inside caps written onchain.
+>
+> The moment that matters: sell the token, and the vault rotates the owner key in two
+> confirmed beats while the operator keeps trading. The seller's key is deleted, so their
+> next transaction fails inside nearcore before a line of contract code runs.
+>
+> 32 Rust tests. Live on testnet.
+> https://raizo07.github.io/handover/
+>
+> @NEARProtocol #NEARHackathon
 
 ---
 
