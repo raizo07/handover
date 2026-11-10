@@ -10,7 +10,7 @@ until the human confirms the exact payload — the API takes one submission per 
 | Field | Rule | Where it comes from | State |
 |---|---|---|---|
 | `projectName` | 2–80 chars | `HANDOVER` | **confirmed** |
-| `leadName` | 2–80 chars | proposed `Raizo Agada` from the email | **confirm spelling** |
+| `leadName` | 2–80 chars | `Gabriel Agada` | **confirmed** |
 | `email` | valid, ≤160 | `agadaraizo@gmail.com` | **confirmed** |
 | `size` | `1` \| `2 - 4` \| `4 - 6` \| `6 - 8` \| `8+` | `1` | **confirmed** |
 | `tracks` | ≥1 track id | `["nfts","business"]` | **confirmed** |
@@ -19,6 +19,18 @@ until the human confirms the exact payload — the API takes one submission per 
 | `demoUrl` | public post | X post by the human | **missing** |
 | `idea` | 20–2000 chars | draft below | needs approval |
 | `consent` | `true` | read to the human verbatim | pending |
+
+The payload is drafted in `deploy-out/submission.json` (git-ignored — it holds personal
+data). Validate it, never send it from here:
+
+```
+node scripts/prepare-submission.mjs
+```
+
+It checks every field against the published rules, refuses a non-lowercase or malformed
+account, rejects a stray `website` key, reports the byte size against the 12000-byte limit,
+prints the body and the curl command, and persists the `requestId` so a retry reuses it.
+Current state: **3 fields outstanding** — `nearAddress`, `demoUrl`, `consent`.
 
 ### 1.1 Why `nearAddress` is blocked, and the two ways out
 
