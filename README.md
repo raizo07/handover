@@ -5,7 +5,7 @@
 *The rulebook a business runs under is called its **charter**. The repo directory keeps an
 older name; everything user-facing says HANDOVER.*
 
-> **Status — read this first.** Both contracts are written and tested (28 Rust tests,
+> **Status — read this first.** Both contracts are written and tested (32 Rust tests,
 > including 4 that deploy real wasm into a real NEAR VM), and they are **deployed on
 > testnet**:
 >
@@ -66,7 +66,7 @@ Requires Node 20+ and Rust stable. The demo path needs no wallet, no faucet and 
 
 1. **Run the contract tests**
    `make test`
-   → `28 passed` across two crates: 13 registry unit tests, 15 vault unit tests, 4 sandbox
+   → `32 passed` across two crates: 13 registry tests, 15 vault unit tests, 4 sandbox
    tests that deploy the wasm and call it in a real VM.
 
 2. **Run the app**
@@ -163,7 +163,7 @@ named parent.
 
 | Thing | State |
 |---|---|
-| `registry` + `vault` contracts | **Real.** Built with `cargo near build`, 28 tests green. |
+| `registry` + `vault` contracts | **Real.** Built with `cargo near build`, 32 tests green. |
 | Key rotation, caps, halt, dividends | **Real** in Rust; **re-enforced** in the demo client so the UI cannot show a state the contract forbids. |
 | Browser app | **Real** React/Vite build, served from `dist/`. |
 | Chain reads in the browser | **Verified.** Set `VITE_REGISTRY_CONTRACT` (and `VITE_RPC_URL` for a local node) and the app reads the registry through `near-kit`. Rehearsed end-to-end against a local NEAR node: three businesses, real operator accounts, no demo banner. |
@@ -184,6 +184,7 @@ web/                  React + Vite app; demo client mirrors the contract rules
 web/scripts/          headless browser checks (screenshots, buy flow)
 docs/SPEC.md          state shapes, methods, events, errors, protocol, test matrix
 docs/DECISIONS.md     choices and the trigger that would reverse each one
+docs/SUBMISSION.md    submission checklist, drafts, and open fields
 docs/DEMO.md          45-second recording script + judge walkthrough
 ```
 

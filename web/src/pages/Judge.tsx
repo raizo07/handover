@@ -135,7 +135,7 @@ export function JudgePage({
             <div className="kv">
               <div className="kv-row">
                 <span className="kv-key">contracts</span>
-                <span className="kv-val">28 Rust tests, deployed on testnet</span>
+                <span className="kv-val">32 Rust tests, deployed on testnet</span>
               </div>
               <div className="kv-row">
                 <span className="kv-key">demo rules</span>
