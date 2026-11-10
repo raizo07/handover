@@ -86,9 +86,22 @@ export default function App() {
 
       <footer className="footer wrap">
         <span>HANDOVER · NEAR HACKATHON · testnet only</span>
-        <span>
-          {businesses.length} businesses ·{" "}
-          {mode === "demo" ? "simulated vault" : "registry reads via near-kit"}
+        <span className="row" style={{ gap: 14 }}>
+          <span>
+            {businesses.length} businesses ·{" "}
+            {mode === "demo" ? "simulated vault" : "registry reads via near-kit"}
+          </span>
+          <button
+            className="btn ghost sm"
+            onClick={() => {
+              const url = new URL(window.location.href);
+              if (mode === "demo") url.searchParams.set("live", "1");
+              else url.searchParams.delete("live");
+              window.location.href = url.toString();
+            }}
+          >
+            {mode === "demo" ? "read live testnet →" : "back to demo data"}
+          </button>
         </span>
       </footer>
 

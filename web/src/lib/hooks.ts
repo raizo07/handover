@@ -8,9 +8,13 @@ let clientPromise: Promise<DataClient> | null = null;
 export function resolveClient(): Promise<DataClient> {
   if (!clientPromise) {
     const liveId = import.meta.env.VITE_REGISTRY_CONTRACT as string | undefined;
-    clientPromise = (liveId
-      ? createLiveClient(liveId).then((c) => c ?? createDemoClient())
-      : Promise.resolve(createDemoClient()));
+    // Fixtures are the default because they are populated and always available; ?live=1
+    // switches to the deployed registry so the chain path can be inspected on demand.
+    const wantLive = new URLSearchParams(window.location.search).has("live");
+    clientPromise =
+      liveId && wantLive
+        ? createLiveClient(liveId).then((c) => c ?? createDemoClient())
+        : Promise.resolve(createDemoClient());
   }
   return clientPromise;
 }
@@ -71,19 +75,27 @@ export function useToasts() {
   return { toasts, push };
 }
 
+/** Vite injects the deploy base ("/" locally, "/handover/" on GitHub Pages). */
+export const BASE = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "");
+
+function currentPath(): string {
+  const p = window.location.pathname;
+  return BASE && p.startsWith(BASE) ? p.slice(BASE.length) || "/" : p;
+}
+
 /** Tiny history router: pushState + popstate. No dependency, no surprises. */
 export function useRoute() {
-  const [path, setPath] = useState(() => window.location.pathname);
+  const [path, setPath] = useState(() => currentPath());
 
   useEffect(() => {
-    const onPop = () => setPath(window.location.pathname);
+    const onPop = () => setPath(currentPath());
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
   }, []);
 
   const navigate = useCallback((to: string) => {
-    if (to === window.location.pathname) return;
-    window.history.pushState({}, "", to);
+    if (to === currentPath()) return;
+    window.history.pushState({}, "", `${BASE}${to}`);
     setPath(to);
     window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
   }, []);
