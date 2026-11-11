@@ -11,7 +11,9 @@ import pathlib
 import numpy as np
 
 SR = 48_000
-DUR = 120.0
+ROOT = pathlib.Path(__file__).parent
+TL = json.loads((ROOT / "timeline.json").read_text())
+DUR = float(TL["meta"]["duration"])
 N = int(SR * DUR)
 RNG = np.random.default_rng(2610)
 
@@ -221,7 +223,6 @@ def midi_hz(m):
 # read the plan
 # --------------------------------------------------------------------------
 ROOT = pathlib.Path(__file__).parent
-TL = json.loads((ROOT / "timeline.json").read_text())
 META = TL["meta"]
 BEAT = META["beat"]
 BAR = META["bar"]

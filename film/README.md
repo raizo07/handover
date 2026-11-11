@@ -1,8 +1,12 @@
 # HANDOVER — the film
 
-A two-minute demo film for HANDOVER, built on a deterministic motion-and-sound framework:
-paper `#F3F3F0`, ink `#141414`, and black redaction bars. 96 BPM, 48 bars, 120 seconds,
+An 85-second demo film for HANDOVER, built on a deterministic motion-and-sound framework:
+paper `#F3F3F0`, ink `#141414`, and black redaction bars. 96 BPM, 34 bars, 85 seconds,
 1920×1080 at 30 fps.
+
+Two of the nine scenes are **recorded product moments** — the real UI, captured with
+`web/scripts/record-demo.mjs` and replayed frame by frame under a camera that pushes between
+keyframed boxes. Nothing in them is re-staged.
 
 Every number in the picture comes from the product. Timings are on the musical grid, written
 once by `plan.py`, and read by both the renderer and the score, so every hit you see is a hit
@@ -21,6 +25,7 @@ the scenario and the screens are HANDOVER's.
 ```bash
 npm ci                   # puppeteer-core, pointed at the system Chrome
 node ../web/scripts/capture-film.mjs   # 2x screenshots into assets/art/
+node ../web/scripts/record-demo.mjs    # records clips/*.webm from the deployed app
 python3 plan.py          # writes timeline.json and src/timeline.js
 python3 score.py         # writes audio/score.wav
 node render.mjs          # frames -> out/handover.mp4 (H.264 + AAC, -14 LUFS)
@@ -34,18 +39,17 @@ single PNG.
 
 | bars | scene | template | what it says |
 |---|---|---|---|
-| 0–4 | open | title | selling a business onchain gives the buyer a picture |
-| 4–8 | vault | chapter | minting creates a real sub-account with its own keys |
-| 8–12 | proof | counter | 32 tests, four of them deploying real wasm |
-| 12–16 | live | screen | the deployed registry, read from chain, camera on two boxes |
-| 16–20 | charter | chapter | an agent with money and a ceiling |
-| 20–24 | limit | refusal | the vault refuses an overspend; the key turns |
-| 24–28 | transform | receipt | the hand-over: two beats, printed |
-| 28–32 | halt | terminal | `halt` deletes the operator key; the next call is E23 |
-| 32–36 | keys | compare | seller GONE / buyer LIVE |
-| 36–40 | phone | phone | the same app on a phone |
-| 40–44 | name | name | HANDOVER, revealed from under three bars |
-| 44–48 | end | title | buy a going concern, not a keyring |
+| 0–2 | open | title | selling a business onchain gives the buyer a picture |
+| 2–7 | handover | clip | **recorded**: key → sign → two beats → "You own it." |
+| 7–11 | vault | chapter | minting creates a real sub-account on NEAR |
+| 11–14 | charter | chapter | an agent with money, and a ceiling |
+| 14–18 | refusal | clip | **recorded**: the cap is set, the agent tries 1.5×, E20 |
+| 18–22 | halt | terminal | `halt` deletes the operator key; the next call is E23 |
+| 22–25 | proof | counter | 32 tests, four of them deploying real wasm |
+| 25–29 | name | name | HANDOVER, revealed from under three bars |
+| 29–34 | end | title | buy a going concern, not a keyring |
+
+The two clips are the argument: they are the product, not a description of it.
 
 ## The clock
 
@@ -80,6 +84,14 @@ pulse(t, c, h) = max(0, 1 - |t - c| / h)
 ```
 
 Randomness is `mulberry32(2610)`, spent while building, never per frame.
+
+## The clip template
+
+`BUILD.clip` shows a pre-extracted frame sequence (`clips/<name>/0001.jpg`) inside a sheet,
+scrubbed by `t`, with `frame_from` / `count` / `fps` deciding the window and a list of
+keyframed camera boxes (`{t, x, y, w, dur}`) interpolated with `inout`. Frames come from
+`page.screencast()` and `ffmpeg -vf fps=30`; the recording hides toasts so the cut has no
+stray UI.
 
 ## Changes made to the fork
 

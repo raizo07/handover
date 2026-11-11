@@ -77,9 +77,13 @@ export function OperatorPanel({
         </Btn>
         <Btn
           sm
-          onClick={() => onSpend(plan.to, plan.amount + plan.amount / 4n)}
+          onClick={() => {
+            // deliberately 1.5x the per-call cap: the point is to be refused
+            const over = b.rules.maxSingleSpend + b.rules.maxSingleSpend / 2n;
+            onSpend(plan.to, over > 0n ? over : 1n);
+          }}
           disabled={busy !== null || locked}
-          title={locked ? LOCKED_HINT : "Force a spend that breaks the per-call cap"}
+          title={locked ? LOCKED_HINT : "Spend 1.5x the per-call cap — the vault must refuse it"}
         >
           try an overspend
         </Btn>

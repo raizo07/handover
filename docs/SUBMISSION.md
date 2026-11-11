@@ -145,6 +145,6 @@ field or a post that does not carry the required tags.
 
 ## 6. Demo video
 
-`film/out/handover.mp4` — 120 s, 1920×1080, 30 fps, H.264 + AAC at −14 LUFS. Rebuild with
+`film/out/handover.mp4` — 85 s, 1920×1080, 30 fps, H.264 + AAC at −14.4 LUFS, 10.6 MB. Rebuild with
 `make film` (see `film/README.md`). Attach it to the post; if X rejects the size, the three
 stills in `docs/screens/` are the fallback.

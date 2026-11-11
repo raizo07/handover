@@ -402,6 +402,60 @@
     };
   };
 
+  // A recorded product moment: pre-extracted frames, scrubbed by time, under a
+  // camera that moves between keyframed boxes. Real UI, no re-staging.
+  BUILD.clip = (s) => {
+    const el = mk('div', 'scene');
+    const heading = textBlock(el, { text: s.heading, cls: 'words', size: 58, top: 150 });
+    const box = sheet(el, { x: s.sheet.x, y: s.sheet.y, w: s.sheet.w, h: s.sheet.h });
+    const clip = mk('div', 'clip', box);
+    css(clip, { left: '10px', top: '10px', right: '10px', bottom: '10px', borderRadius: '6px', background: '#0a0b0d' });
+    const img = mk('img', '', clip);
+    img.decoding = 'sync';
+    css(img, { position: 'absolute', left: 0, top: 0, width: s.frameW + 'px', height: 'auto', transformOrigin: '0 0' });
+
+    const lines = s.lines.map((l) => textBlock(el, { text: l.text, cls: 'words', size: 38, top: l.top }));
+
+    let last = -1;
+    return {
+      el,
+      layout() {},
+      draw(t) {
+        const c = s.cues;
+        slamIn(heading, t, c.heading);
+
+        // frame scrub
+        const i = Math.max(0, Math.min(s.count - 1, (s.frame_from || 0) + Math.floor((t - c.play) * (s.fps || 30))));
+        if (i !== last) {
+          last = i;
+          img.src = `${s.dir}/${String(i + 1).padStart(4, '0')}.jpg`;
+        }
+
+        // camera: interpolate between keyframed boxes
+        const keys = c.camera;
+        let view = keys[0];
+        for (let k = 0; k < keys.length; k++) {
+          const cur = keys[k];
+          if (t >= cur.t) {
+            const next = keys[k + 1];
+            view = next
+              ? cameraBox(cur, next, inout(prog(t, cur.t, cur.dur ?? 0.6)))
+              : cur;
+          }
+        }
+        const scale = (s.sheet.w - 20) / view.w;
+        img.style.transform = `translate(${-view.x * scale}px, ${-view.y * scale}px) scale(${scale * (s.frameScale || 1)})`;
+
+        const jump = pulse(t, c.punch ?? -9, 0.12);
+        box.style.marginLeft = `${4 * jump}px`;
+        box.style.marginTop = `${3 * jump}px`;
+
+        lines.forEach((n, k) => slamIn(n, t, s.lines[k].t));
+        sheetOut(box, t, s.end - 0.4);
+      },
+    };
+  };
+
   BUILD.compare = (s) => {
     const el = mk('div', 'scene');
     const heading = textBlock(el, { text: s.heading, cls: 'display', size: 190, top: 210 });

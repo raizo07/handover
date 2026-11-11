@@ -42,3 +42,4 @@ film/out/
 film/frames/
 film/node_modules/
 film/audio/*.wav
+film/clips/
