@@ -14,7 +14,7 @@ until the human confirms the exact payload — the API takes one submission per 
 | `email` | valid, ≤160 | `agadaraizo@gmail.com` | **confirmed** |
 | `size` | `1` \| `2 - 4` \| `4 - 6` \| `6 - 8` \| `8+` | `1` | **confirmed** |
 | `tracks` | ≥1 track id | `["nfts","business"]` | **confirmed** |
-| `nearAddress` | mainnet, lowercase | see §1.1 | **blocked** |
+| `nearAddress` | mainnet, lowercase | `raizo007.near` | **confirmed** |
 | `projectUrl` | public repo | https://github.com/raizo07/handover | ready |
 | `demoUrl` | public post | X post by the human | **missing** |
 | `idea` | 20–2000 chars | draft below | needs approval |
@@ -30,16 +30,21 @@ node scripts/prepare-submission.mjs
 It checks every field against the published rules, refuses a non-lowercase or malformed
 account, rejects a stray `website` key, reports the byte size against the 12000-byte limit,
 prints the body and the curl command, and persists the `requestId` so a retry reuses it.
-Current state: **3 fields outstanding** — `nearAddress`, `demoUrl`, `consent`.
+Current state: **2 fields outstanding** — `demoUrl`, `consent`.
 
-### 1.1 Why `nearAddress` is blocked, and the two ways out
+### 1.1 Payout account
 
-`raizo07.near` exists on mainnet, holds 0 NEAR, and its **only** full-access key is
-`ed25519:8EJvQEEjj6sh2h8Uf5n2ZfZ12fUZwWHsrkzAFYSEuxCk` — the key pasted into chat. Anyone
-holding that string can sign for the account, including a transfer of any prize paid to it.
+`raizo007.near` (two zeros) exists on mainnet, holds 0 NEAR, and its only key is
+`ed25519:DxC5pLY2AhhKLmyR9UZAvfMJUgTftFdFwBkfH5caBgn6`. That key has never been in this
+chat, so this account is safe to use as the payout address.
 
-The hackathon is explicit that the team creates this account and an agent must never create
-or invent one, so both fixes are human steps:
+A **different** account, `raizo07.near` (one zero), exists and its only key is
+`ed25519:8EJvQEEjj6sh2h8Uf5n2ZfZ12fUZwWHsrkzAFYSEuxCk` — the key pasted into chat on
+2026-11-10. It is not the payout address, so no prize is exposed. Treat it as burned:
+never reuse it, and rotate or abandon it.
+
+If the payout ever moves back to a fresh account, the hackathon is explicit that the team
+creates it and an agent must never create or invent one:
 
 **Option A — a fresh account (recommended).** Create a new mainnet account in a wallet
 (e.g. `handover-prize.near`), record its name, and submit that. The compromised key never
