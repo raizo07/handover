@@ -102,14 +102,16 @@ Requires Node 20+ and Rust stable. The demo path needs no wallet, no faucet and 
    buy flow uses your address as the buyer.
 
 5. **Watch the charter block the agent**
-   On `/b/biz-7`, drag the *per-call cap* slider to about `0.20` →
-   the line under it changes live to "the operator's next 0.31 NEAR payment **is rejected
-   (E20)**". Press **replay operator** → the spend is rejected, a receipt drawer opens with
-   the reverted call, and the activity feed records a struck-through row.
+   On `/b/biz-7`, drag the *per-call cap* slider to about `0.20`. The line under it already
+   tells you the verdict the current plan would get. The cap only becomes law when you press
+   **propose change** and then **apply** — the charter is timelocked, not a form field.
+   Then press **try an overspend** (1.5× the cap) → rejected with `E20`, a receipt drawer
+   opens with the reverted call, and the activity feed records a struck-through row.
 
-6. **Halve the cap, then spend inside it**
-   Set the cap to `0.50`, press **replay operator** → the payment settles, the epoch meter
-   advances. The same button, two outcomes, decided by one number.
+6. **The same account, allowed**
+   With that cap applied, press **replay operator** → it settles, because the replay is
+   0.625× the cap by construction. One number decides both outcomes: the overspend is
+   refused, the ordinary spend goes through.
 
 7. **Halt the agent**
    Press **halt operator** → the receipt shows `DeleteKey(...)`. Press **replay operator**
