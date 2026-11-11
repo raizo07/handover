@@ -308,7 +308,7 @@ measured in a sandbox test and asserted, not guessed — the README publishes th
 NEAR executes a cross-contract call as *separate receipts*. If the vault's receipt
 commits and the caller's callback later panics, **the vault's key rotation is not
 rolled back**. Claiming atomicity across contracts would be a lie, and a judge who
-knows NEAR will catch it. CHARTER therefore implements an explicit two-beat protocol
+knows NEAR will catch it. HANDOVER therefore implements an explicit two-beat protocol
 with a durable state machine and a permissionless repair path.
 
 ### 6.2 State machine
@@ -544,10 +544,11 @@ funds, no signatures requested from the human at any point in the build.
 
 ## 14. Open decisions (need the human)
 
-1. **Project name** — `CHARTER` is a working title.
-2. **Testnet deployer account** — must be created by the human; never invented.
-3. **Push policy** — commits stay local; no `git push`, no public repo, until explicit yes.
-4. **Second submission** — SEALED is held in reserve (Q-015: max 2, disclosed in both READMEs).
+1. ~~**Project name**~~ — decided: **HANDOVER**. The directory still carries the working
+   title; "charter" survives only as the domain word for a business's rulebook.
+2. ~~**Testnet deployer account**~~ — created: `raizo07.testnet`, key in `.env` only.
+3. ~~**Push policy**~~ — confirmed; the repository is public.
+4. **Second submission** — SEALED was held in reserve; not built, so nothing to disclose.
 
 ---
 

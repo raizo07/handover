@@ -1,6 +1,6 @@
 [package]
 name = "vault"
-description = "CHARTER vault: per-business account holding treasury, keys and charter rules"
+description = "HANDOVER vault: per-business account holding treasury, keys and its charter"
 version = "0.1.0"
 edition = "2024"
 resolver = "3"
