@@ -57,3 +57,7 @@ deploy-sandbox:
 ## Build with the GitHub Pages base path and publish to the gh-pages branch.
 pages:
 	./web/scripts/publish-pages.sh
+
+## Rebuild the two-minute film (needs ffmpeg, python3+numpy, Chrome).
+film:
+	cd film && npm ci && python3 plan.py && python3 score.py && node render.mjs

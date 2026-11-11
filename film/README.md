@@ -1,0 +1,91 @@
+# HANDOVER — the film
+
+A two-minute demo film for HANDOVER, built on a deterministic motion-and-sound framework:
+paper `#F3F3F0`, ink `#141414`, and black redaction bars. 96 BPM, 48 bars, 120 seconds,
+1920×1080 at 30 fps.
+
+Every number in the picture comes from the product. Timings are on the musical grid, written
+once by `plan.py`, and read by both the renderer and the score, so every hit you see is a hit
+you hear.
+
+```
+plan.py ──► timeline.json ──┬──► film.js  (window.seek(t)) ──► render.mjs ──► out/handover.mp4
+                            └──► score.py (48 kHz stereo) ──► audio/score.wav ──┘
+```
+
+The engine is forked from the LeakBench film (same author, same house style); the content,
+the scenario and the screens are HANDOVER's.
+
+## Build
+
+```bash
+npm ci                   # puppeteer-core, pointed at the system Chrome
+node ../web/scripts/capture-film.mjs   # 2x screenshots into assets/art/
+python3 plan.py          # writes timeline.json and src/timeline.js
+python3 score.py         # writes audio/score.wav
+node render.mjs          # frames -> out/handover.mp4 (H.264 + AAC, -14 LUFS)
+```
+
+`node render.mjs --check` revisits frames out of order and compares them byte-for-byte:
+`seek(t)` is a pure function of `t`, so a revisit must be identical. `--still 42.5` renders a
+single PNG.
+
+## The twelve scenes
+
+| bars | scene | template | what it says |
+|---|---|---|---|
+| 0–4 | open | title | selling a business onchain gives the buyer a picture |
+| 4–8 | vault | chapter | minting creates a real sub-account with its own keys |
+| 8–12 | proof | counter | 32 tests, four of them deploying real wasm |
+| 12–16 | live | screen | the deployed registry, read from chain, camera on two boxes |
+| 16–20 | charter | chapter | an agent with money and a ceiling |
+| 20–24 | limit | refusal | the vault refuses an overspend; the key turns |
+| 24–28 | transform | receipt | the hand-over: two beats, printed |
+| 28–32 | halt | terminal | `halt` deletes the operator key; the next call is E23 |
+| 32–36 | keys | compare | seller GONE / buyer LIVE |
+| 36–40 | phone | phone | the same app on a phone |
+| 40–44 | name | name | HANDOVER, revealed from under three bars |
+| 44–48 | end | title | buy a going concern, not a keyring |
+
+## The clock
+
+`BEAT = 0.625 s`, `BAR = 2.5 s`, 48 bars. `at(bar, beat) = bar*BAR + beat*BEAT`. Scenes start and
+end on bar lines; events sit on beats, eighths, sixteenths and thirty-seconds. Typing runs at
+`BEAT/16`. A beat counts as reached at `t + 0.5/fps`.
+
+## The look
+
+| layer | z | notes |
+|---|---|---|
+| paper + grain | 0–1 | grain is a 128 px tile at 0.07, behind the content |
+| scene | 2 | sheets, type, bars |
+| exit bars | 6 | scene ledges |
+| mascot | 7 | the brand's bar with two eyes |
+| wipe | 80 | 9 bars, 108 tall, every 120 px from y 6 |
+
+Type: Archivo 800 at 72% width for display (`-0.012em`, line-height 0.9), 78% for words, IBM Plex
+Mono for data. Sheets are white with a 1.5 px `#DAD9D3` border, radius 10 and a two-part shadow.
+Bars are black, radius 6 (8 for wipe bars). Everything scales from its `(0, 60%)` point.
+
+Colour is a vocabulary: green `#0B6B3A` only for a yes, red `#B3261E` only for the refusal.
+
+## Rebuilding the frame
+
+```
+prog(t, start, dur) = clamp((t - start) / dur)
+out3(k) = 1 - (1-k)^3      in3(k) = k^3
+inout(k) = 4k^3 | 1 - (-2k+2)^3/2
+back(k, s=1.7) = 1 + (s+1)(k-1)^3 + s(k-1)^2
+pulse(t, c, h) = max(0, 1 - |t - c| / h)
+```
+
+Randomness is `mulberry32(2610)`, spent while building, never per frame.
+
+## Changes made to the fork
+
+- `chapter` and `compare` take a configurable word size / grade prefix, so longer chapter
+  words do not collide with the sheet.
+- The `counter` label, the terminal window title and the receipt unit were hard-coded to
+  LeakBench strings; they are now scene data (`label`, `window_title`, `unit`).
+- `refusal` renders `key.label`, which the original ignored.
+- The phone sheet scales its screenshot to the device width instead of assuming a 1× capture.
