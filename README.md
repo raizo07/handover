@@ -2,8 +2,8 @@
 
 **A business is a NEAR account. An NFT is the share.**
 
-*The rulebook a business runs under is called its **charter**. The repo directory keeps an
-older name; everything user-facing says HANDOVER.*
+*One word to know: a business's **charter** is its rulebook — the caps, the allowlist and the
+halt switch the operator runs under. It is a thing inside HANDOVER, not another name for it.*
 
 > **Status — read this first.** Both contracts are written and tested (32 Rust tests,
 > including 4 that deploy real wasm into a real NEAR VM), and they are **deployed on

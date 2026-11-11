@@ -14,7 +14,7 @@ the frontend tree, the demo script, and the test matrix.
 
 A business is a NEAR account. An NFT is the share.
 
-Mint a business → a real sub-account (`biz-7.charter.testnet`) exists, holding money,
+Mint a business → a real sub-account (`biz-7.reg.raizo07.testnet`) exists, holding money,
 a scoped key for an autonomous operator, and a rulebook (*charter*) enforced by code.
 The business earns (`record_sale`), pays itself out (`claim`), and spends under caps
 (`operator_spend`). The NFT is the ownership instrument: transfer it and the account's
@@ -33,7 +33,7 @@ in the contract (the operator is an off-chain process; the contract constrains i
 |---|---|---|---|
 | **Holder** | full-access key on the *vault*, granted at transfer | claim dividends, halt/resume operator, edit charter (timelocked), spend from treasury, sell the NFT | mint new businesses, change the controller link, seize from another vault |
 | **Operator** (agent) | a *function-call* key on the vault, scoped to `record_sale` + `operator_spend` | report sales, spend inside charter caps | withdraw treasury, add keys, halt anything, claim, touch the NFT |
-| **Controller** (`charter` contract) | the only account allowed to call `vault.set_holder` | rotate the owner key on transfer, walk the rotation state machine | mint a second NFT for a vault, transfer anyone's token, hold user funds |
+| **Controller** (`registry` contract) | the only account allowed to call `vault.set_holder` | rotate the owner key on transfer, walk the rotation state machine | mint a second NFT for a vault, transfer anyone's token, hold user funds |
 | **Minter** (deployer) | admin flag | mint new businesses, pause *minting* | touch existing vaults, holders, or keys |
 | **Anyone** | nothing | read everything, call `resolve_rotation` for a stuck token (idempotent, permissionless) | any state change |
 
@@ -48,9 +48,9 @@ function call — not in an off-chain prompt, and not on a server that can be br
 ```mermaid
 flowchart LR
   subgraph chain [NEAR testnet]
-    C[charter.testnet<br/>registry + NFTs<br/>EXISTS ONCE]
-    V1[biz-1.charter.testnet<br/>vault + treasury]
-    V2[biz-2.charter.testnet<br/>vault + treasury]
+    C[reg.raizo07.testnet<br/>registry + NFTs<br/>EXISTS ONCE]
+    V1[biz-1.reg.raizo07.testnet<br/>vault + treasury]
+    V2[biz-2.reg.raizo07.testnet<br/>vault + treasury]
   end
   H[Holder<br/>browser wallet + owner key]
   O[Operator agent<br/>process]
@@ -97,7 +97,7 @@ pub struct CharterContract {
 
 #[near(serializers = [json, borsh])]
 pub struct TokenRecord {
-    pub vault: AccountId,        // biz-N.charter.testnet
+    pub vault: AccountId,        // biz-N.reg.raizo07.testnet
     pub holder: AccountId,       // mirror of vault.holder, updated on rotation
     pub operator: AccountId,     // operator *account* (informational; key lives in vault)
     pub created_at: u64,
@@ -194,7 +194,7 @@ string matching:
 ```rust
 #[near(contract_state)]
 pub struct Vault {
-    controller: AccountId,     // charter.testnet — sole privileged caller
+    controller: AccountId,     // reg.raizo07.testnet — sole privileged caller
     token_id: TokenId,
     holder: AccountId,         // payout target + authority
     operator: AccountId,       // account behind the function-call key
@@ -502,7 +502,7 @@ in CI; `cargo test` on every push.
 | Item | Value | Who |
 |---|---|---|
 | Deployer account | `<human creates and names it>` | human |
-| Controller | `charter.<deployer>.testnet` | script |
+| Controller | `reg.<deployer>.testnet` | script |
 | Vault code hash | pinned at deploy, recorded in README | script |
 | RPC | `https://rpc.testnet.near.org` | config |
 | Keys | `.env` only, gitignored from commit #1 | human |
