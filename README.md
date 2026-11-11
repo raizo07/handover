@@ -18,6 +18,9 @@ older name; everything user-facing says HANDOVER.*
 > The frontend runs against seeded demo data by default and reads this registry when
 > `VITE_REGISTRY_CONTRACT` is set. No mainnet contract exists — the "real vs simulated"
 > section below is exact.
+>
+> **Demo:** <https://raizo07.github.io/handover/> · **film:** [`film/out/handover.mp4`](film/out/handover.mp4)
+> (85 s, rebuild with `make film`) · **submission packet:** [docs/SUBMISSION.md](docs/SUBMISSION.md)
 
 ![Marketplace](docs/screens/marketplace.png)
 
@@ -57,12 +60,23 @@ rather than simulated. On a chain with one key model and no sub-accounts, this i
 contract per token plus a trusted operator; here it is an account, and the separation between
 owner and operator is enforced by the protocol rather than by `if` statements in my code.
 
+## The film
+
+[`film/out/handover.mp4`](film/out/handover.mp4) — 85 seconds, 1920×1080, 30 fps, with sound.
+Nine scenes on a 96 BPM grid, and two of them are **recorded product**: the hand-over and the
+E20 refusal are the real UI, captured with `page.screencast()` and replayed frame by frame
+under a keyframed camera. Every sound is synthesised from the same timeline the picture reads,
+so a hit you see is a hit you hear.
+
+`make film` rebuilds it (needs ffmpeg, python3 + numpy, and Chrome); `film/README.md` documents
+the scenes and the engine.
+
 ## Try it
 
 Requires Node 20+ and Rust stable. The demo path needs no wallet, no faucet and no funds.
 
 0. **Follow the walkthrough** — <https://raizo07.github.io/handover/judge>
-   The same eight steps as below, in the app, with the mode you are in explained on the side.
+   The same steps as below, in the app, with the mode you are in explained on the side.
 
 1. **Run the contract tests**
    `make test`
@@ -71,7 +85,8 @@ Requires Node 20+ and Rust stable. The demo path needs no wallet, no faucet and 
 
 2. **Run the app**
    `make demo` (or `cd web && npm ci && npm run dev` for the dev server)
-   → opens `http://localhost:4173`: three businesses, a `DEMO DATA` banner, no wallet prompt.
+   → opens `http://localhost:4173`: three businesses, a `DEMO DATA` banner. A connect-wallet button
+   is present but nothing requires it.
 
 3. **See the live testnet registry instead of demo data**
    `VITE_REGISTRY_CONTRACT=reg.raizo07.testnet npm run build` (in `web/`), or add `?live=1`
@@ -154,8 +169,8 @@ The same app pointed at that registry with `VITE_REGISTRY_CONTRACT` renders live
 
 ![Live mode](docs/screens/live.png)
 
-A testnet run needs a funded named account (about 25 NEAR covers the registry plus three
-mints) and writes `docs/DEPLOYED.md` with the real addresses. It will not run against
+A testnet run needs a funded named account — **≈12 NEAR** covers the registry, the stored vault
+code and three mints (2 NEAR each) — and writes `docs/DEPLOYED.md` with the real addresses. It will not run against
 mainnet, and it refuses an implicit 64-character account up front — sub-accounts require a
 named parent.
 
@@ -166,8 +181,8 @@ named parent.
 | `registry` + `vault` contracts | **Real.** Built with `cargo near build`, 32 tests green. |
 | Key rotation, caps, halt, dividends | **Real** in Rust; **re-enforced** in the demo client so the UI cannot show a state the contract forbids. |
 | Browser app | **Real** React/Vite build, served from `dist/`. |
-| Chain reads in the browser | **Verified.** Set `VITE_REGISTRY_CONTRACT` (and `VITE_RPC_URL` for a local node) and the app reads the registry through `near-kit`. Rehearsed end-to-end against a local NEAR node: three businesses, real operator accounts, no demo banner. |
-| Chain writes in the browser | **Not wired.** Writes show "needs a connected wallet" instead of pretending. |
+| Chain reads in the browser | **Verified.** Set `VITE_REGISTRY_CONTRACT` (and `VITE_RPC_URL` for a local node) and the app reads the registry through `near-kit`. Checked against the live testnet registry: two businesses, real operator accounts, no demo banner. |
+| Chain writes in the browser | **Partly wired.** A connected wallet signs registry actions (`nft_transfer`, `resolve_rotation`). Vault actions are signed by the business key, so the UI refuses them with an explanation instead of faking a signature. |
 | Deployed contracts | **Real, on testnet.** Registry `reg.raizo07.testnet` with two businesses minted. Addresses in [docs/DEPLOYED.md](docs/DEPLOYED.md). |
 
 The demo client enforces `E20` (per-call cap), `E21` (epoch cap), `E22` (allowlist), `E23`
@@ -181,11 +196,13 @@ animation of one.
 contracts/registry/   NEP-171 tokens + the two-beat transfer state machine
 contracts/vault/      per-business account: treasury, keys, charter, accounting
 web/                  React + Vite app; demo client mirrors the contract rules
-web/scripts/          headless browser checks (screenshots, buy flow)
+web/scripts/          headless checks: screenshots, buy flow, wallet, film recording
+scripts/              prepare-submission.mjs (validates the payload, never sends)
+film/                 the 85-second demo film: plan, engine, score, clips
 docs/SPEC.md          state shapes, methods, events, errors, protocol, test matrix
 docs/DECISIONS.md     choices and the trigger that would reverse each one
 docs/SUBMISSION.md    submission checklist, drafts, and open fields
-docs/DEMO.md          45-second recording script + judge walkthrough
+docs/DEPLOYED.md      the addresses that are actually live
 ```
 
 ## Contract invariants (asserted in tests)
