@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""plan.py — the single source of truth for the HANDOVER film.
+"""plan.py — the single source of truth for the FREEHOLD film.
 
 Writes timeline.json: scenes that start and end on bar lines, plus every event
 on the musical grid. film.js draws from it and score.py plays from it, so every
@@ -93,7 +93,7 @@ def typed(t0, text, per_char, level=1.0, pan=0.0, gain=0.10, scene_id=""):
 # =========================================================================
 s_open = scene(
     "open", 0, 2, "title",
-    eyebrow="HANDOVER · NEAR HACKATHON 2026 · TESTNET",
+    eyebrow="FREEHOLD · NEAR HACKATHON 2026 · TESTNET",
     eyebrow_t=-0.18,
     lines=[
         {"text": "Sell a business onchain,", "cls": "display", "size": 128, "t": -0.18, "top": 300},
@@ -110,7 +110,7 @@ ev("sweep", at(1, 2) - 0.15, dur=0.4, lo=200, hi=1400, up=True, gain=0.16, pan=0
 ev("bloop", at(1, 2) + 1.2, f0=800, f1=1300, dur=0.05, gain=0.12, pan=0.2)
 
 # =========================================================================
-# 2 · THE HANDOVER — 5..17.5 s  (recorded product moment)
+# 2 · THE FREEHOLD — 5..17.5 s  (recorded product moment)
 # =========================================================================
 s_hand = scene(
     "handover", 2, 7, "clip",
@@ -314,7 +314,7 @@ for i, line in enumerate(s_proof["lines"]):
 # =========================================================================
 s_name = scene(
     "name", 25, 29, "name",
-    word="HANDOVER",
+    word="FREEHOLD",
     sub="A business is a NEAR account",
     cues={
         "riser": r(at(25)),
@@ -337,12 +337,12 @@ slam(s_name["cues"]["sub"], gain=0.2, target="sub", scene_id="name")
 # =========================================================================
 s_end = scene(
     "end", 29, 34, "title",
-    eyebrow="HANDOVER · NEAR HACKATHON 2026",
+    eyebrow="FREEHOLD · NEAR HACKATHON 2026",
     lines=[
         {"text": "Buy a going concern,", "cls": "display", "size": 118, "t": r(at(29)), "top": 300},
         {"text": "not a keyring.", "cls": "display", "size": 118, "t": r(at(30)), "top": 410},
     ],
-    sub={"text": "raizo07.github.io/handover  ·  github.com/raizo07/handover", "t": r(at(31)), "top": 640, "mono": True},
+    sub={"text": "raizo07.github.io/freehold  ·  github.com/raizo07/freehold", "t": r(at(31)), "top": 640, "mono": True},
     mascot={"enter": r(at(31, 2)), "x": 1500, "y": 700, "w": 250, "h": 108},
     out=83.2,
 )
@@ -377,7 +377,7 @@ timeline = {
     "meta": {
         "bpm": BPM, "beat": BEAT, "bar": BAR, "bars": BARS,
         "fps": FPS, "width": W, "height": H, "duration": DURATION,
-        "project": "HANDOVER",
+        "project": "FREEHOLD",
         "seed": 2610,
     },
     "scenes": SCENES,

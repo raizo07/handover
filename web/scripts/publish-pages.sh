@@ -7,7 +7,7 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
-REPO_SLUG="${REPO_SLUG:-raizo07/handover}"
+REPO_SLUG="${REPO_SLUG:-raizo07/freehold}"
 REMOTE="https://github.com/${REPO_SLUG}.git"
 REMOTE_URL="$(git -C "$REPO_ROOT" remote get-url origin 2>/dev/null || echo "$REMOTE")"
 NAME="${REPO_SLUG##*/}"
@@ -31,8 +31,8 @@ git -C "$TMP/site" add -A
 if git -C "$TMP/site" diff --cached --quiet; then
   echo "no changes to publish"
 else
-  git -C "$TMP/site" -c user.name="HANDOVER" -c user.email="dev@handover.local" \
-    commit --quiet -m "Pages build: HANDOVER (demo data, ?live=1 for the testnet registry)"
+  git -C "$TMP/site" -c user.name="FREEHOLD" -c user.email="dev@handover.local" \
+    commit --quiet -m "Pages build: FREEHOLD (demo data, ?live=1 for the testnet registry)"
   git -C "$TMP/site" push --quiet origin gh-pages
   echo "published: https://${REPO_SLUG%%/*}.github.io/${NAME}/"
 fi

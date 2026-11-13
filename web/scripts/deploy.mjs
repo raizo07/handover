@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Deploy + seed HANDOVER.
+ * Deploy + seed FREEHOLD.
  *
  * Three modes, same code path:
  *
@@ -250,7 +250,7 @@ async function createRegistry(near, cfg, wasm) {
         minter: cfg.deployer,
         metadata: {
           spec: "nft-1.0.0",
-          name: "HANDOVER",
+          name: "FREEHOLD",
           symbol: "HNDV",
           icon: null,
           base_uri: null,
@@ -415,7 +415,7 @@ function writeDeployed(cfg, rows, wasm) {
 // ---------------------------------------------------------------- main
 
 async function main() {
-  console.log(`\n${c.bold("HANDOVER")} · deploy ${DRY ? c.amber("(dry run)") : SANDBOX ? c.amber("(sandbox)") : ""}\n`);
+  console.log(`\n${c.bold("FREEHOLD")} · deploy ${DRY ? c.amber("(dry run)") : SANDBOX ? c.amber("(sandbox)") : ""}\n`);
 
   const wasm = assertArtifacts();
   const crypto = await import("node:crypto");

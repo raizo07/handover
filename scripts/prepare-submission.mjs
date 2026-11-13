@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Validate a HANDOVER submission payload against the hackathon contract.
+ * Validate a FREEHOLD submission payload against the hackathon contract.
  *
  * This script never sends anything. It reads deploy-out/submission.json, checks every
  * field against the published rules, prints the exact body and the curl command, and
@@ -43,7 +43,7 @@ if (!existsSync(FILE)) {
         size: "1",
         tracks: [],
         nearAddress: "",
-        projectUrl: "https://github.com/raizo07/handover",
+        projectUrl: "https://github.com/raizo07/freehold",
         demoUrl: "",
         idea: "",
         consent: false,

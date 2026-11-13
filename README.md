@@ -1,9 +1,9 @@
-# HANDOVER
+# FREEHOLD
 
 **A business is a NEAR account. An NFT is the share.**
 
 *One word to know: a business's **charter** is its rulebook — the caps, the allowlist and the
-halt switch the operator runs under. It is a thing inside HANDOVER, not another name for it.*
+halt switch the operator runs under. It is a thing inside FREEHOLD, not another name for it.*
 
 > **Status — read this first.** Both contracts are written and tested (32 Rust tests,
 > including 4 that deploy real wasm into a real NEAR VM), and they are **deployed on
@@ -19,7 +19,7 @@ halt switch the operator runs under. It is a thing inside HANDOVER, not another 
 > `VITE_REGISTRY_CONTRACT` is set. No mainnet contract exists — the "real vs simulated"
 > section below is exact.
 >
-> **Demo:** <https://raizo07.github.io/handover/> · **film:** [`film/out/handover.mp4`](film/out/handover.mp4)
+> **Demo:** <https://raizo07.github.io/freehold/> · **film:** [`film/out/handover.mp4`](film/out/handover.mp4)
 > (85 s, rebuild with `make film`) · **submission packet:** [docs/SUBMISSION.md](docs/SUBMISSION.md)
 
 ![Marketplace](docs/screens/marketplace.png)
@@ -34,7 +34,7 @@ On-chain that is impossible today. An NFT can hold a picture and at best a treas
 but it cannot *be* the business. Selling means re-keying a multisig, re-papering the entity,
 and hoping the operator keeps working while it happens.
 
-HANDOVER makes the ownership instrument and the operating account the same object.
+FREEHOLD makes the ownership instrument and the operating account the same object.
 
 ## What it is
 
@@ -52,6 +52,25 @@ before any contract code runs. The buyer inherits the unclaimed dividend. The op
 stops trading.
 
 ![Business](docs/screens/business.png)
+
+## How this differs from a wallet-handover NFT
+
+Another NEAR Hackathon entry, [`AlphaTechini/handover`](https://github.com/AlphaTechini/handover),
+mints an NFT that owns an **Ethereum** address via Chain Signatures and sells that wallet with
+its ETH and tokens. Both are "an NFT owns an account", so it is worth being exact about the
+difference:
+
+| | Wallet handover NFT | FREEHOLD |
+|---|---|---|
+| The token owns | an Ethereum address | a **NEAR sub-account** |
+| What is inside | ETH, ERC-20s, ERC-721/1155 | a treasury, an owner key, an **operator key** and a charter |
+| The other party | a buyer of a wallet | an **operator** — an agent that keeps trading after the sale |
+| What is enforced | signature log, frozen signing, locked contract | per-call and per-epoch caps, allowlist, halt switch — in the vault |
+| The problem | the seller kept a copy of the key, or a pre-signed transaction | the business stops working when it changes hands |
+| Chain Signatures | central | not used |
+
+Theirs moves **assets**. FREEHOLD moves a **business that must keep running**, which is why the
+operator survives the transfer and the charter outlives the owner.
 
 ## Why NEAR
 
@@ -75,7 +94,7 @@ the scenes and the engine.
 
 Requires Node 20+ and Rust stable. The demo path needs no wallet, no faucet and no funds.
 
-0. **Follow the walkthrough** — <https://raizo07.github.io/handover/judge>
+0. **Follow the walkthrough** — <https://raizo07.github.io/freehold/judge>
    The same steps as below, in the app, with the mode you are in explained on the side.
 
 1. **Run the contract tests**

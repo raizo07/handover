@@ -4,7 +4,7 @@ import puppeteer from "puppeteer-core";
 import { mkdirSync } from "node:fs";
 
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-const BASE = process.env.BASE ?? "https://raizo07.github.io/handover";
+const BASE = process.env.BASE ?? "https://raizo07.github.io/freehold";
 const OUT = "../film/assets/art";
 mkdirSync(OUT, { recursive: true });
 

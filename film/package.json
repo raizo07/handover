@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Two-minute HANDOVER demo film: paper, ink and black redaction bars",
+  "description": "Two-minute FREEHOLD demo film: paper, ink and black redaction bars",
   "scripts": {
     "plan": "python3 plan.py",
     "score": "python3 score.py",

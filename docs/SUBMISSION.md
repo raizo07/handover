@@ -9,13 +9,13 @@ until the human confirms the exact payload — the API takes one submission per 
 
 | Field | Rule | Where it comes from | State |
 |---|---|---|---|
-| `projectName` | 2–80 chars | `HANDOVER` | **confirmed** |
+| `projectName` | 2–80 chars | `FREEHOLD` | **confirmed** |
 | `leadName` | 2–80 chars | `Gabriel Agada` | **confirmed** |
 | `email` | valid, ≤160 | `agadaraizo@gmail.com` | **confirmed** |
 | `size` | `1` \| `2 - 4` \| `4 - 6` \| `6 - 8` \| `8+` | `1` | **confirmed** |
 | `tracks` | ≥1 track id | `["nfts","business"]` | **confirmed** |
 | `nearAddress` | mainnet, lowercase | `raizo007.near` | **confirmed** |
-| `projectUrl` | public repo | https://github.com/raizo07/handover | ready |
+| `projectUrl` | public repo | https://github.com/raizo07/freehold | ready |
 | `demoUrl` | public post | X post by the human | **missing** |
 | `idea` | 20–2000 chars | draft below | needs approval |
 | `consent` | `true` | read to the human verbatim | pending |
@@ -82,7 +82,7 @@ Verify the new key works before deleting the old one, or the account is lost.
 ## 3. Draft `idea` (996 chars — needs approval, not yet sent)
 
 > When a small business is sold, the buyer inherits an operating entity — a bank account,
-> suppliers, an operator who does the work — not a JPEG. HANDOVER makes that literal on
+> suppliers, an operator who does the work — not a JPEG. FREEHOLD makes that literal on
 > NEAR: minting creates a real sub-account with its own treasury, a full-access owner key
 > and a function-call operator key constrained by an on-chain charter (per-call cap, epoch
 > cap, allowlist, halt). Revenue accrues as an unclaimed dividend that travels with the
@@ -101,10 +101,10 @@ Single post, 273 characters with the link weighted as X counts it (limit 280):
 
 > Selling a small business onchain gives the buyer a JPEG, not the business.
 >
-> At NEAR HACKATHON I built HANDOVER: the token owns a real NEAR sub-account. Sell it and
+> At NEAR HACKATHON I built FREEHOLD: the token owns a real NEAR sub-account. Sell it and
 > the owner key rotates while the operator keeps trading.
 >
-> https://raizo07.github.io/handover/ @NEARProtocol #NEARHackathon
+> https://raizo07.github.io/freehold/ @NEARProtocol #NEARHackathon
 
 Attach the 45-second screen recording if there is one; otherwise attach
 `docs/screens/settled.png` and `docs/screens/business.png`. The post must contain
@@ -115,7 +115,7 @@ Longer version, if a thread or a premium account is used:
 > A small business sold onchain gives the buyer a JPEG, not the business. No treasury, no
 > operator, no customers.
 >
-> At NEAR HACKATHON I built HANDOVER. Minting a business creates a real NEAR sub-account
+> At NEAR HACKATHON I built FREEHOLD. Minting a business creates a real NEAR sub-account
 > with its own treasury, a full-access owner key, and an operator key that an agent can
 > use only inside caps written onchain.
 >
@@ -124,7 +124,7 @@ Longer version, if a thread or a premium account is used:
 > next transaction fails inside nearcore before a line of contract code runs.
 >
 > 32 Rust tests. Live on testnet.
-> https://raizo07.github.io/handover/
+> https://raizo07.github.io/freehold/
 >
 > @NEARProtocol #NEARHackathon
 

@@ -8,7 +8,7 @@
   "width": 1920,
   "height": 1080,
   "duration": 85.0,
-  "project": "HANDOVER",
+  "project": "FREEHOLD",
   "seed": 2610
  },
  "scenes": [
@@ -17,7 +17,7 @@
    "start": 0.0,
    "end": 5.0,
    "template": "title",
-   "eyebrow": "HANDOVER \u00b7 NEAR HACKATHON 2026 \u00b7 TESTNET",
+   "eyebrow": "FREEHOLD \u00b7 NEAR HACKATHON 2026 \u00b7 TESTNET",
    "eyebrow_t": -0.18,
    "lines": [
     {
@@ -314,7 +314,7 @@
    "start": 62.5,
    "end": 72.5,
    "template": "name",
-   "word": "HANDOVER",
+   "word": "FREEHOLD",
    "sub": "A business is a NEAR account",
    "cues": {
     "riser": 62.5,
@@ -332,7 +332,7 @@
    "start": 72.5,
    "end": 85.0,
    "template": "title",
-   "eyebrow": "HANDOVER \u00b7 NEAR HACKATHON 2026",
+   "eyebrow": "FREEHOLD \u00b7 NEAR HACKATHON 2026",
    "lines": [
     {
      "text": "Buy a going concern,",
@@ -350,7 +350,7 @@
     }
    ],
    "sub": {
-    "text": "raizo07.github.io/handover  \u00b7  github.com/raizo07/handover",
+    "text": "raizo07.github.io/freehold  \u00b7  github.com/raizo07/freehold",
     "t": 77.5,
     "top": 640,
     "mono": true

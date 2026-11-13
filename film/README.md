@@ -1,6 +1,6 @@
-# HANDOVER — the film
+# FREEHOLD — the film
 
-An 85-second demo film for HANDOVER, built on a deterministic motion-and-sound framework:
+An 85-second demo film for FREEHOLD, built on a deterministic motion-and-sound framework:
 paper `#F3F3F0`, ink `#141414`, and black redaction bars. 96 BPM, 34 bars, 85 seconds,
 1920×1080 at 30 fps.
 
@@ -13,12 +13,12 @@ once by `plan.py`, and read by both the renderer and the score, so every hit you
 you hear.
 
 ```
-plan.py ──► timeline.json ──┬──► film.js  (window.seek(t)) ──► render.mjs ──► out/handover.mp4
+plan.py ──► timeline.json ──┬──► film.js  (window.seek(t)) ──► render.mjs ──► out/freehold.mp4
                             └──► score.py (48 kHz stereo) ──► audio/score.wav ──┘
 ```
 
 The engine is forked from the LeakBench film (same author, same house style); the content,
-the scenario and the screens are HANDOVER's.
+the scenario and the screens are FREEHOLD's.
 
 ## Build
 
@@ -28,7 +28,7 @@ node ../web/scripts/capture-film.mjs   # 2x screenshots into assets/art/
 node ../web/scripts/record-demo.mjs    # records clips/*.webm from the deployed app
 python3 plan.py          # writes timeline.json and src/timeline.js
 python3 score.py         # writes audio/score.wav
-node render.mjs          # frames -> out/handover.mp4 (H.264 + AAC, -14 LUFS)
+node render.mjs          # frames -> out/freehold.mp4 (H.264 + AAC, -14 LUFS)
 ```
 
 `node render.mjs --check` revisits frames out of order and compares them byte-for-byte:
@@ -46,7 +46,7 @@ single PNG.
 | 14–18 | refusal | clip | **recorded**: the cap is set, the agent tries 1.5×, E20 |
 | 18–22 | halt | terminal | `halt` deletes the operator key; the next call is E23 |
 | 22–25 | proof | counter | 32 tests, four of them deploying real wasm |
-| 25–29 | name | name | HANDOVER, revealed from under three bars |
+| 25–29 | name | name | FREEHOLD, revealed from under three bars |
 | 29–34 | end | title | buy a going concern, not a keyring |
 
 The two clips are the argument: they are the product, not a description of it.

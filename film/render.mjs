@@ -112,7 +112,7 @@ function run(cmd, args) {
 async function mux({ first, last, fps }) {
   await fsp.mkdir(path.join(ROOT, 'out'), { recursive: true });
   const hasAudio = !NO_AUDIO && fs.existsSync(path.join(ROOT, 'audio/score.wav'));
-  const out = path.join(ROOT, 'out/handover.mp4');
+  const out = path.join(ROOT, 'out/freehold.mp4');
   const args = ['-y', '-framerate', String(fps), '-start_number', String(first),
     '-i', path.join(ROOT, 'frames/f_%05d.jpg')];
   if (hasAudio) {

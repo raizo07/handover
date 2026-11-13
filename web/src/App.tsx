@@ -24,7 +24,7 @@ export default function App() {
   const openBusiness = useCallback((id: string) => navigate(`/b/${id}`), [navigate]);
 
   useEffect(() => {
-    document.title = business ? `${business.name} · HANDOVER` : "HANDOVER";
+    document.title = business ? `${business.name} · FREEHOLD` : "FREEHOLD";
   }, [business]);
 
   const mode = client?.mode ?? "demo";
@@ -66,7 +66,7 @@ export default function App() {
         <div className="wrap topbar-inner">
           <a href="/" className="brand" onClick={(e) => { e.preventDefault(); navigate("/"); }}>
             <span className="brand-mark">
-              HAND<b>OVER</b>
+              FREE<b>HOLD</b>
             </span>
             <span className="brand-sub">business as an account</span>
           </a>
@@ -99,7 +99,7 @@ export default function App() {
       </main>
 
       <footer className="footer wrap">
-        <span>HANDOVER · NEAR HACKATHON · testnet only</span>
+        <span>FREEHOLD · NEAR HACKATHON · testnet only</span>
         <span className="row" style={{ gap: 14 }}>
           <span>
             {businesses.length} businesses ·{" "}
