@@ -59,7 +59,7 @@ function receipt(ok: boolean, message: string, extra: Partial<Receipt> = {}): Re
 
 function logLine(event: string, data: Record<string, unknown>): string {
   return `EVENT_JSON:${JSON.stringify({
-    standard: "handover",
+    standard: "freehold",
     version: "1.0.0",
     event,
     data: [data],

@@ -417,7 +417,7 @@ impl Vault {
 
     fn emit(event: &str, data: near_sdk::serde_json::Value) {
         let payload = json!({
-            "standard": "handover",
+            "standard": "freehold",
             "version": "1.0.0",
             "event": event,
             "data": [data],
