@@ -2,7 +2,8 @@
 
 **A business is a NEAR account. An NFT is the share.**
 
-> **Live:** <https://raizo07.github.io/freehold/> · **Film:** [`film/out/freehold.mp4`](film/out/freehold.mp4) ·
+> **Live:** <https://freehold-demo.vercel.app/> · **Mirror:** <https://raizo07.github.io/freehold/> ·
+> **Film:** [`film/out/freehold.mp4`](film/out/freehold.mp4) ·
 > **Registry:** [`freehold.raizo07.testnet`](https://testnet.nearblocks.io/address/freehold.raizo07.testnet)
 
 Three businesses are live on NEAR testnet, each a real sub-account:
