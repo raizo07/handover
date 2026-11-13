@@ -5,9 +5,10 @@
 > **Live:** <https://raizo07.github.io/freehold/> · **Film:** [`film/out/freehold.mp4`](film/out/freehold.mp4) ·
 > **Registry:** [`freehold.raizo07.testnet`](https://testnet.nearblocks.io/address/freehold.raizo07.testnet)
 
-Two businesses are live on NEAR testnet, each a real sub-account: `biz-7.freehold.raizo07.testnet`
-and `biz-3.freehold.raizo07.testnet`. Both contracts are tested (32 Rust tests, 4 of which deploy
-real wasm into a NEAR VM).
+Three businesses are live on NEAR testnet, each a real sub-account:
+`biz-7.freehold.raizo07.testnet`, `biz-3.freehold.raizo07.testnet` and
+`biz-9.freehold.raizo07.testnet`. Both contracts are tested (32 Rust tests, 4 of which deploy real
+wasm into a NEAR VM).
 
 ## What it is
 
