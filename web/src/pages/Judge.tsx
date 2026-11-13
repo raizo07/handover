@@ -122,7 +122,7 @@ export function JudgePage({
                 <span className="kv-key">live</span>
                 <span className="kv-val" style={{ maxWidth: "62%", textAlign: "left" }}>
                   reads{" "}
-                  <span className="mono">reg.raizo07.testnet</span>; wallet signs registry actions
+                  <span className="mono">freehold.raizo07.testnet</span>; wallet signs registry actions
                 </span>
               </div>
             </div>

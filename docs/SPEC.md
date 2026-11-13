@@ -14,7 +14,7 @@ the frontend tree, the demo script, and the test matrix.
 
 A business is a NEAR account. An NFT is the share.
 
-Mint a business → a real sub-account (`biz-7.reg.raizo07.testnet`) exists, holding money,
+Mint a business → a real sub-account (`biz-7.freehold.raizo07.testnet`) exists, holding money,
 a scoped key for an autonomous operator, and a rulebook (*charter*) enforced by code.
 The business earns (`record_sale`), pays itself out (`claim`), and spends under caps
 (`operator_spend`). The NFT is the ownership instrument: transfer it and the account's
@@ -48,9 +48,9 @@ function call — not in an off-chain prompt, and not on a server that can be br
 ```mermaid
 flowchart LR
   subgraph chain [NEAR testnet]
-    C[reg.raizo07.testnet<br/>registry + NFTs<br/>EXISTS ONCE]
-    V1[biz-1.reg.raizo07.testnet<br/>vault + treasury]
-    V2[biz-2.reg.raizo07.testnet<br/>vault + treasury]
+    C[freehold.raizo07.testnet<br/>registry + NFTs<br/>EXISTS ONCE]
+    V1[biz-1.freehold.raizo07.testnet<br/>vault + treasury]
+    V2[biz-2.freehold.raizo07.testnet<br/>vault + treasury]
   end
   H[Holder<br/>browser wallet + owner key]
   O[Operator agent<br/>process]
@@ -97,7 +97,7 @@ pub struct CharterContract {
 
 #[near(serializers = [json, borsh])]
 pub struct TokenRecord {
-    pub vault: AccountId,        // biz-N.reg.raizo07.testnet
+    pub vault: AccountId,        // biz-N.freehold.raizo07.testnet
     pub holder: AccountId,       // mirror of vault.holder, updated on rotation
     pub operator: AccountId,     // operator *account* (informational; key lives in vault)
     pub created_at: u64,
@@ -194,7 +194,7 @@ string matching:
 ```rust
 #[near(contract_state)]
 pub struct Vault {
-    controller: AccountId,     // reg.raizo07.testnet — sole privileged caller
+    controller: AccountId,     // freehold.raizo07.testnet — sole privileged caller
     token_id: TokenId,
     holder: AccountId,         // payout target + authority
     operator: AccountId,       // account behind the function-call key

@@ -3,10 +3,10 @@
 **A business is a NEAR account. An NFT is the share.**
 
 > **Live:** <https://raizo07.github.io/freehold/> · **Film:** [`film/out/freehold.mp4`](film/out/freehold.mp4) ·
-> **Registry:** [`reg.raizo07.testnet`](https://testnet.nearblocks.io/address/reg.raizo07.testnet)
+> **Registry:** [`freehold.raizo07.testnet`](https://testnet.nearblocks.io/address/freehold.raizo07.testnet)
 
-Two businesses are live on NEAR testnet, each a real sub-account: `biz-7.reg.raizo07.testnet`
-and `biz-3.reg.raizo07.testnet`. Both contracts are tested (32 Rust tests, 4 of which deploy
+Two businesses are live on NEAR testnet, each a real sub-account: `biz-7.freehold.raizo07.testnet`
+and `biz-3.freehold.raizo07.testnet`. Both contracts are tested (32 Rust tests, 4 of which deploy
 real wasm into a NEAR VM).
 
 ## What it is
@@ -59,9 +59,9 @@ Every action opens a receipt with the `EVENT_JSON` the contract emits.
 `make deploy-dry` · `make sandbox` · `make deploy`. A run needs ~12 NEAR (registry, stored
 vault code, three mints at 2 NEAR) and writes `docs/DEPLOYED.md`.
 
-**Naming note:** the deployed contracts still emit `"standard": "handover"`. The source now
-says `freehold`; the change takes effect on the next deploy. That needs ~12 NEAR and the
-deployer holds 0.97, so the live chain still says the old string.
+The deployed contracts emit `"standard": "freehold"`. The earlier registry
+(`reg.raizo07.testnet`) is locked and holds the pre-rename deployment; it stays on chain as a
+historical address and is not used by the app.
 
 ## Layout
 

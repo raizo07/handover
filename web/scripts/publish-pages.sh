@@ -13,7 +13,7 @@ REMOTE_URL="$(git -C "$REPO_ROOT" remote get-url origin 2>/dev/null || echo "$RE
 NAME="${REPO_SLUG##*/}"
 
 cd "$REPO_ROOT/web"
-VITE_REGISTRY_CONTRACT="${VITE_REGISTRY_CONTRACT:-reg.raizo07.testnet}" \
+VITE_REGISTRY_CONTRACT="${VITE_REGISTRY_CONTRACT:-freehold.raizo07.testnet}" \
   ./node_modules/.bin/vite build --base="/${NAME}/"
 
 TMP="$(mktemp -d)"
