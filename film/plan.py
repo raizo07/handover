@@ -1,28 +1,25 @@
 #!/usr/bin/env python3
-"""plan.py — the single source of truth for the FREEHOLD film.
+"""plan.py — one clock for picture and sound.
 
-Writes timeline.json: scenes that start and end on bar lines, plus every event
-on the musical grid. film.js draws from it and score.py plays from it, so every
-hit in the picture is a hit in the sound.
+120 BPM, 66 bars, 132 s, 1920x1080 at 60 fps. Writes timeline.json (scenes,
+captions with per-word times, sound events, music grid) and src/timeline.js.
 
-96 BPM -> BEAT 0.625 s, BAR 2.5 s, 48 bars = 120 s.
-
-The film follows the product: a business is an account, the token is the share,
-and the moment that matters is the hand-over.
+Every number on screen is either read from the live product or measured from
+the deployed contracts; data/sources.json records where each one came from.
 """
 import json
 import pathlib
 
-BPM = 96
-BEAT = 60.0 / BPM          # 0.625
-BAR = 4 * BEAT             # 2.5
-EIGHTH = BEAT / 2
-SIXTEENTH = BEAT / 4
-THIRTY2 = BEAT / 8
-FPS = 30
+BPM = 120
+BEAT = 60.0 / BPM        # 0.5
+BAR = 4 * BEAT           # 2.0
+FPS = 60
 W, H = 1920, 1080
-BARS = 34
-DURATION = BARS * BAR      # 120.0
+BARS = 66
+DURATION = BARS * BAR    # 132.0
+
+ROOT = pathlib.Path(__file__).parent
+SCENES, CAPTIONS, EVENTS = [], [], []
 
 
 def at(bar, beat=0.0):
@@ -33,364 +30,223 @@ def r(x):
     return round(x, 6)
 
 
-def mulberry32(seed):
-    a = seed & 0xFFFFFFFF
-
-    def rnd():
-        nonlocal a
-        a = (a + 0x6D2B79F5) & 0xFFFFFFFF
-        t = a
-        t = ((t ^ (t >> 15)) * (t | 1)) & 0xFFFFFFFF
-        t ^= (t + (((t ^ (t >> 7)) * (t | 61)) & 0xFFFFFFFF)) & 0xFFFFFFFF
-        return ((t ^ (t >> 14)) & 0xFFFFFFFF) / 4294967296.0
-
-    return rnd
-
-
-RND = mulberry32(2610)
-
-SCENES = []
-EVENTS = []
-
-
-def scene(sid, start_bar, end_bar, template, **data):
-    s = {
-        "id": sid,
-        "start": r(at(start_bar)),
-        "end": r(at(end_bar)),
-        "template": template,
-        **data,
-    }
+def scene(sid, b0, b1, kind, **data):
+    s = {"id": sid, "start": r(at(b0)), "end": r(at(b1)), "kind": kind, **data}
     SCENES.append(s)
     return s
 
 
 def ev(kind, t, **kw):
-    e = {"kind": kind, "t": r(t), **{k: (r(v) if isinstance(v, float) else v) for k, v in kw.items()}}
-    EVENTS.append(e)
-    return e
+    EVENTS.append({"kind": kind, "t": r(t), **kw})
 
 
-def wipe(cut):
-    ev("sweep", cut - 0.30, dur=0.55, lo=380, hi=3400, up=True, gain=0.24, pan=0.0)
+def cap(t0, t1, text, keyword):
+    """One caption line. `keyword` is the word that carries the accent, matched
+    ignoring punctuation so the script reads like prose."""
+    words = text.split()
+    bare = [w.strip(".,:;!?") for w in words]
+    hi = bare.index(keyword) if keyword in bare else 0
+    span = (t1 - t0) / max(1, len(words))
+    CAPTIONS.append({
+        "t": r(t0),
+        "end": r(t1),
+        "text": text,
+        "hi": hi,
+        "words": [{"w": w, "t": r(t0 + i * span), "e": r(t0 + (i + 1) * span)} for i, w in enumerate(words)],
+    })
 
 
-def slam(t, gain=0.22, pan=0.0, w=0.5, target="", scene_id=""):
-    ev("slam", t, gain=gain, pan=pan, w=w, target=target, scene=scene_id)
+def whoosh(t):
+    ev("sweep", t - 0.28, dur=0.5, lo=380, hi=3200, up=True, gain=0.20)
 
 
-def typed(t0, text, per_char, level=1.0, pan=0.0, gain=0.10, scene_id=""):
-    t = t0
-    for i, ch in enumerate(text):
-        ev("typekey", t, level=r(level * (0.75 + 0.25 * RND())), gain=gain, pan=pan,
-           char=ch, index=i, scene=scene_id)
-        t += per_char
-    return t
+def hit(t, gain=0.5):
+    ev("slam", t, gain=gain, w=0.6)
+    ev("kick", t + 0.01, gain=0.35)
 
 
 # =========================================================================
-# 1 · OPEN — 0..5 s  (the problem, in one breath)
+# 1 · HOOK — 0..10 s   chaos around the mark, then an iris
 # =========================================================================
-s_open = scene(
-    "open", 0, 2, "title",
-    eyebrow="FREEHOLD · NEAR HACKATHON 2026 · TESTNET",
-    eyebrow_t=-0.18,
-    lines=[
-        {"text": "Sell a business onchain,", "cls": "display", "size": 128, "t": -0.18, "top": 300},
-        {"text": "the buyer gets a picture.", "cls": "display", "size": 128, "t": r(at(0, 2)), "top": 436},
-    ],
-    sub={"text": "So we made the business an account.", "t": r(at(1)), "top": 700},
-    mascot={"enter": r(at(1, 2)), "x": 1530, "y": 730, "w": 250, "h": 108},
-)
-slam(at(0), target="eyebrow", scene_id="open")
-for i, line in enumerate(s_open["lines"]):
-    slam(line["t"], target=f"line{i}", scene_id="open")
-slam(s_open["sub"]["t"], gain=0.16, target="sub", scene_id="open")
-ev("sweep", at(1, 2) - 0.15, dur=0.4, lo=200, hi=1400, up=True, gain=0.16, pan=0.2)
-ev("bloop", at(1, 2) + 1.2, f0=800, f1=1300, dur=0.05, gain=0.12, pan=0.2)
+scene("hook", 0, 5, "chaos",
+      mark_from=1.2,
+      cards=[
+          {"label": "NFT", "sub": "a picture", "x": 250, "y": 210, "rot": -7},
+          {"label": "0 NEAR", "sub": "treasury", "x": 1430, "y": 250, "rot": 6},
+          {"label": "key", "sub": "held by one person", "x": 300, "y": 720, "rot": 4},
+          {"label": "operator", "sub": "not in the sale", "x": 1380, "y": 700, "rot": -5},
+          {"label": "customers", "sub": "left behind", "x": 760, "y": 180, "rot": 3},
+          {"label": "suppliers", "sub": "re-signed by hand", "x": 700, "y": 760, "rot": -3},
+      ],
+      badges=["no treasury", "no operator", "no access", "just a token"])
+for i, t in enumerate([0.3, 0.7, 1.1, 1.5, 1.9, 2.3]):
+    ev("bell", t, freq=880, decay=0.2, ratio=2.0, index=0.5, gain=0.10, pan=r(-0.5 + 0.2 * i))
+hit(1.2, 0.45)
+whoosh(10.0)
 
 # =========================================================================
-# 2 · THE FREEHOLD — 5..17.5 s  (recorded product moment)
+# 2 · FIRST CONTACT — 10..30 s   the live marketplace
 # =========================================================================
-s_hand = scene(
-    "handover", 2, 7, "clip",
-    heading="The handover",
-    dir="../clips/b",
-    count=270,
-    frame_from=24,
-    fps=30,
-    frameW=1920,
-    sheet={"x": 830, "y": 250, "w": 980, "h": 560},
-    cues={
-        "heading": r(at(2)),
-        "play": r(at(2, 1)),
-        "punch": r(at(6, 1)),
-        "camera": [
-            {"t": r(at(2, 1)), "x": 120, "y": 150, "w": 1780, "dur": 0.6},
-            {"t": r(at(4)), "x": 150, "y": 520, "w": 1180, "dur": 1.0},
-            {"t": r(at(5, 2)), "x": 150, "y": 520, "w": 1120, "dur": 0.8},
-        ],
-    },
-    lines=[
-        {"text": "A key is generated in the browser.", "t": r(at(4, 1)), "top": 860},
-        {"text": "The vault rotates its owner key to it.", "t": r(at(5, 2)), "top": 916},
-    ],
-    end=r(at(7)),
-)
-slam(s_hand["cues"]["heading"], target="heading", scene_id="handover")
-ev("sweep", s_hand["cues"]["play"] - 0.05, dur=0.25, lo=500, hi=3000, up=False, gain=0.16, pan=0.25)
-ev("riser", r(at(6)), dur=1.25, gain=0.22)
-ev("kick", r(at(6, 1)), gain=0.55)
-ev("stamp", r(at(6, 1)) + 0.01, scale=1.4, pitch=1.0, gain=0.4)
-for i, line in enumerate(s_hand["lines"]):
-    slam(line["t"], gain=0.2, target=f"line{i}", scene_id="handover")
+scene("contact", 5, 15, "clip",
+      heading="One token, one account",
+      clip="market", frames=200, from_frame=1, play=at(5, 1),
+      sheet={"x": 96, "y": 214, "w": 1728, "h": 620},
+      camera=[{"t": at(5, 1), "x": 120, "y": 60, "w": 2320, "dur": 1.0},
+              {"t": at(7, 0), "x": 180, "y": 400, "w": 1500, "dur": 1.4},
+              {"t": at(11, 0), "x": 160, "y": 430, "w": 1700, "dur": 1.2}],
+      punch=[at(9, 2)],
+      card={"text": "The token is the share.", "t": at(6, 2), "sub": "its treasury, its keys, its operator"},
+      end=at(15))
+whoosh(10.0)
+hit(12.4)
+ev("pop" if False else "bell", at(6, 2), freq=1180, decay=0.22, ratio=1.0, index=0.3, gain=0.12)
+whoosh(30.0)
 
 # =========================================================================
-# 3 · THE VAULT — 17.5..27.5 s  (what actually transferred)
+# 3 · THE CORE ACTION — 30..50 s   the charter refuses an overspend
 # =========================================================================
-s_vault = scene(
-    "vault", 7, 11, "chapter",
-    word="The vault",
-    rows=[
-        {"left": "biz-7.reg.raizo07.testnet", "right": "2.00 NEAR"},
-        {"left": "owner key", "right": "full access"},
-        {"left": "operator key", "right": "record_sale, spend"},
-    ],
-    lines=[
-        {"text": "Minting creates a real sub-account on NEAR.", "t": r(at(9, 1)), "top": 782},
-        {"text": "Its own treasury. Its own keys. Its own rules.", "t": r(at(9, 3)), "top": 838},
-    ],
-    cues={
-        "land": r(at(7)),
-        "move": r(at(7) + 1.25 * BEAT),
-        "sheet": r(at(7, 1.5)),
-        "redact": r(at(9)),
-        "lift": r(at(10, 2)),
-    },
-)
-slam(s_vault["cues"]["land"], gain=0.5, w=0.6, target="word", scene_id="vault")
-ev("kick", s_vault["cues"]["land"], gain=0.6)
-ev("stamp", s_vault["cues"]["land"] + 0.01, scale=1.3, pitch=0.8, gain=0.4)
-ev("sweep", s_vault["cues"]["sheet"] - 0.05, dur=0.25, lo=500, hi=3000, up=False, gain=0.16, pan=0.2)
+scene("action", 15, 25, "clip",
+      heading="The cap is a number on chain",
+      clip="charter", frames=222, from_frame=1, play=at(15, 1),
+      sheet={"x": 96, "y": 214, "w": 1728, "h": 620},
+      camera=[{"t": at(15, 1), "x": 160, "y": 120, "w": 2200, "dur": 0.8},
+              {"t": at(16, 2), "x": 980, "y": 420, "w": 1300, "dur": 1.0},
+              {"t": at(19, 0), "x": 1150, "y": 0, "w": 1400, "dur": 0.8}],
+      punch=[at(18, 2)],
+      card={"text": "0.50 NEAR", "t": at(16, 2), "sub": "per call, enforced by the vault", "x": 1230, "y": 96},
+      end=at(25))
+whoosh(30.0)
+hit(38.8, 0.55)
+ev("stamp", at(18, 2), scale=1.4, pitch=0.85, gain=0.5)
+whoosh(50.0)
+
+# =========================================================================
+# 4 · THE MECHANISM — 50..68 s   two beats, a key rotation
+# =========================================================================
+scene("mechanism", 25, 34, "clip",
+      heading="Selling rotates the owner key",
+      clip="handover", frames=313, from_frame=96, play=at(25, 1),
+      sheet={"x": 96, "y": 214, "w": 1728, "h": 620},
+      camera=[{"t": at(25, 1), "x": 180, "y": 300, "w": 2000, "dur": 0.9},
+              {"t": at(27, 2), "x": 240, "y": 560, "w": 1400, "dur": 1.2},
+              {"t": at(30, 0), "x": 240, "y": 540, "w": 1320, "dur": 1.0}],
+      punch=[at(29, 2)],
+      card={"text": "pending → applied", "t": at(31, 0), "sub": "two confirmed beats"},
+      end=at(34))
+whoosh(50.0)
+hit(56.0)
+ev("riser", at(29, 0), dur=1.0, gain=0.18)
+whoosh(68.0)
+
+# =========================================================================
+# 5 · THE PROOF — 68..96 s   the receipt, the tests, the live registry
+# =========================================================================
+scene("proof", 34, 48, "proof",
+      heading="The registry settles it",
+      receipt=[
+          ['"standard": "freehold"', "ok"],
+          ['"event": "business_minted"', ""],
+          ['"token_id": "biz-3"', ""],
+          ['"vault": "biz-3.freehold…"', ""],
+          ['"result": "on chain"', "ok"],
+      ],
+      stamp={"text": "Verified", "ok": True, "t": at(40, 0)},
+      stats=[
+          {"n": "32", "l": "tests", "t": at(42, 0)},
+          {"n": "4", "l": "deploy real wasm", "t": at(43, 0)},
+          {"n": "3", "l": "businesses live", "t": at(44, 0)},
+      ],
+      end=at(48))
+whoosh(68.0)
+for i in range(5):
+    ev("typekey", at(35, 0) + i * 0.18, level=0.7, gain=0.09, pan=r(-0.2 + 0.1 * i))
+ev("stamp", at(40, 0), scale=1.6, pitch=1.0, gain=0.55)
+ev("kick", at(40, 0) + 0.01, gain=0.45)
 for i in range(3):
-    ev("slam", s_vault["cues"]["redact"] + i * EIGHTH, gain=0.3, pan=r(-0.3 + 0.1 * i), w=0.6)
+    ev("bell", at(42 + i, 0), freq=1320, decay=0.25, ratio=2.0, index=0.4, gain=0.12, pan=r(-0.3 + 0.3 * i))
+whoosh(96.0)
+
+# =========================================================================
+# 6 · THE SECOND BUSINESS — 96..118 s   cloth, not coffee
+# =========================================================================
+scene("second", 48, 59, "tiles",
+      heading="A second business, same charter",
+      clip="live", frames=220, from_frame=1, play=at(48, 1),
+      sheet={"x": 96, "y": 200, "w": 1100, "h": 560},
+      camera=[{"t": at(48, 1), "x": 120, "y": 120, "w": 2260, "dur": 1.0},
+              {"t": at(50, 0), "x": 200, "y": 140, "w": 2100, "dur": 1.2}],
+      tiles=[
+          {"n": "3", "l": "businesses on testnet", "t": at(49, 0), "x": 1240, "y": 210},
+          {"n": "1.50", "l": "NEAR per call · biz-9", "t": at(50, 0), "x": 1240, "y": 420},
+          {"n": "32", "l": "contract tests", "t": at(51, 0), "x": 1240, "y": 630},
+      ],
+      end=at(59))
+whoosh(96.0)
 for i in range(3):
-    t = s_vault["cues"]["lift"] + i * EIGHTH
-    ev("sweep", t - 0.12, dur=0.18, lo=900, hi=4200, up=True, gain=0.12, pan=r(-0.3 + 0.1 * i))
-for i, line in enumerate(s_vault["lines"]):
-    slam(line["t"], gain=0.2, target=f"line{i}", scene_id="vault")
+    ev("bell", at(52 + 2 * i, 0), freq=1180, decay=0.3, ratio=1.0, index=0.35, gain=0.12, pan=0.3)
+whoosh(118.0)
 
 # =========================================================================
-# 4 · THE CHARTER — 27.5..35 s  (the rules the agent runs under)
+# 7 · CLOSE — 118..132 s   the globe, then the card
 # =========================================================================
-s_charter = scene(
-    "charter", 11, 14, "chapter",
-    word="The charter",
-    rows=[
-        {"left": "per call", "right": "0.50 NEAR"},
-        {"left": "per epoch", "right": "2.00 NEAR"},
-        {"left": "allowlist", "right": "2 accounts"},
-    ],
-    lines=[
-        {"text": "An agent with money, and a ceiling.", "t": r(at(12, 1)), "top": 782},
-        {"text": "Not by prompt. By protocol.", "t": r(at(13, 1)), "top": 838},
-    ],
-    cues={
-        "land": r(at(11)),
-        "move": r(at(11) + 1.25 * BEAT),
-        "sheet": r(at(11, 1.5)),
-        "redact": r(at(12, 2)),
-        "lift": r(at(13, 2)),
-    },
-)
-slam(s_charter["cues"]["land"], gain=0.5, w=0.6, target="word", scene_id="charter")
-ev("kick", s_charter["cues"]["land"], gain=0.6)
-ev("stamp", s_charter["cues"]["land"] + 0.01, scale=1.3, pitch=0.8, gain=0.4)
-ev("sweep", s_charter["cues"]["sheet"] - 0.05, dur=0.25, lo=500, hi=3000, up=False, gain=0.16, pan=0.2)
-for i in range(3):
-    ev("slam", s_charter["cues"]["redact"] + i * EIGHTH, gain=0.3, pan=r(-0.3 + 0.1 * i), w=0.6)
-for i in range(3):
-    t = s_charter["cues"]["lift"] + i * EIGHTH
-    ev("sweep", t - 0.12, dur=0.18, lo=900, hi=4200, up=True, gain=0.12, pan=r(-0.3 + 0.1 * i))
-for i, line in enumerate(s_charter["lines"]):
-    slam(line["t"], gain=0.2, target=f"line{i}", scene_id="charter")
-
-# =========================================================================
-# 5 · THE REFUSAL — 35..45 s  (recorded product moment)
-# =========================================================================
-s_ref = scene(
-    "refusal", 14, 18, "clip",
-    heading="The refusal",
-    dir="../clips/a",
-    count=150,
-    frame_from=10,
-    fps=30,
-    frameW=1920,
-    sheet={"x": 830, "y": 250, "w": 980, "h": 560},
-    cues={
-        "heading": r(at(14)),
-        "play": r(at(14, 1)),
-        "punch": r(at(16, 1)),
-        "camera": [
-            {"t": r(at(14, 1)), "x": 60, "y": 100, "w": 1820, "dur": 0.6},
-            {"t": r(at(15, 2)), "x": 980, "y": 480, "w": 860, "dur": 0.8},
-            {"t": r(at(16, 1)), "x": 1150, "y": 0, "w": 770, "dur": 0.7},
-        ],
-    },
-    lines=[
-        {"text": "The cap is a number on chain.", "t": r(at(15, 2)), "top": 860},
-        {"text": "The agent tries 1.5x it. E20.", "t": r(at(16, 3)), "top": 916},
-    ],
-    end=r(at(18)),
-)
-slam(s_ref["cues"]["heading"], target="heading", scene_id="refusal")
-ev("sweep", s_ref["cues"]["play"] - 0.05, dur=0.25, lo=500, hi=3000, up=False, gain=0.16, pan=0.25)
-ev("stamp", s_ref["cues"]["punch"], scale=0.9, pitch=0.55, gain=0.5)
-ev("kick", s_ref["cues"]["punch"] + 0.01, gain=0.5)
-for i, line in enumerate(s_ref["lines"]):
-    slam(line["t"], gain=0.2, target=f"line{i}", scene_id="refusal")
-
-# =========================================================================
-# 6 · THE SWITCH — 45..55 s  (halt, then the key is gone)
-# =========================================================================
-CMD = "near call biz-7 halt --accountId raizo07.testnet"
-s_halt = scene(
-    "halt", 18, 22, "terminal",
-    heading="The switch",
-    window_title="handover — near",
-    cues={
-        "heading": r(at(18)),
-        "window": r(at(18, 1)),
-        "outputs": [r(at(19, 2) + i * SIXTEENTH * 2) for i in range(5)],
-    },
-    command=CMD,
-    outputs=[
-        "receipt   DeleteKey(ed25519:9E8s…)",
-        "state     halted: true",
-        "replay    E23 operator halted",
-        "next tx   Access key does not exist",
-        "ok        the key is gone",
-    ],
-    ok_index=4,
-    lines=[{"text": "Not a flag. The key is gone.", "t": r(at(21, 2)), "top": 940}],
-)
-slam(s_halt["cues"]["heading"], target="heading", scene_id="halt")
-ev("sweep", s_halt["cues"]["window"] - 0.12, dur=0.32, lo=400, hi=2600, up=True, gain=0.16, pan=0.2)
-typed(r(at(18, 2)), CMD, BEAT / 16, level=1.0, pan=0.15, gain=0.10, scene_id="halt")
-for i, t in enumerate(s_halt["cues"]["outputs"]):
-    ev("bloop", t, f0=1500, f1=1200, dur=0.03, gain=0.10, pan=0.15)
-    ev("typekey", t + 0.02, level=0.5, gain=0.08, pan=0.15)
-ev("bell", r(at(21)), midi=88, decay=0.5, ratio=2.0, index=0.6, gain=0.18, pan=0.2)
-slam(s_halt["lines"][0]["t"], gain=0.2, target="line0", scene_id="halt")
-
-# =========================================================================
-# 7 · THE PROOF — 55..62.5 s  (32 tests, counted)
-# =========================================================================
-s_proof = scene(
-    "proof", 22, 25, "counter",
-    heading="32 tests",
-    label="tests",
-    cues={
-        "heading": r(at(22)),
-        "count_start": r(at(22, 2)),
-        "count_end": r(at(24)),
-    },
-    count={"from": 0, "to": 32, "rows": 22},
-    lines=[
-        {"text": "Every rule the contract enforces, asserted in Rust.", "t": r(at(24, 1)), "top": 770},
-        {"text": "Four of them deploy real wasm and call it.", "t": r(at(24, 3)), "top": 828},
-    ],
-)
-slam(s_proof["cues"]["heading"], target="heading", scene_id="proof")
-_start, _end = s_proof["cues"]["count_start"], s_proof["cues"]["count_end"]
-for x in range(28):
-    ev("typekey", _start + (_end - _start) * (1 - (1 - x / 27) ** 1.8),
-       level=r(0.5 + 0.5 * RND()), gain=0.07, pan=r(-0.4 + 0.03 * x))
-for i, line in enumerate(s_proof["lines"]):
-    slam(line["t"], gain=0.18, target=f"line{i}", scene_id="proof")
-
-# =========================================================================
-# 8 · NAME — 62.5..72.5 s
-# =========================================================================
-s_name = scene(
-    "name", 25, 29, "name",
-    word="FREEHOLD",
-    sub="A business is a NEAR account",
-    cues={
-        "riser": r(at(25)),
-        "bars": [r(at(25, 1) + i * SIXTEENTH) for i in range(3)],
-        "reveal": r(at(26)),
-        "sub": r(at(27, 2)),
-    },
-)
-ev("riser", s_name["cues"]["riser"], dur=2 * BEAT)
-for i, t in enumerate(s_name["cues"]["bars"]):
-    slam(t, gain=0.4, w=0.4, pan=r(-0.3 + 0.3 * i), target=f"bar{i}", scene_id="name")
-ev("kick", s_name["cues"]["reveal"], gain=0.5)
+scene("close", 59, 66, "close",
+      heading="Live now",
+      globe={"t": at(59, 1)},
+      card={"t": at(61, 0), "url": "raizo07.github.io/freehold", "repo": "github.com/raizo07/freehold"},
+      end=at(66))
+whoosh(118.0)
+ev("riser", at(59, 0), dur=1.0, gain=0.2)
+hit(122.0, 0.5)
 for i, midi in enumerate([62, 66, 69, 73, 78]):
-    ev("bell", s_name["cues"]["reveal"] + i * 0.004, midi=midi, decay=1.0, ratio=1.0, index=0.8,
-       gain=0.16, pan=r(-0.3 + 0.15 * i))
-slam(s_name["cues"]["sub"], gain=0.2, target="sub", scene_id="name")
+    ev("bell", 122.0 + i * 0.004, midi=midi, decay=1.0, ratio=1.0, index=0.8, gain=0.14, pan=r(-0.3 + 0.15 * i))
 
-# =========================================================================
-# 9 · END — 72.5..85 s
-# =========================================================================
-s_end = scene(
-    "end", 29, 34, "title",
-    eyebrow="FREEHOLD · NEAR HACKATHON 2026",
-    lines=[
-        {"text": "Buy a going concern,", "cls": "display", "size": 118, "t": r(at(29)), "top": 300},
-        {"text": "not a keyring.", "cls": "display", "size": 118, "t": r(at(30)), "top": 410},
-    ],
-    sub={"text": "raizo07.github.io/freehold  ·  github.com/raizo07/freehold", "t": r(at(31)), "top": 640, "mono": True},
-    mascot={"enter": r(at(31, 2)), "x": 1500, "y": 700, "w": 250, "h": 108},
-    out=83.2,
-)
-slam(s_end["lines"][0]["t"], target="line0", scene_id="end")
-slam(s_end["lines"][1]["t"], target="line1", scene_id="end")
-slam(s_end["sub"]["t"], gain=0.16, target="sub", scene_id="end")
-ev("sweep", s_end["mascot"]["enter"] - 0.15, dur=0.4, lo=200, hi=1400, up=True, gain=0.16, pan=0.2)
-ev("redact", s_end["out"], gain=0.2)
+# --- narration: 16 lines, about five seconds each so an average reader keeps up ---
+NARRATION = [
+    (1.0, 5.0, 'Onchain, a business sold is a picture and a name.'),
+    (7.0, 5.0, 'No till, no keys, no operator — nothing that came.'),
+    (12.5, 5.5, 'FREEHOLD makes the business an account you hold.'),
+    (18.5, 5.5, 'One token, one sub-account — its treasury, its gold.'),
+    (25.0, 5.0, 'Its keys, its rules, its money, in one place.'),
+    (31.5, 5.0, 'The cap is a number written on chain.'),
+    (37.5, 5.5, 'The agent tries more — refused, and nothing moves.'),
+    (51.5, 5.0, 'The sale is a rotation, in two beats.'),
+    (57.5, 5.5, "Pending, then applied — the seller's key retreats."),
+    (69.5, 5.0, 'The proof is a receipt, and the tests are in Rust.'),
+    (75.5, 5.0, 'Thirty-two pass — and the chain keeps the trust.'),
+    (81.5, 5.0, 'Three businesses live, and the rules are the same.'),
+    (97.5, 5.0, 'A second business sells cloth, by the same code.'),
+    (103.5, 5.0, 'Its own cap, its own treasury — on the same road.'),
+    (119.5, 5.0, 'Live on testnet today, and the tokens are free.'),
+    (125.5, 5.5, 'Come and buy a business that keeps working — you will see.'),
+]
 
-# --- wipes at every scene cut ---------------------------------------------
+for _t, _d, _text in NARRATION:
+    cap(_t, _t + _d, _text, _text.split()[-1].strip('.,!?—'))
+
+# wipes land on every cut
 for a, b in zip(SCENES, SCENES[1:]):
     assert a["end"] == b["start"], (a["id"], b["id"])
-    wipe(a["end"])
 
-# --- music grid ------------------------------------------------------------
-PROG_A = ["Dmaj9", "Bm9", "Gmaj9", "A7sus4"]
-PROG_B = ["Em9", "F#m7", "Gmaj7", "A7"]
-QUIET = set(range(25, 29))
-MUSIC = []
-for b in range(BARS):
-    if b < 14:
-        chord = PROG_A[b % 4]
-    elif b < 22:
-        chord = PROG_B[b % 4]
-    else:
-        chord = PROG_A[b % 4]
-    MUSIC.append({"bar": b, "chord": chord, "quiet": b in QUIET})
+PROG = ["Dmaj9", "Bm9", "Gmaj9", "A7sus4"]
+MUSIC = [{"bar": b, "chord": PROG[b % 4], "quiet": b in range(59, 66)} for b in range(BARS)]
 
-# --- assemble --------------------------------------------------------------
 EVENTS.sort(key=lambda e: (e["t"], e["kind"]))
 timeline = {
     "meta": {
-        "bpm": BPM, "beat": BEAT, "bar": BAR, "bars": BARS,
-        "fps": FPS, "width": W, "height": H, "duration": DURATION,
-        "project": "FREEHOLD",
+        "bpm": BPM, "beat": BEAT, "bar": BAR, "bars": BARS, "fps": FPS,
+        "width": W, "height": H, "duration": DURATION, "project": "FREEHOLD",
+        "format": "1920x1080 · 60",
+        "truth": "NEAR testnet · free test tokens · three businesses live",
         "seed": 2610,
     },
     "scenes": SCENES,
+    "captions": CAPTIONS,
     "events": EVENTS,
     "music": {"bars": MUSIC},
 }
 
-out = pathlib.Path(__file__).parent / "timeline.json"
-out.write_text(json.dumps(timeline, indent=1))
+(ROOT / "timeline.json").write_text(json.dumps(timeline, indent=1))
+(ROOT / "src" / "timeline.js").write_text(
+    "window.__TIMELINE__ = " + json.dumps(timeline, separators=(",", ":")) + ";\n")
 
-js = pathlib.Path(__file__).parent / "src" / "timeline.js"
-js.write_text("window.__TIMELINE__ = " + json.dumps(timeline, separators=(",", ":")) + ";\n")
-print(f"scenes {len(SCENES)} · events {len(EVENTS)} · {DURATION:.0f}s · {out.name} "
-      f"{out.stat().st_size // 1024} KB")
-for kind in sorted({e["kind"] for e in EVENTS}):
-    print(f"  {kind:<9} {sum(1 for e in EVENTS if e['kind'] == kind)}")
+print(f"scenes {len(SCENES)} · captions {len(CAPTIONS)} · events {len(EVENTS)} · {DURATION:.0f}s")

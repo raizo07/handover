@@ -1,0 +1,41 @@
+{
+  "captured": "2026-11-13",
+  "network": "NEAR testnet (rpc.testnet.near.org)",
+  "facts": [
+    {
+      "claim": "registry account reg.raizo07.testnet",
+      "source": "deployed 2026-11-10 by scripts/deploy.mjs; view_account returns code_hash"
+    },
+    {
+      "claim": "three businesses (biz-7, biz-3, biz-9)",
+      "source": "call_function nft_total_supply on freehold.raizo07.testnet -> \"3\""
+    },
+    {
+      "claim": "biz-7 caps: 0.50 NEAR per call, 2.00 NEAR per epoch",
+      "source": "call_function get_rules on biz-7.reg.raizo07.testnet",
+      "raw": "data/rules-biz-7.json"
+    },
+    {
+      "claim": "biz-3 caps: 0.40 NEAR per call, 1.20 NEAR per epoch",
+      "source": "call_function get_rules on biz-3.reg.raizo07.testnet",
+      "raw": "data/rules-biz-3.json"
+    },
+    {
+      "claim": "32 contract tests",
+      "source": "cargo test: 13 registry + 15 vault + 4 sandbox (contracts/vault/tests/sandbox.rs)"
+    },
+    {
+      "claim": "4 tests deploy real wasm",
+      "source": "contracts/vault/tests/sandbox.rs \u2014 four #[tokio::test] that deploy the wasm into near-sandbox"
+    },
+    {
+      "claim": "free test tokens",
+      "source": "NEAR testnet faucet; the deployer raizo07.testnet was funded by helper.testnet.near.org"
+    }
+  ],
+  "not_shown_in_footage": [
+    "a wallet handshake (needs a browser extension; no sign-in was performed)",
+    "a mainnet deployment (none exists)",
+    "any transaction written by the film: every capture is read-only"
+  ]
+}

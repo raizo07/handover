@@ -255,11 +255,11 @@ for entry in TL["music"]["bars"]:
             for det, pan in ((-0.0015, -0.35), (0.0015, 0.35)):
                 add(epiano(midi_hz(m), decay=2.2, detune=det), t0,
                     gain=0.055 * MUS, pan=pan, send=0.5)
-        for beat_at, g in ((0, 0.35), (1, 0.30), (2, 0.30), (3, 0.28)):
+        for beat_at, g in ((0, 0.26),):   # one kick per bar: the bed was reading fast
             add(kick(1.0), t0 + beat_at * BEAT, gain=g * 0.5)
         continue
 
-    for beat_at, gain in ((0.0, 0.10), (1.5, 0.08)):
+    for beat_at, gain in ((0.0, 0.09),):
         for i, m in enumerate(notes):
             pan = -0.3 + 0.15 * i
             add(epiano(midi_hz(m), decay=1.5, detune=-0.0015), t0 + beat_at * BEAT,
@@ -277,7 +277,7 @@ for entry in TL["music"]["bars"]:
     add(bass(midi_hz(root - 12 + 7), 0.4), t0 + 2.0 * BEAT, gain=0.20 * MUS)
     add(bass(midi_hz(root - 12)), t0 + 3.0 * BEAT, gain=0.22 * MUS)
 
-    for beat_at, g in ((0, 1.0), (1, 0.62), (2, 0.92), (3, 0.62)):
+    for beat_at, g in ((0, 1.0), (2, 0.70)):
         add(kick(1.0), t0 + beat_at * BEAT, gain=g * 0.5)
 
     add(stamp(0.5, 1.0), t0 + 1 * BEAT, gain=0.10 * MUS, pan=0.15, send=0.3)

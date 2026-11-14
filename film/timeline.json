@@ -1,1768 +1,1628 @@
 {
  "meta": {
-  "bpm": 96,
-  "beat": 0.625,
-  "bar": 2.5,
-  "bars": 34,
-  "fps": 30,
+  "bpm": 120,
+  "beat": 0.5,
+  "bar": 2.0,
+  "bars": 66,
+  "fps": 60,
   "width": 1920,
   "height": 1080,
-  "duration": 85.0,
+  "duration": 132.0,
   "project": "FREEHOLD",
+  "format": "1920x1080 \u00b7 60",
+  "truth": "NEAR testnet \u00b7 free test tokens \u00b7 three businesses live",
   "seed": 2610
  },
  "scenes": [
   {
-   "id": "open",
+   "id": "hook",
    "start": 0.0,
-   "end": 5.0,
-   "template": "title",
-   "eyebrow": "FREEHOLD \u00b7 NEAR HACKATHON 2026 \u00b7 TESTNET",
-   "eyebrow_t": -0.18,
-   "lines": [
+   "end": 10.0,
+   "kind": "chaos",
+   "mark_from": 1.2,
+   "cards": [
     {
-     "text": "Sell a business onchain,",
-     "cls": "display",
-     "size": 128,
-     "t": -0.18,
-     "top": 300
+     "label": "NFT",
+     "sub": "a picture",
+     "x": 250,
+     "y": 210,
+     "rot": -7
     },
     {
-     "text": "the buyer gets a picture.",
-     "cls": "display",
-     "size": 128,
-     "t": 1.25,
-     "top": 436
+     "label": "0 NEAR",
+     "sub": "treasury",
+     "x": 1430,
+     "y": 250,
+     "rot": 6
+    },
+    {
+     "label": "key",
+     "sub": "held by one person",
+     "x": 300,
+     "y": 720,
+     "rot": 4
+    },
+    {
+     "label": "operator",
+     "sub": "not in the sale",
+     "x": 1380,
+     "y": 700,
+     "rot": -5
+    },
+    {
+     "label": "customers",
+     "sub": "left behind",
+     "x": 760,
+     "y": 180,
+     "rot": 3
+    },
+    {
+     "label": "suppliers",
+     "sub": "re-signed by hand",
+     "x": 700,
+     "y": 760,
+     "rot": -3
     }
    ],
-   "sub": {
-    "text": "So we made the business an account.",
-    "t": 2.5,
-    "top": 700
-   },
-   "mascot": {
-    "enter": 3.75,
-    "x": 1530,
-    "y": 730,
-    "w": 250,
-    "h": 108
-   }
+   "badges": [
+    "no treasury",
+    "no operator",
+    "no access",
+    "just a token"
+   ]
   },
   {
-   "id": "handover",
-   "start": 5.0,
-   "end": 17.5,
-   "template": "clip",
-   "heading": "The handover",
-   "dir": "../clips/b",
-   "count": 270,
-   "frame_from": 24,
-   "fps": 30,
-   "frameW": 1920,
+   "id": "contact",
+   "start": 10.0,
+   "end": 30.0,
+   "kind": "clip",
+   "heading": "One token, one account",
+   "clip": "market",
+   "frames": 200,
+   "from_frame": 1,
+   "play": 10.5,
    "sheet": {
-    "x": 830,
-    "y": 250,
-    "w": 980,
-    "h": 560
+    "x": 96,
+    "y": 214,
+    "w": 1728,
+    "h": 620
    },
-   "cues": {
-    "heading": 5.0,
-    "play": 5.625,
-    "punch": 15.625,
-    "camera": [
-     {
-      "t": 5.625,
-      "x": 120,
-      "y": 150,
-      "w": 1780,
-      "dur": 0.6
-     },
-     {
-      "t": 10.0,
-      "x": 150,
-      "y": 520,
-      "w": 1180,
-      "dur": 1.0
-     },
-     {
-      "t": 13.75,
-      "x": 150,
-      "y": 520,
-      "w": 1120,
-      "dur": 0.8
-     }
-    ]
-   },
-   "lines": [
+   "camera": [
     {
-     "text": "A key is generated in the browser.",
-     "t": 10.625,
-     "top": 860
+     "t": 10.5,
+     "x": 120,
+     "y": 60,
+     "w": 2320,
+     "dur": 1.0
     },
     {
-     "text": "The vault rotates its owner key to it.",
-     "t": 13.75,
-     "top": 916
-    }
-   ]
-  },
-  {
-   "id": "vault",
-   "start": 17.5,
-   "end": 27.5,
-   "template": "chapter",
-   "word": "The vault",
-   "rows": [
-    {
-     "left": "biz-7.reg.raizo07.testnet",
-     "right": "2.00 NEAR"
+     "t": 14.0,
+     "x": 180,
+     "y": 400,
+     "w": 1500,
+     "dur": 1.4
     },
     {
-     "left": "owner key",
-     "right": "full access"
-    },
-    {
-     "left": "operator key",
-     "right": "record_sale, spend"
+     "t": 22.0,
+     "x": 160,
+     "y": 430,
+     "w": 1700,
+     "dur": 1.2
     }
    ],
-   "lines": [
-    {
-     "text": "Minting creates a real sub-account on NEAR.",
-     "t": 23.125,
-     "top": 782
-    },
-    {
-     "text": "Its own treasury. Its own keys. Its own rules.",
-     "t": 24.375,
-     "top": 838
-    }
+   "punch": [
+    19.0
    ],
-   "cues": {
-    "land": 17.5,
-    "move": 18.28125,
-    "sheet": 18.4375,
-    "redact": 22.5,
-    "lift": 26.25
+   "card": {
+    "text": "The token is the share.",
+    "t": 13.0,
+    "sub": "its treasury, its keys, its operator"
    }
   },
   {
-   "id": "charter",
-   "start": 27.5,
-   "end": 35.0,
-   "template": "chapter",
-   "word": "The charter",
-   "rows": [
-    {
-     "left": "per call",
-     "right": "0.50 NEAR"
-    },
-    {
-     "left": "per epoch",
-     "right": "2.00 NEAR"
-    },
-    {
-     "left": "allowlist",
-     "right": "2 accounts"
-    }
-   ],
-   "lines": [
-    {
-     "text": "An agent with money, and a ceiling.",
-     "t": 30.625,
-     "top": 782
-    },
-    {
-     "text": "Not by prompt. By protocol.",
-     "t": 33.125,
-     "top": 838
-    }
-   ],
-   "cues": {
-    "land": 27.5,
-    "move": 28.28125,
-    "sheet": 28.4375,
-    "redact": 31.25,
-    "lift": 33.75
-   }
-  },
-  {
-   "id": "refusal",
-   "start": 35.0,
-   "end": 45.0,
-   "template": "clip",
-   "heading": "The refusal",
-   "dir": "../clips/a",
-   "count": 150,
-   "frame_from": 10,
-   "fps": 30,
-   "frameW": 1920,
+   "id": "action",
+   "start": 30.0,
+   "end": 50.0,
+   "kind": "clip",
+   "heading": "The cap is a number on chain",
+   "clip": "charter",
+   "frames": 222,
+   "from_frame": 1,
+   "play": 30.5,
    "sheet": {
-    "x": 830,
-    "y": 250,
-    "w": 980,
-    "h": 560
+    "x": 96,
+    "y": 214,
+    "w": 1728,
+    "h": 620
    },
-   "cues": {
-    "heading": 35.0,
-    "play": 35.625,
-    "punch": 40.625,
-    "camera": [
-     {
-      "t": 35.625,
-      "x": 60,
-      "y": 100,
-      "w": 1820,
-      "dur": 0.6
-     },
-     {
-      "t": 38.75,
-      "x": 980,
-      "y": 480,
-      "w": 860,
-      "dur": 0.8
-     },
-     {
-      "t": 40.625,
-      "x": 1150,
-      "y": 0,
-      "w": 770,
-      "dur": 0.7
-     }
-    ]
-   },
-   "lines": [
+   "camera": [
     {
-     "text": "The cap is a number on chain.",
-     "t": 38.75,
-     "top": 860
+     "t": 30.5,
+     "x": 160,
+     "y": 120,
+     "w": 2200,
+     "dur": 0.8
     },
     {
-     "text": "The agent tries 1.5x it. E20.",
-     "t": 41.875,
-     "top": 916
+     "t": 33.0,
+     "x": 980,
+     "y": 420,
+     "w": 1300,
+     "dur": 1.0
+    },
+    {
+     "t": 38.0,
+     "x": 1150,
+     "y": 0,
+     "w": 1400,
+     "dur": 0.8
     }
-   ]
+   ],
+   "punch": [
+    37.0
+   ],
+   "card": {
+    "text": "0.50 NEAR",
+    "t": 33.0,
+    "sub": "per call, enforced by the vault",
+    "x": 1230,
+    "y": 96
+   }
   },
   {
-   "id": "halt",
-   "start": 45.0,
-   "end": 55.0,
-   "template": "terminal",
-   "heading": "The switch",
-   "window_title": "handover \u2014 near",
-   "cues": {
-    "heading": 45.0,
-    "window": 45.625,
-    "outputs": [
-     48.75,
-     49.0625,
-     49.375,
-     49.6875,
-     50.0
-    ]
+   "id": "mechanism",
+   "start": 50.0,
+   "end": 68.0,
+   "kind": "clip",
+   "heading": "Selling rotates the owner key",
+   "clip": "handover",
+   "frames": 313,
+   "from_frame": 96,
+   "play": 50.5,
+   "sheet": {
+    "x": 96,
+    "y": 214,
+    "w": 1728,
+    "h": 620
    },
-   "command": "near call biz-7 halt --accountId raizo07.testnet",
-   "outputs": [
-    "receipt   DeleteKey(ed25519:9E8s\u2026)",
-    "state     halted: true",
-    "replay    E23 operator halted",
-    "next tx   Access key does not exist",
-    "ok        the key is gone"
-   ],
-   "ok_index": 4,
-   "lines": [
+   "camera": [
     {
-     "text": "Not a flag. The key is gone.",
-     "t": 53.75,
-     "top": 940
+     "t": 50.5,
+     "x": 180,
+     "y": 300,
+     "w": 2000,
+     "dur": 0.9
+    },
+    {
+     "t": 55.0,
+     "x": 240,
+     "y": 560,
+     "w": 1400,
+     "dur": 1.2
+    },
+    {
+     "t": 60.0,
+     "x": 240,
+     "y": 540,
+     "w": 1320,
+     "dur": 1.0
     }
-   ]
+   ],
+   "punch": [
+    59.0
+   ],
+   "card": {
+    "text": "pending \u2192 applied",
+    "t": 62.0,
+    "sub": "two confirmed beats"
+   }
   },
   {
    "id": "proof",
-   "start": 55.0,
-   "end": 62.5,
-   "template": "counter",
-   "heading": "32 tests",
-   "label": "tests",
-   "cues": {
-    "heading": 55.0,
-    "count_start": 56.25,
-    "count_end": 60.0
+   "start": 68.0,
+   "end": 96.0,
+   "kind": "proof",
+   "heading": "The registry settles it",
+   "receipt": [
+    [
+     "\"standard\": \"freehold\"",
+     "ok"
+    ],
+    [
+     "\"event\": \"business_minted\"",
+     ""
+    ],
+    [
+     "\"token_id\": \"biz-3\"",
+     ""
+    ],
+    [
+     "\"vault\": \"biz-3.freehold\u2026\"",
+     ""
+    ],
+    [
+     "\"result\": \"on chain\"",
+     "ok"
+    ]
+   ],
+   "stamp": {
+    "text": "Verified",
+    "ok": true,
+    "t": 80.0
    },
-   "count": {
-    "from": 0,
-    "to": 32,
-    "rows": 22
-   },
-   "lines": [
+   "stats": [
     {
-     "text": "Every rule the contract enforces, asserted in Rust.",
-     "t": 60.625,
-     "top": 770
+     "n": "32",
+     "l": "tests",
+     "t": 84.0
     },
     {
-     "text": "Four of them deploy real wasm and call it.",
-     "t": 61.875,
-     "top": 828
+     "n": "4",
+     "l": "deploy real wasm",
+     "t": 86.0
+    },
+    {
+     "n": "3",
+     "l": "businesses live",
+     "t": 88.0
     }
    ]
   },
   {
-   "id": "name",
-   "start": 62.5,
-   "end": 72.5,
-   "template": "name",
-   "word": "FREEHOLD",
-   "sub": "A business is a NEAR account",
-   "cues": {
-    "riser": 62.5,
-    "bars": [
-     63.125,
-     63.28125,
-     63.4375
-    ],
-    "reveal": 65.0,
-    "sub": 68.75
-   }
-  },
-  {
-   "id": "end",
-   "start": 72.5,
-   "end": 85.0,
-   "template": "title",
-   "eyebrow": "FREEHOLD \u00b7 NEAR HACKATHON 2026",
-   "lines": [
+   "id": "second",
+   "start": 96.0,
+   "end": 118.0,
+   "kind": "tiles",
+   "heading": "A second business, same charter",
+   "clip": "live",
+   "frames": 220,
+   "from_frame": 1,
+   "play": 96.5,
+   "sheet": {
+    "x": 96,
+    "y": 200,
+    "w": 1100,
+    "h": 560
+   },
+   "camera": [
     {
-     "text": "Buy a going concern,",
-     "cls": "display",
-     "size": 118,
-     "t": 72.5,
-     "top": 300
+     "t": 96.5,
+     "x": 120,
+     "y": 120,
+     "w": 2260,
+     "dur": 1.0
     },
     {
-     "text": "not a keyring.",
-     "cls": "display",
-     "size": 118,
-     "t": 75.0,
-     "top": 410
+     "t": 100.0,
+     "x": 200,
+     "y": 140,
+     "w": 2100,
+     "dur": 1.2
     }
    ],
-   "sub": {
-    "text": "raizo07.github.io/freehold  \u00b7  github.com/raizo07/freehold",
-    "t": 77.5,
-    "top": 640,
-    "mono": true
+   "tiles": [
+    {
+     "n": "3",
+     "l": "businesses on testnet",
+     "t": 98.0,
+     "x": 1240,
+     "y": 210
+    },
+    {
+     "n": "1.50",
+     "l": "NEAR per call \u00b7 biz-9",
+     "t": 100.0,
+     "x": 1240,
+     "y": 420
+    },
+    {
+     "n": "32",
+     "l": "contract tests",
+     "t": 102.0,
+     "x": 1240,
+     "y": 630
+    }
+   ]
+  },
+  {
+   "id": "close",
+   "start": 118.0,
+   "end": 132.0,
+   "kind": "close",
+   "heading": "Live now",
+   "globe": {
+    "t": 118.5
    },
-   "mascot": {
-    "enter": 78.75,
-    "x": 1500,
-    "y": 700,
-    "w": 250,
-    "h": 108
-   },
-   "out": 83.2
+   "card": {
+    "t": 122.0,
+    "url": "raizo07.github.io/freehold",
+    "repo": "github.com/raizo07/freehold"
+   }
+  }
+ ],
+ "captions": [
+  {
+   "t": 1.0,
+   "end": 6.0,
+   "text": "Onchain, a business sold is a picture and a name.",
+   "hi": 9,
+   "words": [
+    {
+     "w": "Onchain,",
+     "t": 1.0,
+     "e": 1.5
+    },
+    {
+     "w": "a",
+     "t": 1.5,
+     "e": 2.0
+    },
+    {
+     "w": "business",
+     "t": 2.0,
+     "e": 2.5
+    },
+    {
+     "w": "sold",
+     "t": 2.5,
+     "e": 3.0
+    },
+    {
+     "w": "is",
+     "t": 3.0,
+     "e": 3.5
+    },
+    {
+     "w": "a",
+     "t": 3.5,
+     "e": 4.0
+    },
+    {
+     "w": "picture",
+     "t": 4.0,
+     "e": 4.5
+    },
+    {
+     "w": "and",
+     "t": 4.5,
+     "e": 5.0
+    },
+    {
+     "w": "a",
+     "t": 5.0,
+     "e": 5.5
+    },
+    {
+     "w": "name.",
+     "t": 5.5,
+     "e": 6.0
+    }
+   ]
+  },
+  {
+   "t": 7.0,
+   "end": 12.0,
+   "text": "No till, no keys, no operator \u2014 nothing that came.",
+   "hi": 9,
+   "words": [
+    {
+     "w": "No",
+     "t": 7.0,
+     "e": 7.5
+    },
+    {
+     "w": "till,",
+     "t": 7.5,
+     "e": 8.0
+    },
+    {
+     "w": "no",
+     "t": 8.0,
+     "e": 8.5
+    },
+    {
+     "w": "keys,",
+     "t": 8.5,
+     "e": 9.0
+    },
+    {
+     "w": "no",
+     "t": 9.0,
+     "e": 9.5
+    },
+    {
+     "w": "operator",
+     "t": 9.5,
+     "e": 10.0
+    },
+    {
+     "w": "\u2014",
+     "t": 10.0,
+     "e": 10.5
+    },
+    {
+     "w": "nothing",
+     "t": 10.5,
+     "e": 11.0
+    },
+    {
+     "w": "that",
+     "t": 11.0,
+     "e": 11.5
+    },
+    {
+     "w": "came.",
+     "t": 11.5,
+     "e": 12.0
+    }
+   ]
+  },
+  {
+   "t": 12.5,
+   "end": 18.0,
+   "text": "FREEHOLD makes the business an account you hold.",
+   "hi": 7,
+   "words": [
+    {
+     "w": "FREEHOLD",
+     "t": 12.5,
+     "e": 13.1875
+    },
+    {
+     "w": "makes",
+     "t": 13.1875,
+     "e": 13.875
+    },
+    {
+     "w": "the",
+     "t": 13.875,
+     "e": 14.5625
+    },
+    {
+     "w": "business",
+     "t": 14.5625,
+     "e": 15.25
+    },
+    {
+     "w": "an",
+     "t": 15.25,
+     "e": 15.9375
+    },
+    {
+     "w": "account",
+     "t": 15.9375,
+     "e": 16.625
+    },
+    {
+     "w": "you",
+     "t": 16.625,
+     "e": 17.3125
+    },
+    {
+     "w": "hold.",
+     "t": 17.3125,
+     "e": 18.0
+    }
+   ]
+  },
+  {
+   "t": 18.5,
+   "end": 24.0,
+   "text": "One token, one sub-account \u2014 its treasury, its gold.",
+   "hi": 8,
+   "words": [
+    {
+     "w": "One",
+     "t": 18.5,
+     "e": 19.111111
+    },
+    {
+     "w": "token,",
+     "t": 19.111111,
+     "e": 19.722222
+    },
+    {
+     "w": "one",
+     "t": 19.722222,
+     "e": 20.333333
+    },
+    {
+     "w": "sub-account",
+     "t": 20.333333,
+     "e": 20.944444
+    },
+    {
+     "w": "\u2014",
+     "t": 20.944444,
+     "e": 21.555556
+    },
+    {
+     "w": "its",
+     "t": 21.555556,
+     "e": 22.166667
+    },
+    {
+     "w": "treasury,",
+     "t": 22.166667,
+     "e": 22.777778
+    },
+    {
+     "w": "its",
+     "t": 22.777778,
+     "e": 23.388889
+    },
+    {
+     "w": "gold.",
+     "t": 23.388889,
+     "e": 24.0
+    }
+   ]
+  },
+  {
+   "t": 25.0,
+   "end": 30.0,
+   "text": "Its keys, its rules, its money, in one place.",
+   "hi": 8,
+   "words": [
+    {
+     "w": "Its",
+     "t": 25.0,
+     "e": 25.555556
+    },
+    {
+     "w": "keys,",
+     "t": 25.555556,
+     "e": 26.111111
+    },
+    {
+     "w": "its",
+     "t": 26.111111,
+     "e": 26.666667
+    },
+    {
+     "w": "rules,",
+     "t": 26.666667,
+     "e": 27.222222
+    },
+    {
+     "w": "its",
+     "t": 27.222222,
+     "e": 27.777778
+    },
+    {
+     "w": "money,",
+     "t": 27.777778,
+     "e": 28.333333
+    },
+    {
+     "w": "in",
+     "t": 28.333333,
+     "e": 28.888889
+    },
+    {
+     "w": "one",
+     "t": 28.888889,
+     "e": 29.444444
+    },
+    {
+     "w": "place.",
+     "t": 29.444444,
+     "e": 30.0
+    }
+   ]
+  },
+  {
+   "t": 31.5,
+   "end": 36.5,
+   "text": "The cap is a number written on chain.",
+   "hi": 7,
+   "words": [
+    {
+     "w": "The",
+     "t": 31.5,
+     "e": 32.125
+    },
+    {
+     "w": "cap",
+     "t": 32.125,
+     "e": 32.75
+    },
+    {
+     "w": "is",
+     "t": 32.75,
+     "e": 33.375
+    },
+    {
+     "w": "a",
+     "t": 33.375,
+     "e": 34.0
+    },
+    {
+     "w": "number",
+     "t": 34.0,
+     "e": 34.625
+    },
+    {
+     "w": "written",
+     "t": 34.625,
+     "e": 35.25
+    },
+    {
+     "w": "on",
+     "t": 35.25,
+     "e": 35.875
+    },
+    {
+     "w": "chain.",
+     "t": 35.875,
+     "e": 36.5
+    }
+   ]
+  },
+  {
+   "t": 37.5,
+   "end": 43.0,
+   "text": "The agent tries more \u2014 refused, and nothing moves.",
+   "hi": 8,
+   "words": [
+    {
+     "w": "The",
+     "t": 37.5,
+     "e": 38.111111
+    },
+    {
+     "w": "agent",
+     "t": 38.111111,
+     "e": 38.722222
+    },
+    {
+     "w": "tries",
+     "t": 38.722222,
+     "e": 39.333333
+    },
+    {
+     "w": "more",
+     "t": 39.333333,
+     "e": 39.944444
+    },
+    {
+     "w": "\u2014",
+     "t": 39.944444,
+     "e": 40.555556
+    },
+    {
+     "w": "refused,",
+     "t": 40.555556,
+     "e": 41.166667
+    },
+    {
+     "w": "and",
+     "t": 41.166667,
+     "e": 41.777778
+    },
+    {
+     "w": "nothing",
+     "t": 41.777778,
+     "e": 42.388889
+    },
+    {
+     "w": "moves.",
+     "t": 42.388889,
+     "e": 43.0
+    }
+   ]
+  },
+  {
+   "t": 51.5,
+   "end": 56.5,
+   "text": "The sale is a rotation, in two beats.",
+   "hi": 7,
+   "words": [
+    {
+     "w": "The",
+     "t": 51.5,
+     "e": 52.125
+    },
+    {
+     "w": "sale",
+     "t": 52.125,
+     "e": 52.75
+    },
+    {
+     "w": "is",
+     "t": 52.75,
+     "e": 53.375
+    },
+    {
+     "w": "a",
+     "t": 53.375,
+     "e": 54.0
+    },
+    {
+     "w": "rotation,",
+     "t": 54.0,
+     "e": 54.625
+    },
+    {
+     "w": "in",
+     "t": 54.625,
+     "e": 55.25
+    },
+    {
+     "w": "two",
+     "t": 55.25,
+     "e": 55.875
+    },
+    {
+     "w": "beats.",
+     "t": 55.875,
+     "e": 56.5
+    }
+   ]
+  },
+  {
+   "t": 57.5,
+   "end": 63.0,
+   "text": "Pending, then applied \u2014 the seller's key retreats.",
+   "hi": 7,
+   "words": [
+    {
+     "w": "Pending,",
+     "t": 57.5,
+     "e": 58.1875
+    },
+    {
+     "w": "then",
+     "t": 58.1875,
+     "e": 58.875
+    },
+    {
+     "w": "applied",
+     "t": 58.875,
+     "e": 59.5625
+    },
+    {
+     "w": "\u2014",
+     "t": 59.5625,
+     "e": 60.25
+    },
+    {
+     "w": "the",
+     "t": 60.25,
+     "e": 60.9375
+    },
+    {
+     "w": "seller's",
+     "t": 60.9375,
+     "e": 61.625
+    },
+    {
+     "w": "key",
+     "t": 61.625,
+     "e": 62.3125
+    },
+    {
+     "w": "retreats.",
+     "t": 62.3125,
+     "e": 63.0
+    }
+   ]
+  },
+  {
+   "t": 69.5,
+   "end": 74.5,
+   "text": "The proof is a receipt, and the tests are in Rust.",
+   "hi": 10,
+   "words": [
+    {
+     "w": "The",
+     "t": 69.5,
+     "e": 69.954545
+    },
+    {
+     "w": "proof",
+     "t": 69.954545,
+     "e": 70.409091
+    },
+    {
+     "w": "is",
+     "t": 70.409091,
+     "e": 70.863636
+    },
+    {
+     "w": "a",
+     "t": 70.863636,
+     "e": 71.318182
+    },
+    {
+     "w": "receipt,",
+     "t": 71.318182,
+     "e": 71.772727
+    },
+    {
+     "w": "and",
+     "t": 71.772727,
+     "e": 72.227273
+    },
+    {
+     "w": "the",
+     "t": 72.227273,
+     "e": 72.681818
+    },
+    {
+     "w": "tests",
+     "t": 72.681818,
+     "e": 73.136364
+    },
+    {
+     "w": "are",
+     "t": 73.136364,
+     "e": 73.590909
+    },
+    {
+     "w": "in",
+     "t": 73.590909,
+     "e": 74.045455
+    },
+    {
+     "w": "Rust.",
+     "t": 74.045455,
+     "e": 74.5
+    }
+   ]
+  },
+  {
+   "t": 75.5,
+   "end": 80.5,
+   "text": "Thirty-two pass \u2014 and the chain keeps the trust.",
+   "hi": 8,
+   "words": [
+    {
+     "w": "Thirty-two",
+     "t": 75.5,
+     "e": 76.055556
+    },
+    {
+     "w": "pass",
+     "t": 76.055556,
+     "e": 76.611111
+    },
+    {
+     "w": "\u2014",
+     "t": 76.611111,
+     "e": 77.166667
+    },
+    {
+     "w": "and",
+     "t": 77.166667,
+     "e": 77.722222
+    },
+    {
+     "w": "the",
+     "t": 77.722222,
+     "e": 78.277778
+    },
+    {
+     "w": "chain",
+     "t": 78.277778,
+     "e": 78.833333
+    },
+    {
+     "w": "keeps",
+     "t": 78.833333,
+     "e": 79.388889
+    },
+    {
+     "w": "the",
+     "t": 79.388889,
+     "e": 79.944444
+    },
+    {
+     "w": "trust.",
+     "t": 79.944444,
+     "e": 80.5
+    }
+   ]
+  },
+  {
+   "t": 81.5,
+   "end": 86.5,
+   "text": "Three businesses live, and the rules are the same.",
+   "hi": 8,
+   "words": [
+    {
+     "w": "Three",
+     "t": 81.5,
+     "e": 82.055556
+    },
+    {
+     "w": "businesses",
+     "t": 82.055556,
+     "e": 82.611111
+    },
+    {
+     "w": "live,",
+     "t": 82.611111,
+     "e": 83.166667
+    },
+    {
+     "w": "and",
+     "t": 83.166667,
+     "e": 83.722222
+    },
+    {
+     "w": "the",
+     "t": 83.722222,
+     "e": 84.277778
+    },
+    {
+     "w": "rules",
+     "t": 84.277778,
+     "e": 84.833333
+    },
+    {
+     "w": "are",
+     "t": 84.833333,
+     "e": 85.388889
+    },
+    {
+     "w": "the",
+     "t": 85.388889,
+     "e": 85.944444
+    },
+    {
+     "w": "same.",
+     "t": 85.944444,
+     "e": 86.5
+    }
+   ]
+  },
+  {
+   "t": 97.5,
+   "end": 102.5,
+   "text": "A second business sells cloth, by the same code.",
+   "hi": 8,
+   "words": [
+    {
+     "w": "A",
+     "t": 97.5,
+     "e": 98.055556
+    },
+    {
+     "w": "second",
+     "t": 98.055556,
+     "e": 98.611111
+    },
+    {
+     "w": "business",
+     "t": 98.611111,
+     "e": 99.166667
+    },
+    {
+     "w": "sells",
+     "t": 99.166667,
+     "e": 99.722222
+    },
+    {
+     "w": "cloth,",
+     "t": 99.722222,
+     "e": 100.277778
+    },
+    {
+     "w": "by",
+     "t": 100.277778,
+     "e": 100.833333
+    },
+    {
+     "w": "the",
+     "t": 100.833333,
+     "e": 101.388889
+    },
+    {
+     "w": "same",
+     "t": 101.388889,
+     "e": 101.944444
+    },
+    {
+     "w": "code.",
+     "t": 101.944444,
+     "e": 102.5
+    }
+   ]
+  },
+  {
+   "t": 103.5,
+   "end": 108.5,
+   "text": "Its own cap, its own treasury \u2014 on the same road.",
+   "hi": 10,
+   "words": [
+    {
+     "w": "Its",
+     "t": 103.5,
+     "e": 103.954545
+    },
+    {
+     "w": "own",
+     "t": 103.954545,
+     "e": 104.409091
+    },
+    {
+     "w": "cap,",
+     "t": 104.409091,
+     "e": 104.863636
+    },
+    {
+     "w": "its",
+     "t": 104.863636,
+     "e": 105.318182
+    },
+    {
+     "w": "own",
+     "t": 105.318182,
+     "e": 105.772727
+    },
+    {
+     "w": "treasury",
+     "t": 105.772727,
+     "e": 106.227273
+    },
+    {
+     "w": "\u2014",
+     "t": 106.227273,
+     "e": 106.681818
+    },
+    {
+     "w": "on",
+     "t": 106.681818,
+     "e": 107.136364
+    },
+    {
+     "w": "the",
+     "t": 107.136364,
+     "e": 107.590909
+    },
+    {
+     "w": "same",
+     "t": 107.590909,
+     "e": 108.045455
+    },
+    {
+     "w": "road.",
+     "t": 108.045455,
+     "e": 108.5
+    }
+   ]
+  },
+  {
+   "t": 119.5,
+   "end": 124.5,
+   "text": "Live on testnet today, and the tokens are free.",
+   "hi": 8,
+   "words": [
+    {
+     "w": "Live",
+     "t": 119.5,
+     "e": 120.055556
+    },
+    {
+     "w": "on",
+     "t": 120.055556,
+     "e": 120.611111
+    },
+    {
+     "w": "testnet",
+     "t": 120.611111,
+     "e": 121.166667
+    },
+    {
+     "w": "today,",
+     "t": 121.166667,
+     "e": 121.722222
+    },
+    {
+     "w": "and",
+     "t": 121.722222,
+     "e": 122.277778
+    },
+    {
+     "w": "the",
+     "t": 122.277778,
+     "e": 122.833333
+    },
+    {
+     "w": "tokens",
+     "t": 122.833333,
+     "e": 123.388889
+    },
+    {
+     "w": "are",
+     "t": 123.388889,
+     "e": 123.944444
+    },
+    {
+     "w": "free.",
+     "t": 123.944444,
+     "e": 124.5
+    }
+   ]
+  },
+  {
+   "t": 125.5,
+   "end": 131.0,
+   "text": "Come and buy a business that keeps working \u2014 you will see.",
+   "hi": 11,
+   "words": [
+    {
+     "w": "Come",
+     "t": 125.5,
+     "e": 125.958333
+    },
+    {
+     "w": "and",
+     "t": 125.958333,
+     "e": 126.416667
+    },
+    {
+     "w": "buy",
+     "t": 126.416667,
+     "e": 126.875
+    },
+    {
+     "w": "a",
+     "t": 126.875,
+     "e": 127.333333
+    },
+    {
+     "w": "business",
+     "t": 127.333333,
+     "e": 127.791667
+    },
+    {
+     "w": "that",
+     "t": 127.791667,
+     "e": 128.25
+    },
+    {
+     "w": "keeps",
+     "t": 128.25,
+     "e": 128.708333
+    },
+    {
+     "w": "working",
+     "t": 128.708333,
+     "e": 129.166667
+    },
+    {
+     "w": "\u2014",
+     "t": 129.166667,
+     "e": 129.625
+    },
+    {
+     "w": "you",
+     "t": 129.625,
+     "e": 130.083333
+    },
+    {
+     "w": "will",
+     "t": 130.083333,
+     "e": 130.541667
+    },
+    {
+     "w": "see.",
+     "t": 130.541667,
+     "e": 131.0
+    }
+   ]
   }
  ],
  "events": [
   {
-   "kind": "slam",
-   "t": -0.18,
-   "gain": 0.22,
-   "pan": 0.0,
-   "w": 0.5,
-   "target": "line0",
-   "scene": "open"
+   "kind": "bell",
+   "t": 0.3,
+   "freq": 880,
+   "decay": 0.2,
+   "ratio": 2.0,
+   "index": 0.5,
+   "gain": 0.1,
+   "pan": -0.5
+  },
+  {
+   "kind": "bell",
+   "t": 0.7,
+   "freq": 880,
+   "decay": 0.2,
+   "ratio": 2.0,
+   "index": 0.5,
+   "gain": 0.1,
+   "pan": -0.3
+  },
+  {
+   "kind": "bell",
+   "t": 1.1,
+   "freq": 880,
+   "decay": 0.2,
+   "ratio": 2.0,
+   "index": 0.5,
+   "gain": 0.1,
+   "pan": -0.1
   },
   {
    "kind": "slam",
-   "t": 0.0,
-   "gain": 0.22,
-   "pan": 0.0,
-   "w": 0.5,
-   "target": "eyebrow",
-   "scene": "open"
-  },
-  {
-   "kind": "slam",
-   "t": 1.25,
-   "gain": 0.22,
-   "pan": 0.0,
-   "w": 0.5,
-   "target": "line1",
-   "scene": "open"
-  },
-  {
-   "kind": "slam",
-   "t": 2.5,
-   "gain": 0.16,
-   "pan": 0.0,
-   "w": 0.5,
-   "target": "sub",
-   "scene": "open"
-  },
-  {
-   "kind": "sweep",
-   "t": 3.6,
-   "dur": 0.4,
-   "lo": 200,
-   "hi": 1400,
-   "up": true,
-   "gain": 0.16,
-   "pan": 0.2
-  },
-  {
-   "kind": "sweep",
-   "t": 4.7,
-   "dur": 0.55,
-   "lo": 380,
-   "hi": 3400,
-   "up": true,
-   "gain": 0.24,
-   "pan": 0.0
-  },
-  {
-   "kind": "bloop",
-   "t": 4.95,
-   "f0": 800,
-   "f1": 1300,
-   "dur": 0.05,
-   "gain": 0.12,
-   "pan": 0.2
-  },
-  {
-   "kind": "slam",
-   "t": 5.0,
-   "gain": 0.22,
-   "pan": 0.0,
-   "w": 0.5,
-   "target": "heading",
-   "scene": "handover"
-  },
-  {
-   "kind": "sweep",
-   "t": 5.575,
-   "dur": 0.25,
-   "lo": 500,
-   "hi": 3000,
-   "up": false,
-   "gain": 0.16,
-   "pan": 0.25
-  },
-  {
-   "kind": "slam",
-   "t": 10.625,
-   "gain": 0.2,
-   "pan": 0.0,
-   "w": 0.5,
-   "target": "line0",
-   "scene": "handover"
-  },
-  {
-   "kind": "slam",
-   "t": 13.75,
-   "gain": 0.2,
-   "pan": 0.0,
-   "w": 0.5,
-   "target": "line1",
-   "scene": "handover"
-  },
-  {
-   "kind": "riser",
-   "t": 15.0,
-   "dur": 1.25,
-   "gain": 0.22
+   "t": 1.2,
+   "gain": 0.45,
+   "w": 0.6
   },
   {
    "kind": "kick",
-   "t": 15.625,
+   "t": 1.21,
+   "gain": 0.35
+  },
+  {
+   "kind": "bell",
+   "t": 1.5,
+   "freq": 880,
+   "decay": 0.2,
+   "ratio": 2.0,
+   "index": 0.5,
+   "gain": 0.1,
+   "pan": 0.1
+  },
+  {
+   "kind": "bell",
+   "t": 1.9,
+   "freq": 880,
+   "decay": 0.2,
+   "ratio": 2.0,
+   "index": 0.5,
+   "gain": 0.1,
+   "pan": 0.3
+  },
+  {
+   "kind": "bell",
+   "t": 2.3,
+   "freq": 880,
+   "decay": 0.2,
+   "ratio": 2.0,
+   "index": 0.5,
+   "gain": 0.1,
+   "pan": 0.5
+  },
+  {
+   "kind": "sweep",
+   "t": 9.72,
+   "dur": 0.5,
+   "lo": 380,
+   "hi": 3200,
+   "up": true,
+   "gain": 0.2
+  },
+  {
+   "kind": "sweep",
+   "t": 9.72,
+   "dur": 0.5,
+   "lo": 380,
+   "hi": 3200,
+   "up": true,
+   "gain": 0.2
+  },
+  {
+   "kind": "slam",
+   "t": 12.4,
+   "gain": 0.5,
+   "w": 0.6
+  },
+  {
+   "kind": "kick",
+   "t": 12.41,
+   "gain": 0.35
+  },
+  {
+   "kind": "bell",
+   "t": 13.0,
+   "freq": 1180,
+   "decay": 0.22,
+   "ratio": 1.0,
+   "index": 0.3,
+   "gain": 0.12
+  },
+  {
+   "kind": "sweep",
+   "t": 29.72,
+   "dur": 0.5,
+   "lo": 380,
+   "hi": 3200,
+   "up": true,
+   "gain": 0.2
+  },
+  {
+   "kind": "sweep",
+   "t": 29.72,
+   "dur": 0.5,
+   "lo": 380,
+   "hi": 3200,
+   "up": true,
+   "gain": 0.2
+  },
+  {
+   "kind": "stamp",
+   "t": 37.0,
+   "scale": 1.4,
+   "pitch": 0.85,
+   "gain": 0.5
+  },
+  {
+   "kind": "slam",
+   "t": 38.8,
+   "gain": 0.55,
+   "w": 0.6
+  },
+  {
+   "kind": "kick",
+   "t": 38.81,
+   "gain": 0.35
+  },
+  {
+   "kind": "sweep",
+   "t": 49.72,
+   "dur": 0.5,
+   "lo": 380,
+   "hi": 3200,
+   "up": true,
+   "gain": 0.2
+  },
+  {
+   "kind": "sweep",
+   "t": 49.72,
+   "dur": 0.5,
+   "lo": 380,
+   "hi": 3200,
+   "up": true,
+   "gain": 0.2
+  },
+  {
+   "kind": "slam",
+   "t": 56.0,
+   "gain": 0.5,
+   "w": 0.6
+  },
+  {
+   "kind": "kick",
+   "t": 56.01,
+   "gain": 0.35
+  },
+  {
+   "kind": "riser",
+   "t": 58.0,
+   "dur": 1.0,
+   "gain": 0.18
+  },
+  {
+   "kind": "sweep",
+   "t": 67.72,
+   "dur": 0.5,
+   "lo": 380,
+   "hi": 3200,
+   "up": true,
+   "gain": 0.2
+  },
+  {
+   "kind": "sweep",
+   "t": 67.72,
+   "dur": 0.5,
+   "lo": 380,
+   "hi": 3200,
+   "up": true,
+   "gain": 0.2
+  },
+  {
+   "kind": "typekey",
+   "t": 70.0,
+   "level": 0.7,
+   "gain": 0.09,
+   "pan": -0.2
+  },
+  {
+   "kind": "typekey",
+   "t": 70.18,
+   "level": 0.7,
+   "gain": 0.09,
+   "pan": -0.1
+  },
+  {
+   "kind": "typekey",
+   "t": 70.36,
+   "level": 0.7,
+   "gain": 0.09,
+   "pan": 0.0
+  },
+  {
+   "kind": "typekey",
+   "t": 70.54,
+   "level": 0.7,
+   "gain": 0.09,
+   "pan": 0.1
+  },
+  {
+   "kind": "typekey",
+   "t": 70.72,
+   "level": 0.7,
+   "gain": 0.09,
+   "pan": 0.2
+  },
+  {
+   "kind": "stamp",
+   "t": 80.0,
+   "scale": 1.6,
+   "pitch": 1.0,
    "gain": 0.55
   },
   {
-   "kind": "stamp",
-   "t": 15.635,
-   "scale": 1.4,
-   "pitch": 1.0,
-   "gain": 0.4
-  },
-  {
-   "kind": "sweep",
-   "t": 17.2,
-   "dur": 0.55,
-   "lo": 380,
-   "hi": 3400,
-   "up": true,
-   "gain": 0.24,
-   "pan": 0.0
-  },
-  {
    "kind": "kick",
-   "t": 17.5,
-   "gain": 0.6
-  },
-  {
-   "kind": "slam",
-   "t": 17.5,
-   "gain": 0.5,
-   "pan": 0.0,
-   "w": 0.6,
-   "target": "word",
-   "scene": "vault"
-  },
-  {
-   "kind": "stamp",
-   "t": 17.51,
-   "scale": 1.3,
-   "pitch": 0.8,
-   "gain": 0.4
-  },
-  {
-   "kind": "sweep",
-   "t": 18.3875,
-   "dur": 0.25,
-   "lo": 500,
-   "hi": 3000,
-   "up": false,
-   "gain": 0.16,
-   "pan": 0.2
-  },
-  {
-   "kind": "slam",
-   "t": 22.5,
-   "gain": 0.3,
-   "pan": -0.3,
-   "w": 0.6
-  },
-  {
-   "kind": "slam",
-   "t": 22.8125,
-   "gain": 0.3,
-   "pan": -0.2,
-   "w": 0.6
-  },
-  {
-   "kind": "slam",
-   "t": 23.125,
-   "gain": 0.3,
-   "pan": -0.1,
-   "w": 0.6
-  },
-  {
-   "kind": "slam",
-   "t": 23.125,
-   "gain": 0.2,
-   "pan": 0.0,
-   "w": 0.5,
-   "target": "line0",
-   "scene": "vault"
-  },
-  {
-   "kind": "slam",
-   "t": 24.375,
-   "gain": 0.2,
-   "pan": 0.0,
-   "w": 0.5,
-   "target": "line1",
-   "scene": "vault"
-  },
-  {
-   "kind": "sweep",
-   "t": 26.13,
-   "dur": 0.18,
-   "lo": 900,
-   "hi": 4200,
-   "up": true,
-   "gain": 0.12,
-   "pan": -0.3
-  },
-  {
-   "kind": "sweep",
-   "t": 26.4425,
-   "dur": 0.18,
-   "lo": 900,
-   "hi": 4200,
-   "up": true,
-   "gain": 0.12,
-   "pan": -0.2
-  },
-  {
-   "kind": "sweep",
-   "t": 26.755,
-   "dur": 0.18,
-   "lo": 900,
-   "hi": 4200,
-   "up": true,
-   "gain": 0.12,
-   "pan": -0.1
-  },
-  {
-   "kind": "sweep",
-   "t": 27.2,
-   "dur": 0.55,
-   "lo": 380,
-   "hi": 3400,
-   "up": true,
-   "gain": 0.24,
-   "pan": 0.0
-  },
-  {
-   "kind": "kick",
-   "t": 27.5,
-   "gain": 0.6
-  },
-  {
-   "kind": "slam",
-   "t": 27.5,
-   "gain": 0.5,
-   "pan": 0.0,
-   "w": 0.6,
-   "target": "word",
-   "scene": "charter"
-  },
-  {
-   "kind": "stamp",
-   "t": 27.51,
-   "scale": 1.3,
-   "pitch": 0.8,
-   "gain": 0.4
-  },
-  {
-   "kind": "sweep",
-   "t": 28.3875,
-   "dur": 0.25,
-   "lo": 500,
-   "hi": 3000,
-   "up": false,
-   "gain": 0.16,
-   "pan": 0.2
-  },
-  {
-   "kind": "slam",
-   "t": 30.625,
-   "gain": 0.2,
-   "pan": 0.0,
-   "w": 0.5,
-   "target": "line0",
-   "scene": "charter"
-  },
-  {
-   "kind": "slam",
-   "t": 31.25,
-   "gain": 0.3,
-   "pan": -0.3,
-   "w": 0.6
-  },
-  {
-   "kind": "slam",
-   "t": 31.5625,
-   "gain": 0.3,
-   "pan": -0.2,
-   "w": 0.6
-  },
-  {
-   "kind": "slam",
-   "t": 31.875,
-   "gain": 0.3,
-   "pan": -0.1,
-   "w": 0.6
-  },
-  {
-   "kind": "slam",
-   "t": 33.125,
-   "gain": 0.2,
-   "pan": 0.0,
-   "w": 0.5,
-   "target": "line1",
-   "scene": "charter"
-  },
-  {
-   "kind": "sweep",
-   "t": 33.63,
-   "dur": 0.18,
-   "lo": 900,
-   "hi": 4200,
-   "up": true,
-   "gain": 0.12,
-   "pan": -0.3
-  },
-  {
-   "kind": "sweep",
-   "t": 33.9425,
-   "dur": 0.18,
-   "lo": 900,
-   "hi": 4200,
-   "up": true,
-   "gain": 0.12,
-   "pan": -0.2
-  },
-  {
-   "kind": "sweep",
-   "t": 34.255,
-   "dur": 0.18,
-   "lo": 900,
-   "hi": 4200,
-   "up": true,
-   "gain": 0.12,
-   "pan": -0.1
-  },
-  {
-   "kind": "sweep",
-   "t": 34.7,
-   "dur": 0.55,
-   "lo": 380,
-   "hi": 3400,
-   "up": true,
-   "gain": 0.24,
-   "pan": 0.0
-  },
-  {
-   "kind": "slam",
-   "t": 35.0,
-   "gain": 0.22,
-   "pan": 0.0,
-   "w": 0.5,
-   "target": "heading",
-   "scene": "refusal"
-  },
-  {
-   "kind": "sweep",
-   "t": 35.575,
-   "dur": 0.25,
-   "lo": 500,
-   "hi": 3000,
-   "up": false,
-   "gain": 0.16,
-   "pan": 0.25
-  },
-  {
-   "kind": "slam",
-   "t": 38.75,
-   "gain": 0.2,
-   "pan": 0.0,
-   "w": 0.5,
-   "target": "line0",
-   "scene": "refusal"
-  },
-  {
-   "kind": "stamp",
-   "t": 40.625,
-   "scale": 0.9,
-   "pitch": 0.55,
-   "gain": 0.5
-  },
-  {
-   "kind": "kick",
-   "t": 40.635,
-   "gain": 0.5
-  },
-  {
-   "kind": "slam",
-   "t": 41.875,
-   "gain": 0.2,
-   "pan": 0.0,
-   "w": 0.5,
-   "target": "line1",
-   "scene": "refusal"
-  },
-  {
-   "kind": "sweep",
-   "t": 44.7,
-   "dur": 0.55,
-   "lo": 380,
-   "hi": 3400,
-   "up": true,
-   "gain": 0.24,
-   "pan": 0.0
-  },
-  {
-   "kind": "slam",
-   "t": 45.0,
-   "gain": 0.22,
-   "pan": 0.0,
-   "w": 0.5,
-   "target": "heading",
-   "scene": "halt"
-  },
-  {
-   "kind": "sweep",
-   "t": 45.505,
-   "dur": 0.32,
-   "lo": 400,
-   "hi": 2600,
-   "up": true,
-   "gain": 0.16,
-   "pan": 0.2
-  },
-  {
-   "kind": "typekey",
-   "t": 46.25,
-   "level": 0.765549,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "n",
-   "index": 0,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 46.289062,
-   "level": 0.752646,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "e",
-   "index": 1,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 46.328125,
-   "level": 0.990135,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "a",
-   "index": 2,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 46.367188,
-   "level": 0.842541,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "r",
-   "index": 3,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 46.40625,
-   "level": 0.846967,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": " ",
-   "index": 4,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 46.445312,
-   "level": 0.754545,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "c",
-   "index": 5,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 46.484375,
-   "level": 0.80004,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "a",
-   "index": 6,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 46.523438,
-   "level": 0.786965,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "l",
-   "index": 7,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 46.5625,
-   "level": 0.8859,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "l",
-   "index": 8,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 46.601562,
-   "level": 0.842556,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": " ",
-   "index": 9,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 46.640625,
-   "level": 0.99357,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "b",
-   "index": 10,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 46.679688,
-   "level": 0.976215,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "i",
-   "index": 11,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 46.71875,
-   "level": 0.772425,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "z",
-   "index": 12,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 46.757812,
-   "level": 0.770796,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "-",
-   "index": 13,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 46.796875,
-   "level": 0.785388,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "7",
-   "index": 14,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 46.835938,
-   "level": 0.76336,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": " ",
-   "index": 15,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 46.875,
-   "level": 0.826585,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "h",
-   "index": 16,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 46.914062,
-   "level": 0.997924,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "a",
-   "index": 17,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 46.953125,
-   "level": 0.95368,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "l",
-   "index": 18,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 46.992188,
-   "level": 0.991643,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "t",
-   "index": 19,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 47.03125,
-   "level": 0.782055,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": " ",
-   "index": 20,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 47.070312,
-   "level": 0.787491,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "-",
-   "index": 21,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 47.109375,
-   "level": 0.793293,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "-",
-   "index": 22,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 47.148438,
-   "level": 0.823067,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "a",
-   "index": 23,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 47.1875,
-   "level": 0.934915,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "c",
-   "index": 24,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 47.226562,
-   "level": 0.820977,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "c",
-   "index": 25,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 47.265625,
-   "level": 0.979262,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "o",
-   "index": 26,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 47.304688,
-   "level": 0.967929,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "u",
-   "index": 27,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 47.34375,
-   "level": 0.784912,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "n",
-   "index": 28,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 47.382812,
-   "level": 0.941277,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "t",
-   "index": 29,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 47.421875,
-   "level": 0.941505,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "I",
-   "index": 30,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 47.460938,
-   "level": 0.80236,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "d",
-   "index": 31,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 47.5,
-   "level": 0.80583,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": " ",
-   "index": 32,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 47.539062,
-   "level": 0.804199,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "r",
-   "index": 33,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 47.578125,
-   "level": 0.983774,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "a",
-   "index": 34,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 47.617188,
-   "level": 0.871237,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "i",
-   "index": 35,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 47.65625,
-   "level": 0.983859,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "z",
-   "index": 36,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 47.695312,
-   "level": 0.855856,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "o",
-   "index": 37,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 47.734375,
-   "level": 0.750944,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "0",
-   "index": 38,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 47.773438,
-   "level": 0.864055,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "7",
-   "index": 39,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 47.8125,
-   "level": 0.806127,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": ".",
-   "index": 40,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 47.851562,
-   "level": 0.928501,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "t",
-   "index": 41,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 47.890625,
-   "level": 0.793368,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "e",
-   "index": 42,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 47.929688,
-   "level": 0.777046,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "s",
-   "index": 43,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 47.96875,
-   "level": 0.844717,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "t",
-   "index": 44,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 48.007812,
-   "level": 0.886336,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "n",
-   "index": 45,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 48.046875,
-   "level": 0.883492,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "e",
-   "index": 46,
-   "scene": "halt"
-  },
-  {
-   "kind": "typekey",
-   "t": 48.085938,
-   "level": 0.873349,
-   "gain": 0.1,
-   "pan": 0.15,
-   "char": "t",
-   "index": 47,
-   "scene": "halt"
-  },
-  {
-   "kind": "bloop",
-   "t": 48.75,
-   "f0": 1500,
-   "f1": 1200,
-   "dur": 0.03,
-   "gain": 0.1,
-   "pan": 0.15
-  },
-  {
-   "kind": "typekey",
-   "t": 48.77,
-   "level": 0.5,
-   "gain": 0.08,
-   "pan": 0.15
-  },
-  {
-   "kind": "bloop",
-   "t": 49.0625,
-   "f0": 1500,
-   "f1": 1200,
-   "dur": 0.03,
-   "gain": 0.1,
-   "pan": 0.15
-  },
-  {
-   "kind": "typekey",
-   "t": 49.0825,
-   "level": 0.5,
-   "gain": 0.08,
-   "pan": 0.15
-  },
-  {
-   "kind": "bloop",
-   "t": 49.375,
-   "f0": 1500,
-   "f1": 1200,
-   "dur": 0.03,
-   "gain": 0.1,
-   "pan": 0.15
-  },
-  {
-   "kind": "typekey",
-   "t": 49.395,
-   "level": 0.5,
-   "gain": 0.08,
-   "pan": 0.15
-  },
-  {
-   "kind": "bloop",
-   "t": 49.6875,
-   "f0": 1500,
-   "f1": 1200,
-   "dur": 0.03,
-   "gain": 0.1,
-   "pan": 0.15
-  },
-  {
-   "kind": "typekey",
-   "t": 49.7075,
-   "level": 0.5,
-   "gain": 0.08,
-   "pan": 0.15
-  },
-  {
-   "kind": "bloop",
-   "t": 50.0,
-   "f0": 1500,
-   "f1": 1200,
-   "dur": 0.03,
-   "gain": 0.1,
-   "pan": 0.15
-  },
-  {
-   "kind": "typekey",
-   "t": 50.02,
-   "level": 0.5,
-   "gain": 0.08,
-   "pan": 0.15
+   "t": 80.01,
+   "gain": 0.45
   },
   {
    "kind": "bell",
-   "t": 52.5,
-   "midi": 88,
-   "decay": 0.5,
+   "t": 84.0,
+   "freq": 1320,
+   "decay": 0.25,
    "ratio": 2.0,
-   "index": 0.6,
-   "gain": 0.18,
-   "pan": 0.2
+   "index": 0.4,
+   "gain": 0.12,
+   "pan": -0.3
   },
   {
-   "kind": "slam",
-   "t": 53.75,
-   "gain": 0.2,
-   "pan": 0.0,
-   "w": 0.5,
-   "target": "line0",
-   "scene": "halt"
-  },
-  {
-   "kind": "sweep",
-   "t": 54.7,
-   "dur": 0.55,
-   "lo": 380,
-   "hi": 3400,
-   "up": true,
-   "gain": 0.24,
+   "kind": "bell",
+   "t": 86.0,
+   "freq": 1320,
+   "decay": 0.25,
+   "ratio": 2.0,
+   "index": 0.4,
+   "gain": 0.12,
    "pan": 0.0
   },
   {
-   "kind": "slam",
-   "t": 55.0,
-   "gain": 0.22,
-   "pan": 0.0,
-   "w": 0.5,
-   "target": "heading",
-   "scene": "proof"
-  },
-  {
-   "kind": "typekey",
-   "t": 56.25,
-   "level": 0.920183,
-   "gain": 0.07,
-   "pan": -0.4
-  },
-  {
-   "kind": "typekey",
-   "t": 56.496287,
-   "level": 0.923764,
-   "gain": 0.07,
-   "pan": -0.37
-  },
-  {
-   "kind": "typekey",
-   "t": 56.73511,
-   "level": 0.597891,
-   "gain": 0.07,
-   "pan": -0.34
-  },
-  {
-   "kind": "typekey",
-   "t": 56.966411,
-   "level": 0.720525,
-   "gain": 0.07,
-   "pan": -0.31
-  },
-  {
-   "kind": "typekey",
-   "t": 57.190128,
-   "level": 0.695108,
-   "gain": 0.07,
-   "pan": -0.28
-  },
-  {
-   "kind": "typekey",
-   "t": 57.406195,
-   "level": 0.949792,
-   "gain": 0.07,
-   "pan": -0.25
-  },
-  {
-   "kind": "typekey",
-   "t": 57.614545,
-   "level": 0.829903,
-   "gain": 0.07,
-   "pan": -0.22
-  },
-  {
-   "kind": "typekey",
-   "t": 57.815105,
-   "level": 0.637465,
-   "gain": 0.07,
-   "pan": -0.19
-  },
-  {
-   "kind": "typekey",
-   "t": 58.0078,
-   "level": 0.630396,
-   "gain": 0.07,
-   "pan": -0.16
-  },
-  {
-   "kind": "typekey",
-   "t": 58.192547,
-   "level": 0.699373,
-   "gain": 0.07,
-   "pan": -0.13
-  },
-  {
-   "kind": "typekey",
-   "t": 58.369261,
-   "level": 0.876298,
-   "gain": 0.07,
-   "pan": -0.1
-  },
-  {
-   "kind": "typekey",
-   "t": 58.537848,
-   "level": 0.970386,
-   "gain": 0.07,
-   "pan": -0.07
-  },
-  {
-   "kind": "typekey",
-   "t": 58.698211,
-   "level": 0.762455,
-   "gain": 0.07,
-   "pan": -0.04
-  },
-  {
-   "kind": "typekey",
-   "t": 58.850241,
-   "level": 0.989222,
-   "gain": 0.07,
-   "pan": -0.01
-  },
-  {
-   "kind": "typekey",
-   "t": 58.993823,
-   "level": 0.811209,
-   "gain": 0.07,
-   "pan": 0.02
-  },
-  {
-   "kind": "typekey",
-   "t": 59.12883,
-   "level": 0.528052,
-   "gain": 0.07,
-   "pan": 0.05
-  },
-  {
-   "kind": "typekey",
-   "t": 59.255125,
-   "level": 0.932139,
-   "gain": 0.07,
-   "pan": 0.08
-  },
-  {
-   "kind": "typekey",
-   "t": 59.372554,
-   "level": 0.506221,
-   "gain": 0.07,
-   "pan": 0.11
-  },
-  {
-   "kind": "typekey",
-   "t": 59.480945,
-   "level": 0.806515,
-   "gain": 0.07,
-   "pan": 0.14
-  },
-  {
-   "kind": "typekey",
-   "t": 59.580107,
-   "level": 0.831483,
-   "gain": 0.07,
-   "pan": 0.17
-  },
-  {
-   "kind": "typekey",
-   "t": 59.669818,
-   "level": 0.814277,
-   "gain": 0.07,
-   "pan": 0.2
-  },
-  {
-   "kind": "typekey",
-   "t": 59.749822,
-   "level": 0.956373,
-   "gain": 0.07,
-   "pan": 0.23
-  },
-  {
-   "kind": "typekey",
-   "t": 59.819813,
-   "level": 0.506333,
-   "gain": 0.07,
-   "pan": 0.26
-  },
-  {
-   "kind": "typekey",
-   "t": 59.879417,
-   "level": 0.662128,
-   "gain": 0.07,
-   "pan": 0.29
-  },
-  {
-   "kind": "typekey",
-   "t": 59.928155,
-   "level": 0.621455,
-   "gain": 0.07,
-   "pan": 0.32
-  },
-  {
-   "kind": "typekey",
-   "t": 59.965372,
-   "level": 0.992156,
-   "gain": 0.07,
-   "pan": 0.35
-  },
-  {
-   "kind": "typekey",
-   "t": 59.990056,
-   "level": 0.888558,
-   "gain": 0.07,
-   "pan": 0.38
-  },
-  {
-   "kind": "typekey",
-   "t": 60.0,
-   "level": 0.867894,
-   "gain": 0.07,
-   "pan": 0.41
-  },
-  {
-   "kind": "slam",
-   "t": 60.625,
-   "gain": 0.18,
-   "pan": 0.0,
-   "w": 0.5,
-   "target": "line0",
-   "scene": "proof"
-  },
-  {
-   "kind": "slam",
-   "t": 61.875,
-   "gain": 0.18,
-   "pan": 0.0,
-   "w": 0.5,
-   "target": "line1",
-   "scene": "proof"
+   "kind": "bell",
+   "t": 88.0,
+   "freq": 1320,
+   "decay": 0.25,
+   "ratio": 2.0,
+   "index": 0.4,
+   "gain": 0.12,
+   "pan": 0.3
   },
   {
    "kind": "sweep",
-   "t": 62.2,
-   "dur": 0.55,
+   "t": 95.72,
+   "dur": 0.5,
    "lo": 380,
-   "hi": 3400,
+   "hi": 3200,
    "up": true,
-   "gain": 0.24,
-   "pan": 0.0
+   "gain": 0.2
+  },
+  {
+   "kind": "sweep",
+   "t": 95.72,
+   "dur": 0.5,
+   "lo": 380,
+   "hi": 3200,
+   "up": true,
+   "gain": 0.2
+  },
+  {
+   "kind": "bell",
+   "t": 104.0,
+   "freq": 1180,
+   "decay": 0.3,
+   "ratio": 1.0,
+   "index": 0.35,
+   "gain": 0.12,
+   "pan": 0.3
+  },
+  {
+   "kind": "bell",
+   "t": 108.0,
+   "freq": 1180,
+   "decay": 0.3,
+   "ratio": 1.0,
+   "index": 0.35,
+   "gain": 0.12,
+   "pan": 0.3
+  },
+  {
+   "kind": "bell",
+   "t": 112.0,
+   "freq": 1180,
+   "decay": 0.3,
+   "ratio": 1.0,
+   "index": 0.35,
+   "gain": 0.12,
+   "pan": 0.3
+  },
+  {
+   "kind": "sweep",
+   "t": 117.72,
+   "dur": 0.5,
+   "lo": 380,
+   "hi": 3200,
+   "up": true,
+   "gain": 0.2
+  },
+  {
+   "kind": "sweep",
+   "t": 117.72,
+   "dur": 0.5,
+   "lo": 380,
+   "hi": 3200,
+   "up": true,
+   "gain": 0.2
   },
   {
    "kind": "riser",
-   "t": 62.5,
-   "dur": 1.25
-  },
-  {
-   "kind": "slam",
-   "t": 63.125,
-   "gain": 0.4,
-   "pan": -0.3,
-   "w": 0.4,
-   "target": "bar0",
-   "scene": "name"
-  },
-  {
-   "kind": "slam",
-   "t": 63.28125,
-   "gain": 0.4,
-   "pan": 0.0,
-   "w": 0.4,
-   "target": "bar1",
-   "scene": "name"
-  },
-  {
-   "kind": "slam",
-   "t": 63.4375,
-   "gain": 0.4,
-   "pan": 0.3,
-   "w": 0.4,
-   "target": "bar2",
-   "scene": "name"
+   "t": 118.0,
+   "dur": 1.0,
+   "gain": 0.2
   },
   {
    "kind": "bell",
-   "t": 65.0,
+   "t": 122.0,
    "midi": 62,
    "decay": 1.0,
    "ratio": 1.0,
    "index": 0.8,
-   "gain": 0.16,
+   "gain": 0.14,
    "pan": -0.3
   },
   {
-   "kind": "kick",
-   "t": 65.0,
-   "gain": 0.5
+   "kind": "slam",
+   "t": 122.0,
+   "gain": 0.5,
+   "w": 0.6
   },
   {
    "kind": "bell",
-   "t": 65.004,
+   "t": 122.004,
    "midi": 66,
    "decay": 1.0,
    "ratio": 1.0,
    "index": 0.8,
-   "gain": 0.16,
+   "gain": 0.14,
    "pan": -0.15
   },
   {
    "kind": "bell",
-   "t": 65.008,
+   "t": 122.008,
    "midi": 69,
    "decay": 1.0,
    "ratio": 1.0,
    "index": 0.8,
-   "gain": 0.16,
+   "gain": 0.14,
    "pan": 0.0
   },
   {
+   "kind": "kick",
+   "t": 122.01,
+   "gain": 0.35
+  },
+  {
    "kind": "bell",
-   "t": 65.012,
+   "t": 122.012,
    "midi": 73,
    "decay": 1.0,
    "ratio": 1.0,
    "index": 0.8,
-   "gain": 0.16,
+   "gain": 0.14,
    "pan": 0.15
   },
   {
    "kind": "bell",
-   "t": 65.016,
+   "t": 122.016,
    "midi": 78,
    "decay": 1.0,
    "ratio": 1.0,
    "index": 0.8,
-   "gain": 0.16,
+   "gain": 0.14,
    "pan": 0.3
-  },
-  {
-   "kind": "slam",
-   "t": 68.75,
-   "gain": 0.2,
-   "pan": 0.0,
-   "w": 0.5,
-   "target": "sub",
-   "scene": "name"
-  },
-  {
-   "kind": "sweep",
-   "t": 72.2,
-   "dur": 0.55,
-   "lo": 380,
-   "hi": 3400,
-   "up": true,
-   "gain": 0.24,
-   "pan": 0.0
-  },
-  {
-   "kind": "slam",
-   "t": 72.5,
-   "gain": 0.22,
-   "pan": 0.0,
-   "w": 0.5,
-   "target": "line0",
-   "scene": "end"
-  },
-  {
-   "kind": "slam",
-   "t": 75.0,
-   "gain": 0.22,
-   "pan": 0.0,
-   "w": 0.5,
-   "target": "line1",
-   "scene": "end"
-  },
-  {
-   "kind": "slam",
-   "t": 77.5,
-   "gain": 0.16,
-   "pan": 0.0,
-   "w": 0.5,
-   "target": "sub",
-   "scene": "end"
-  },
-  {
-   "kind": "sweep",
-   "t": 78.6,
-   "dur": 0.4,
-   "lo": 200,
-   "hi": 1400,
-   "up": true,
-   "gain": 0.16,
-   "pan": 0.2
-  },
-  {
-   "kind": "redact",
-   "t": 83.2,
-   "gain": 0.2
   }
  ],
  "music": {
@@ -1839,42 +1699,42 @@
    },
    {
     "bar": 14,
-    "chord": "Gmaj7",
+    "chord": "Gmaj9",
     "quiet": false
    },
    {
     "bar": 15,
-    "chord": "A7",
+    "chord": "A7sus4",
     "quiet": false
    },
    {
     "bar": 16,
-    "chord": "Em9",
+    "chord": "Dmaj9",
     "quiet": false
    },
    {
     "bar": 17,
-    "chord": "F#m7",
+    "chord": "Bm9",
     "quiet": false
    },
    {
     "bar": 18,
-    "chord": "Gmaj7",
+    "chord": "Gmaj9",
     "quiet": false
    },
    {
     "bar": 19,
-    "chord": "A7",
+    "chord": "A7sus4",
     "quiet": false
    },
    {
     "bar": 20,
-    "chord": "Em9",
+    "chord": "Dmaj9",
     "quiet": false
    },
    {
     "bar": 21,
-    "chord": "F#m7",
+    "chord": "Bm9",
     "quiet": false
    },
    {
@@ -1895,22 +1755,22 @@
    {
     "bar": 25,
     "chord": "Bm9",
-    "quiet": true
+    "quiet": false
    },
    {
     "bar": 26,
     "chord": "Gmaj9",
-    "quiet": true
+    "quiet": false
    },
    {
     "bar": 27,
     "chord": "A7sus4",
-    "quiet": true
+    "quiet": false
    },
    {
     "bar": 28,
     "chord": "Dmaj9",
-    "quiet": true
+    "quiet": false
    },
    {
     "bar": 29,
@@ -1936,6 +1796,166 @@
     "bar": 33,
     "chord": "Bm9",
     "quiet": false
+   },
+   {
+    "bar": 34,
+    "chord": "Gmaj9",
+    "quiet": false
+   },
+   {
+    "bar": 35,
+    "chord": "A7sus4",
+    "quiet": false
+   },
+   {
+    "bar": 36,
+    "chord": "Dmaj9",
+    "quiet": false
+   },
+   {
+    "bar": 37,
+    "chord": "Bm9",
+    "quiet": false
+   },
+   {
+    "bar": 38,
+    "chord": "Gmaj9",
+    "quiet": false
+   },
+   {
+    "bar": 39,
+    "chord": "A7sus4",
+    "quiet": false
+   },
+   {
+    "bar": 40,
+    "chord": "Dmaj9",
+    "quiet": false
+   },
+   {
+    "bar": 41,
+    "chord": "Bm9",
+    "quiet": false
+   },
+   {
+    "bar": 42,
+    "chord": "Gmaj9",
+    "quiet": false
+   },
+   {
+    "bar": 43,
+    "chord": "A7sus4",
+    "quiet": false
+   },
+   {
+    "bar": 44,
+    "chord": "Dmaj9",
+    "quiet": false
+   },
+   {
+    "bar": 45,
+    "chord": "Bm9",
+    "quiet": false
+   },
+   {
+    "bar": 46,
+    "chord": "Gmaj9",
+    "quiet": false
+   },
+   {
+    "bar": 47,
+    "chord": "A7sus4",
+    "quiet": false
+   },
+   {
+    "bar": 48,
+    "chord": "Dmaj9",
+    "quiet": false
+   },
+   {
+    "bar": 49,
+    "chord": "Bm9",
+    "quiet": false
+   },
+   {
+    "bar": 50,
+    "chord": "Gmaj9",
+    "quiet": false
+   },
+   {
+    "bar": 51,
+    "chord": "A7sus4",
+    "quiet": false
+   },
+   {
+    "bar": 52,
+    "chord": "Dmaj9",
+    "quiet": false
+   },
+   {
+    "bar": 53,
+    "chord": "Bm9",
+    "quiet": false
+   },
+   {
+    "bar": 54,
+    "chord": "Gmaj9",
+    "quiet": false
+   },
+   {
+    "bar": 55,
+    "chord": "A7sus4",
+    "quiet": false
+   },
+   {
+    "bar": 56,
+    "chord": "Dmaj9",
+    "quiet": false
+   },
+   {
+    "bar": 57,
+    "chord": "Bm9",
+    "quiet": false
+   },
+   {
+    "bar": 58,
+    "chord": "Gmaj9",
+    "quiet": false
+   },
+   {
+    "bar": 59,
+    "chord": "A7sus4",
+    "quiet": true
+   },
+   {
+    "bar": 60,
+    "chord": "Dmaj9",
+    "quiet": true
+   },
+   {
+    "bar": 61,
+    "chord": "Bm9",
+    "quiet": true
+   },
+   {
+    "bar": 62,
+    "chord": "Gmaj9",
+    "quiet": true
+   },
+   {
+    "bar": 63,
+    "chord": "A7sus4",
+    "quiet": true
+   },
+   {
+    "bar": 64,
+    "chord": "Dmaj9",
+    "quiet": true
+   },
+   {
+    "bar": 65,
+    "chord": "Bm9",
+    "quiet": true
    }
   ]
  }

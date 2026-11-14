@@ -1,0 +1,1 @@
+{"max_spend_per_epoch": "2000000000000000000000000", "max_single_spend": "500000000000000000000000", "epoch_secs": 86400, "allow_recipients": ["supplier.coffee.testnet", "roastery.rent.testnet"], "claim_cooldown_secs": 0, "rules_delay_secs": 0}

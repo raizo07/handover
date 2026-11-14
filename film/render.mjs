@@ -73,7 +73,7 @@ async function still(page, t, file) {
 }
 
 async function render(page) {
-  const framesDir = path.join(ROOT, 'frames');
+  const framesDir = path.join(ROOT, 'render_frames');
   await fsp.rm(framesDir, { recursive: true, force: true });
   await fsp.mkdir(framesDir, { recursive: true });
 
@@ -112,9 +112,9 @@ function run(cmd, args) {
 async function mux({ first, last, fps }) {
   await fsp.mkdir(path.join(ROOT, 'out'), { recursive: true });
   const hasAudio = !NO_AUDIO && fs.existsSync(path.join(ROOT, 'audio/score.wav'));
-  const out = path.join(ROOT, 'out/freehold.mp4');
+  const out = path.join(ROOT, 'out/freehold-demo.mp4');
   const args = ['-y', '-framerate', String(fps), '-start_number', String(first),
-    '-i', path.join(ROOT, 'frames/f_%05d.jpg')];
+    '-i', path.join(ROOT, 'render_frames/f_%05d.jpg')];
   if (hasAudio) {
     if (first > 0) args.push('-ss', String(first / fps));
     args.push('-i', path.join(ROOT, 'audio/score.wav'));
@@ -129,7 +129,7 @@ async function mux({ first, last, fps }) {
   await run('ffmpeg', args);
   const { size } = await fsp.stat(out);
   console.log(`  ${out}  ${(size / 1024 / 1024).toFixed(1)} MB${hasAudio ? '' : ' (no audio)'}`);
-  if (!KEEP) await fsp.rm(path.join(ROOT, 'frames'), { recursive: true, force: true });
+  if (!KEEP) await fsp.rm(path.join(ROOT, 'render_frames'), { recursive: true, force: true });
 }
 
 async function check(browser) {
